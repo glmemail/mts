@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\User;
+use App\Models\User;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +15,7 @@ class UserController extends AdminController
      *
      * @var string
      */
-    protected $title = 'App\User';
+    protected $title = 'App\Models\User';
 
     /**
      * Make a grid builder.
@@ -30,13 +30,17 @@ class UserController extends AdminController
         $grid->column('name', __('Name'));
         $grid->column('email', __('Email'));
         $grid->column('email_verified_at', __('Email verified at'));
-        $grid->column('password', __('Password'));
+        // $grid->column('password', __('Password'));
         $grid->column('remember_token', __('Remember token'));
         $grid->column('created_at', __('Created at'));
         $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
+
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 
     /**
      * Make a show builder.

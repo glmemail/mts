@@ -60,7 +60,6 @@ class MessageController extends AdminController
         $form = new Form(new Message());
         $form->text('message', __('Message'));
         $form->datetime('actiontime', __('ActionTime'))->default(date('Y-m-d H:i:s'));
-        $timestamps = false;
 
         return $form;
     }

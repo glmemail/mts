@@ -9,7 +9,9 @@ use Encore\Admin\Facades\Admin;
 class Message extends Model
 {
     // use Notifiable;
+    protected $table = 'message';
 
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
