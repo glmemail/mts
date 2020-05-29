@@ -16,6 +16,7 @@
       </div>
     </nav> -->
     @include('layouts._header')
+    <br/>
     <div class="container">
         <div class="offset-md-1 col-md-10">
         @include('shared._messages')

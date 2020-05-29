@@ -9,7 +9,7 @@
       <h5>各项目统计</h5>
     </div>
     <div class="card-body">
-      @include('chartjs._chartjs')
+      @include('shared._chartjs')
     </p>
 <!--     <p>
       一切，将从这里开始。
