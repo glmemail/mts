@@ -20,6 +20,7 @@ class ChartjsController extends Controller
             ->header('Chartjs')
             ->body(new Box('Bar chart', view('admin.chartjs')));
         $grid = new Grid(new action_info());
+
 //         $grid->header(function ($query) {
 //         $gender = $query->select(DB::raw('count(sex) as count, sex'))
 //         ->groupBy('sex')->get()->pluck('count', 'sex')->toArray();
