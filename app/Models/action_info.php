@@ -16,6 +16,6 @@ class action_info extends Model
      * @var array
      */
     protected $fillable = [
-        'message_id', 'sysid', 'svrid', 'subsysid', 'cmpid', 'phoneq', 'mailq', 'wechatq', 'ssmq'
+        'message_id', 'code1', 'code2', 'code3', 'code4', 'code5', 'code6', 'actiontype', 'actiontime'
     ];
 }
