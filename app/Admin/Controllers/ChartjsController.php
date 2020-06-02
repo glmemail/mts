@@ -19,9 +19,6 @@ class ChartjsController extends Controller
         return $content
             ->header('Chartjs')
             ->body(new Box('Bar chart', view('admin.chartjs')));
-
-
-
         $grid = new Grid(new action_info());
 //         $grid->header(function ($query) {
 //         $gender = $query->select(DB::raw('count(sex) as count, sex'))
