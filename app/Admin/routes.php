@@ -16,5 +16,6 @@ Route::group([
     $router->get('/chartjs', 'ChartjsController@index')->name('admin.chartjs');
 
 
+    $router->resource('action', ActionController::class);
 
 });
