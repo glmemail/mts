@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Message;
 
-class action_info extends Model
+class Action_info extends Model
 {
+
     // use Notifiable;
     protected $table = 'action_info';
 

@@ -2,7 +2,7 @@
 
 namespace App\Admin\Controllers;
 
-use App\Models\action_info;
+use App\Models\Action_info;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -15,7 +15,7 @@ class ActionController extends AdminController
      *
      * @var string
      */
-    protected $title = 'App\Models\action_info';
+    protected $title = 'Action_info';
 
     /**
      * Make a grid builder.
