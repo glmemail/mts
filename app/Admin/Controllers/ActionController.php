@@ -26,7 +26,8 @@ class ActionController extends AdminController
     {
         $grid = new Grid(new action_info());
 
-        $grid->column('message_id', __('Message id'));
+        // $grid->column('message_id', __('Message id'));
+        $grid->column('message_id', "消息ID");
         $grid->column('code1', __('Code1'));
         $grid->column('code2', __('Code2'));
         $grid->column('code3', __('Code3'));
