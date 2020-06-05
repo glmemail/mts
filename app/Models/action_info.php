@@ -8,6 +8,11 @@ use App\Models\Message;
 class Action_info extends Model
 {
 
+    public function post()
+    {
+        return $this->belongsTo(Message::class, 'id', 'message_id');
+    }
+
     // use Notifiable;
     protected $table = 'action_info';
 
