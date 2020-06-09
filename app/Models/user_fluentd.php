@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class user_fluentd extends Model
+class User_Fluentd extends Model
 {
     // use Notifiable;
     protected $table = 'user_fluentd';
