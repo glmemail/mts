@@ -28,29 +28,58 @@ class ChartjsController extends Controller
         //     ->get()
         //     ->groupBy('keyname');
         $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
+        // $fluentd = Fluentd::select('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id')
             ->join('user_fluentd','fluentd.keyid','=','user_fluentd.fluentd_keyid')
             ->where('user_fluentd.user_id', $user['username'])
             // ->where('language', 'cn')
             // ->orderBy('id');
             ->get()
             ->groupBy('keyid');
-        $svrid = "";
+        // $svrid = "";
         $fluentd_json = json_decode($fluentd,true);
+        // var_dump($fluentd_json);
+        // var_dump($fluentd);
+        foreach ($fluentd_json as $k => $v) {
+            echo $k[0]['sysid'] . '<br>';
+            print_r($v[0]['sysid']);
+            echo '<br>';
+            // foreach ($a[$k] as $index => $value) {
+            //     echo $k . '<br>';
+            //     echo $index . '<br>';
+            //     echo $value . '<br>';
+            // }
+        }
+        // var_dump($fluentd_json);
+        // $count_fluentd = count($fluentd);
+        // var_dump($fluentd_json);
+        // var_dump($fluentd);
+        // foreach($fluentd_json as $key=>$value){
+        //     // echo 'key: '.$key.' --- value: '.$value.'<br/>';
+        //     var_dump($key);
+        //     var_dump($value);
+        //     $value[0];
+        //     $json = json_encode($value);
+        //     // var_dump($json);/ $json['sysid'];
+        //     // foreach($fluentd_json as $key1=>$value1){
+        //     //     var_dump($key1);
+        //     //     var_dump($value1);
 
-        $count_fluentd = count($fluentd_json);
-        var_dump($fluentd_json);
-        var_dump($fluentd);
-        for ($i = 0; $i < $count_fluentd; $i++)
-        {
+        //     // }
+        // }
 
-            // $sysid = $fluentd_json[$i][0]['sysid'];
+
+
+        // for ($i = 0; $i < $count_fluentd; $i++)
+        // {
+
+            // $sysid = $fluentd_json[$i]['sysid'];
             // $svrid = $fluentd_json[$i]['svrid'];
             // $subsysid = $fluentd_json[$i]['subsysid'];
             // $cmpid = $fluentd_json[$i]['cmpid'];
             // $user_id = $fluentd_json[$i]['user_id'];
             // $message = json_encode($de_json[$i]['data']);
 
-        }
+        // }
 
         $actoninfo = Action_info::select(array('message_id', 'actiontype', 'message.message'))
             ->join('message','action_info.message_id','=','message.id')
@@ -71,11 +100,10 @@ class ChartjsController extends Controller
         //     // $cmpid = $actoninfo_json[$i]['cmpid'];
         //     // $user_id = $actoninfo_json[$i]['user_id'];
         //     // $message = json_encode($de_json[$i]['data']);
-
         // }
 
         $str = "";
-        $str = $str.'start【'.$fluentd;
+        // $str = $str.'start【'.$fluentd;
         $cnt = 0;
         // $g[0];
         // foreach ($g as $value)
@@ -88,12 +116,12 @@ class ChartjsController extends Controller
             // }
             // $cnt++;
         // }
-        $str = $str.'】end';
+        // $str = $str.'】end';
         $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         return $content
             ->header('Chartjs')
 
-            ->body(new Box('Bar'.':'.$str, view('admin.chartjs', compact('action_count'))));
+            ->body(new Box('Bar'.':'.$str, view('admin.chartjs', compact('action_count'), ['fluentd_json'=>$fluentd_json])));
 
     //     $grid->header(function ($content) {
 
