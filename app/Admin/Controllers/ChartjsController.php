@@ -39,16 +39,12 @@ class ChartjsController extends Controller
         $fluentd_json = json_decode($fluentd,true);
         // var_dump($fluentd_json);
         // var_dump($fluentd);
+        $s = [];
         foreach ($fluentd_json as $k => $v) {
-            echo $k[0]['sysid'] . '<br>';
-            print_r($v[0]['sysid']);
-            echo '<br>';
-            // foreach ($a[$k] as $index => $value) {
-            //     echo $k . '<br>';
-            //     echo $index . '<br>';
-            //     echo $value . '<br>';
-            // }
+            $s[] = $v[0]['sysid'] ." ". $v[0]['svrid'] ." ". $v[0]['subsysid'] ." ". $v[0]['subsysid'];
         }
+        // var_dump($s);
+        $fluentd_sel = $s;
         // var_dump($fluentd_json);
         // $count_fluentd = count($fluentd);
         // var_dump($fluentd_json);
@@ -75,7 +71,7 @@ class ChartjsController extends Controller
             // $sysid = $fluentd_json[$i]['sysid'];
             // $svrid = $fluentd_json[$i]['svrid'];
             // $subsysid = $fluentd_json[$i]['subsysid'];
-            // $cmpid = $fluentd_json[$i]['cmpid'];
+            // $cmpid = $fluentd_json[$i]['c'];
             // $user_id = $fluentd_json[$i]['user_id'];
             // $message = json_encode($de_json[$i]['data']);
 
@@ -121,7 +117,7 @@ class ChartjsController extends Controller
         return $content
             ->header('Chartjs')
 
-            ->body(new Box('Bar'.':'.$str, view('admin.chartjs', compact('action_count'), ['fluentd_json'=>$fluentd_json])));
+            ->body(new Box('Bar'.':'.$str, view('admin.chartjs', compact('action_count'), compact('fluentd_sel'))));
 
     //     $grid->header(function ($content) {
 

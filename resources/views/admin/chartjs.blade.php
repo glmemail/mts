@@ -1,3 +1,15 @@
+
+<div>
+    <select>
+        <option value="0">请选择</option>
+        <?php
+        // $arr=array($fluentd_sel);
+        foreach ($fluentd_sel as $v) {
+            echo "<option value='".$v."''>".$v."</option>";
+        }
+    ?>
+    </select>
+</div>
 <div class="row">
 <div class="col-md-4">
     <canvas id="myChart1" style="width: 322px; display: block; height: 160px;" width="322" height="160"></canvas>
