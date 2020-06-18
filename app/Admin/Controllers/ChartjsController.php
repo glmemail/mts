@@ -13,6 +13,7 @@ use Encore\Admin\Layout\Row;
 use Encore\Admin\Widgets\Box;
 use Encore\Admin\Grid;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 class ChartjsController extends Controller
 {
@@ -33,13 +34,14 @@ class ChartjsController extends Controller
             ->groupBy('keyid');
         // $svrid = "";
         $fluentd_json = json_decode($fluentd,true);
+        // var_dump($fluentd_json);
         $s = [];
         foreach ($fluentd_json as $k => $v) {
             $s[] = $v[0]['sysid'] ." ". $v[0]['svrid'] ." ". $v[0]['subsysid'] ." ". $v[0]['cmpid'];
         }
         // var_dump($s);
         $fluentd_sel = $s;
-        $actoninfo = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to'))
+        $actoninfo = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
                 $join->on('message.sysid', '=', 'fluentd.sysid')
@@ -57,31 +59,42 @@ class ChartjsController extends Controller
             // ->orderBy('id')
             ->get()
             ->groupBy('actiontype'); // 按actiontype分组
+        $actoninfo1 = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to'))
+            ->join('message','action_info.message_id','=','message.id')
+            ->join('fluentd',function ($join) {
+                $join->on('message.sysid', '=', 'fluentd.sysid')
+                    ->on('message.svrid', '=', 'fluentd.svrid')
+                    ->on('message.subsysid', '=', 'fluentd.subsysid')
+                    ->on('message.cmpid', '=', 'fluentd.cmpid');
+                })
+            ->join('user_fluentd',function ($join) {
+                $join->on('fluentd.keyid', '=', 'user_fluentd.fluentd_keyid');
+                })
+            ->leftjoin('phone_info','action_info.phone_id','=','phone_info.call_id')
+            ->leftjoin('mail_info','action_info.mail_id','=','mail_info.id')
+            ->leftjoin('wechat_info','action_info.wechat_id','=','wechat_info.id')
+            ->where('user_fluentd.user_id', $user['username'])
+            ->get()
+            ->groupBy(function($date) {
+                return Carbon::parse($date->actiontime)->format('m');
+                });
+
+
+
+
+
         $actoninfo_json = json_decode($actoninfo,TRUE);
-        var_dump($actoninfo_json);
-
-        foreach ($actoninfo as $k1 => $v1) {
-        }
-
-
-        // $count_json = count($actoninfo_json);
-        // for ($i = 0; $i < $count_json; $i++)
-        // {
-        //     //echo var_dump($de_json);
-        //     $message = $actoninfo_json[$i]['message'];
-        //     // $svrid = $actoninfo_json[$i]['svrid'];
-        // $svrid = var_dump($fluentd_json)[0]['svrid'];
-        //     // $subsysid = $actoninfo_json[$i]['subsysid'];
-        //     // $cmpid = $actoninfo_json[$i]['cmpid'];
-        //     // $user_id = $actoninfo_json[$i]['user_id'];
-        //     // $message = json_encode($de_json[$i]['data']);
-        // }
-
+        $actoninfo1_json = json_decode($actoninfo1,TRUE);
+        var_dump($actoninfo1_json);
+        $view_json=[];
+        $view_json[]=$actoninfo_json;
+        $view_json[]=$fluentd_sel;
+        $view_json[]=$actoninfo1_json;
         $cnt = 0;
-        $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
+        // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         return $content
             ->header('Chartjs')
-            ->body(new Box('', view('admin.chartjs', compact('action_count'), compact('fluentd_sel'), compact('actoninfo_json'))));
+            ->body(new Box('', view('admin.chartjs', compact('view_json'))));
 
     }
 

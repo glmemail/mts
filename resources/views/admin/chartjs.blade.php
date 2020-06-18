@@ -1,10 +1,11 @@
 
 <div>
     <select>
-        <option value="0">请选择</option>
+        <option value="0" onchange="#">请选择</option>
         <?php
-        // $arr=array($fluentd_sel);
-        foreach ($fluentd_sel as $v) {
+        // $arr=array($view_json[1]);
+        // var_dump($view_json);
+        foreach ($view_json[1] as $v) {
             echo "<option value='".$v."''>".$v."</option>";
         }
         ?>
@@ -18,31 +19,125 @@
     <canvas id="myChart3" style="width: 322px; display: block; height: 160px;" width="322" height="160" class="chartjs-render-monitor"></canvas>
 </div>
 </div>
+<div id="mail" class="box-body table-responsive no-padding" style="display: none">
+    <h2>Mail</h2>
+    <table class="table table-hover grid-table">
+        <th class="column-id" style="width: 33%">邮箱</th>
+        <th class="column-id" style="width: 33%">时间</th>
+        <th class="column-id" style="width: 33%">FluentdID</th>
+        <?php
+        // var_dump($actoninfo_json);
+        foreach ($view_json[0]['MAIL'] as $k1 => $v1) {
+            echo "<tr>";
+            echo "<td>".$v1['mail_to']."</td>";
+            echo "<td>".$v1['actiontime']."</td>";
+            echo "<td>".$v1['sysid']." ".$v1['svrid']." ".$v1['subsysid']." ".$v1['cmpid']."</td>";
+            echo "</tr>";
+        }
+        ?>
+    </table>
+</div>
+<div id="phone" class="box-body table-responsive no-padding" style="display: none">
+    <h2>Phone</h2>
+    <table class="table table-hover grid-table">
+        <th class="column-id" style="width: 33%">电话号码</th>
+        <th class="column-id" style="width: 33%">时间</th>
+        <th class="column-id" style="width: 33%">FluentdID</th>
+        <?php
+        foreach ($view_json[0]['PHONE'] as $k1 => $v1) {
+            echo "<tr>";
+            echo "<td>".$v1['phone_number']."</td>";
+            echo "<td>".$v1['actiontime']."</td>";
+            echo "<td>".$v1['sysid']." ".$v1['svrid']." ".$v1['subsysid']." ".$v1['cmpid']."</td>";
+            echo "</tr>";
+        }
+        ?>
+    </table>
+</div>
+<div id="wechat" class="box-body table-responsive no-padding" style="display: none">
+    <h2>Wechat</h2>
+    <table class="table table-hover grid-table">
+        <th class="column-id" style="width: 33%">微信号码</th>
+        <th class="column-id" style="width: 33%">时间</th>
+        <th class="column-id" style="width: 33%">FluentdID</th>
+        <?php
+        foreach ($view_json[0]['WECHAT'] as $k1 => $v1) {
+            echo "<tr>";
+            echo "<td>".$v1['wechat_to']."</td>";
+            echo "<td>".$v1['actiontime']."</td>";
+            echo "<td>".$v1['sysid']." ".$v1['svrid']." ".$v1['subsysid']." ".$v1['cmpid']."</td>";
+            echo "</tr>";
+        }
+        ?>
+    </table>
+</div>
 <script>
 $(function () {
     var ctx = document.getElementById("myChart1").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["Mail", "Phone", "Wechat", "SMS", "SSM", "Redmine"],
+            labels: ["2020/01", "2020/02", "2020/03", "2020/04", "2020/05", "2020/06"],
             datasets: [{
-                label: '# of Votes',
-                data: [{{ $action_count[0] }}, {{ $action_count[1] }}, {{ $action_count[2] }}, 0, 0, 0],
+                label: 'Mail',
+                data: [1, 5, 9,16, 8, 4],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)'
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)'
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'Phone',
+                data: [3, 6, 4, 3, 6, 4],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
                     'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            },
+            {
+                label: 'Wechat',
+                data: [15, 7, 5, 15, 7, 5],
+                backgroundColor: [
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
                     'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(255, 206, 86, 1)'
                 ],
                 borderWidth: 1
             }]
@@ -62,25 +157,20 @@ $(function () {
     var myChart3 = new Chart(ctx3, {
         type: 'doughnut',
         data: {
-            labels: ["Mail", "Phone", "Wechat", "SMS", "SSM", "Redmine"],
+            labels: ["Mail", "Phone", "Wechat"],
             datasets: [{
                 label: '# of Votes',
-                data: [{{ $action_count[0] }}, {{ $action_count[1] }}, {{ $action_count[2] }}, 0, 0, 0],
+                data: [{{ count($view_json[0]["MAIL"]) }}, {{ count($view_json[0]["PHONE"]) }}, {{ count($view_json[0]["WECHAT"]) }}],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    'rgba(255, 206, 86, 0.2)'
+
                 ],
                 borderColor: [
                     'rgba(255,99,132,1)',
                     'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(255, 206, 86, 1)'
                 ],
                 borderWidth: 1
             }]
@@ -98,7 +188,20 @@ $(function () {
                              var activeElement = bars[0];   //当前被选中的元素
                              var product = activeElement._model.label;
                              console.log(activeElement);
-                             alert(activeElement);
+                             // alert(activeElement._index);
+                             if (activeElement._index==0) {
+                                document.getElementById("mail").style.display= "block";
+                                document.getElementById("phone").style.display= "none";
+                                document.getElementById("wechat").style.display= "none";
+                             } else if (activeElement._index==1) {
+                                document.getElementById("mail").style.display= "none";
+                                document.getElementById("phone").style.display= "block";
+                                document.getElementById("wechat").style.display= "none";
+                             } else if (activeElement._index==2) {
+                                document.getElementById("mail").style.display= "none";
+                                document.getElementById("phone").style.display= "none";
+                                document.getElementById("wechat").style.display= "block";
+                             }
                              //load_version_chart(product);
                          }
         }
