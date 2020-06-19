@@ -13,6 +13,7 @@ use Encore\Admin\Layout\Row;
 use Encore\Admin\Widgets\Box;
 use Encore\Admin\Grid;
 use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Carbon;
 
 class ChartjsController extends Controller
@@ -56,9 +57,12 @@ class ChartjsController extends Controller
             ->leftjoin('mail_info','action_info.mail_id','=','mail_info.id')
             ->leftjoin('wechat_info','action_info.wechat_id','=','wechat_info.id')
             ->where('user_fluentd.user_id', $user['username'])
-            // ->orderBy('id')
             ->get()
             ->groupBy('actiontype'); // 按actiontype分组
+        // $days = Input::get('days', 7);
+        // $range = Carbon::now()->subDays($days);
+        $showtime=date("Y-m-d",strtotime("-7 day"));
+        // var_dump($showtime);
         $actoninfo1 = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
@@ -74,22 +78,33 @@ class ChartjsController extends Controller
             ->leftjoin('mail_info','action_info.mail_id','=','mail_info.id')
             ->leftjoin('wechat_info','action_info.wechat_id','=','wechat_info.id')
             ->where('user_fluentd.user_id', $user['username'])
+            ->where('action_info.actiontime','>=', $showtime)
+            ->orderBy('actiontime', 'asc')
             ->get()
             ->groupBy(function($date) {
-                return Carbon::parse($date->actiontime)->format('m');
+                return Carbon::parse($date->actiontime)->format('yy-m-d');
                 });
-
-
+        $weeks=[];
+        for ($x=6; $x>=0; $x--) {
+            $day_str="-".$x." day";
+            $weeks[]=date("Y-m-d",strtotime($day_str));
+        }
+        // var_dump($weeks);
 
 
 
         $actoninfo_json = json_decode($actoninfo,TRUE);
         $actoninfo1_json = json_decode($actoninfo1,TRUE);
-        var_dump($actoninfo1_json);
+        // $weeks_json = json_decode($weeks,TRUE);
+        // var_dump($actoninfo1_json);
         $view_json=[];
         $view_json[]=$actoninfo_json;
         $view_json[]=$fluentd_sel;
         $view_json[]=$actoninfo1_json;
+        $view_json[]=$weeks;
+        // var_dump($actoninfo1_json);
+        var_dump($view_json[0]);
+        var_dump($view_json[2]);
         $cnt = 0;
         // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         return $content

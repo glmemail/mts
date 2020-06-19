@@ -4,7 +4,7 @@
         <option value="0" onchange="#">请选择</option>
         <?php
         // $arr=array($view_json[1]);
-        // var_dump($view_json);
+        // var_dump($view_json[3]);
         foreach ($view_json[1] as $v) {
             echo "<option value='".$v."''>".$v."</option>";
         }
@@ -14,6 +14,9 @@
 <div class="row">
 <div class="col-md-4">
     <canvas id="myChart1" style="width: 322px; display: block; height: 160px;" width="322" height="160"></canvas>
+</div>
+<div class="col-md-4">
+    <canvas id="myChart2" style="width: 322px; display: block; height: 160px;" width="322" height="160" class="chartjs-render-monitor"></canvas>
 </div>
 <div class="col-md-4">
     <canvas id="myChart3" style="width: 322px; display: block; height: 160px;" width="322" height="160" class="chartjs-render-monitor"></canvas>
@@ -27,6 +30,7 @@
         <th class="column-id" style="width: 33%">FluentdID</th>
         <?php
         // var_dump($actoninfo_json);
+        // var_dump($view_json[0]);
         foreach ($view_json[0]['MAIL'] as $k1 => $v1) {
             echo "<tr>";
             echo "<td>".$v1['mail_to']."</td>";
@@ -66,6 +70,23 @@
             echo "<td>".$v1['wechat_to']."</td>";
             echo "<td>".$v1['actiontime']."</td>";
             echo "<td>".$v1['sysid']." ".$v1['svrid']." ".$v1['subsysid']." ".$v1['cmpid']."</td>";
+            echo "</tr>";
+        }
+        ?>
+    </table>
+</div>
+<div id="index1" class="box-body table-responsive no-padding" style="display: none">
+    <h2>Wechat</h2>
+    <table class="table table-hover grid-table">
+        <th class="column-id" style="width: 33%">微信号码</th>
+        <th class="column-id" style="width: 33%">时间</th>
+        <th class="column-id" style="width: 33%">FluentdID</th>
+        <?php
+        foreach ($view_json[2][$view_json[3][0]] as $k => $v) {
+            echo "<tr>";
+            echo "<td>".$v['wechat_to']."</td>";
+            echo "<td>".$v['actiontime']."</td>";
+            echo "<td>".$v['sysid']." ".$v['svrid']." ".$v['subsysid']." ".$v['cmpid']."</td>";
             echo "</tr>";
         }
         ?>
@@ -153,6 +174,80 @@ $(function () {
         }
     });
 
+
+
+    var ctx2 = document.getElementById("myChart2").getContext('2d');
+    var myChart2 = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+            labels: ["{{$view_json[3][0]}}", "{{$view_json[3][1]}}", "{{$view_json[3][2]}}", "{{$view_json[3][3]}}", "{{$view_json[3][4]}}", "{{$view_json[3][5]}}","{{$view_json[3][6]}}"],
+            datasets: [{
+                label: '一周内告警信息',
+                data: [
+                {{ count(!empty($view_json[2][$view_json[3][0]])?$view_json[2][$view_json[3][0]]:[]) }},
+                {{ count(!empty($view_json[2][$view_json[3][1]])?$view_json[2][$view_json[3][1]]:[]) }},
+                {{ count(!empty($view_json[2][$view_json[3][2]])?$view_json[2][$view_json[3][2]]:[]) }},
+                {{ count(!empty($view_json[2][$view_json[3][3]])?$view_json[2][$view_json[3][3]]:[]) }},
+                {{ count(!empty($view_json[2][$view_json[3][4]])?$view_json[2][$view_json[3][4]]:[]) }},
+                {{ count(!empty($view_json[2][$view_json[3][5]])?$view_json[2][$view_json[3][5]]:[]) }},
+                {{ count(!empty($view_json[2][$view_json[3][6]])?$view_json[2][$view_json[3][6]]:[]) }}
+                ],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            },
+            events : ["mousemove", "mouseout", "click"],
+            onClick : function (event, bars){
+                             var activeElement = bars[0];   //当前被选中的元素
+                             var product = activeElement._model.label;
+                             console.log(activeElement);
+                             // alert(activeElement._index);
+                             // if (activeElement._index==0) {
+                             //    document.getElementById("mail").style.display= "block";
+                             //    document.getElementById("phone").style.display= "none";
+                             //    document.getElementById("wechat").style.display= "none";
+                             // } else if (activeElement._index==1) {
+                             //    document.getElementById("mail").style.display= "none";
+                             //    document.getElementById("phone").style.display= "block";
+                             //    document.getElementById("wechat").style.display= "none";
+                             // } else if (activeElement._index==2) {
+                             //    document.getElementById("mail").style.display= "none";
+                             //    document.getElementById("phone").style.display= "none";
+                             //    document.getElementById("wechat").style.display= "block";
+                             // }
+                             //load_version_chart(product);
+                         }
+        }
+    });
+
+
+
+
     var ctx3 = document.getElementById("myChart3").getContext('2d');
     var myChart3 = new Chart(ctx3, {
         type: 'doughnut',
@@ -187,7 +282,7 @@ $(function () {
             onClick : function (event, bars){
                              var activeElement = bars[0];   //当前被选中的元素
                              var product = activeElement._model.label;
-                             console.log(activeElement);
+                             // console.log(activeElement);
                              // alert(activeElement._index);
                              if (activeElement._index==0) {
                                 document.getElementById("mail").style.display= "block";
