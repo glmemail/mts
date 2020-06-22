@@ -63,7 +63,7 @@ class ChartjsController extends Controller
         // $range = Carbon::now()->subDays($days);
         $showtime=date("Y-m-d",strtotime("-7 day"));
         // var_dump($showtime);
-        $actoninfo1 = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to'))
+        $actoninfo1 = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
                 $join->on('message.sysid', '=', 'fluentd.sysid')
@@ -90,21 +90,157 @@ class ChartjsController extends Controller
             $weeks[]=date("Y-m-d",strtotime($day_str));
         }
         // var_dump($weeks);
-
-
+        $message = Message::select(array('message.id','message.message','action_info.message_id', 'action_info.actiontime', 'action_info.actiontype', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
+            ->leftjoin('action_info','action_info.message_id','=','message.id')
+            ->join('fluentd',function ($join) {
+                $join->on('message.sysid', '=', 'fluentd.sysid')
+                    ->on('message.svrid', '=', 'fluentd.svrid')
+                    ->on('message.subsysid', '=', 'fluentd.subsysid')
+                    ->on('message.cmpid', '=', 'fluentd.cmpid');
+                })
+            ->join('user_fluentd',function ($join) {
+                $join->on('fluentd.keyid', '=', 'user_fluentd.fluentd_keyid');
+                })
+            ->leftjoin('phone_info','action_info.phone_id','=','phone_info.call_id')
+            ->leftjoin('mail_info','action_info.mail_id','=','mail_info.id')
+            ->leftjoin('wechat_info','action_info.wechat_id','=','wechat_info.id')
+            ->where('user_fluentd.user_id', $user['username'])
+            ->where('action_info.actiontime','>=', $showtime)
+            ->orderBy('actiontime', 'asc')
+            ->orderBy('message.id', 'asc')
+            ->get()
+            ->groupBy(function($date) {
+                return Carbon::parse($date->actiontime)->format('yy-m-d');
+                });
 
         $actoninfo_json = json_decode($actoninfo,TRUE);
         $actoninfo1_json = json_decode($actoninfo1,TRUE);
+        $message_json = json_decode($message,TRUE);
+        $msg = [];
+        $msg_arr= [];
+        $message_id=0;
+        foreach ($message_json as $k => $v) {
+            // $message_id=$v[0]['id'];
+            $msg=[];
+            for ($x=0; $x<count($v); $x++) {
+                // var_dump($v[$x]);
+                $mail_type="";
+                $phone_type="";
+                $wechat_type="";
+                $m=[];
+                if ($v[$x]['actiontype']=='MAIL'){
+                    $mail_type="MAIL";
+                }
+                if ($v[$x]['actiontype']=='PHONE'){
+                    $phone_type="PHONE";
+                }
+                if ($v[$x]['actiontype']=='WECHAT'){
+                    $wechat_type="WECHAT";
+                }
+                // var_dump($message_id);
+                // var_dump($v[$x]['id']);
+                // for ($x1=0; $x1<count($msg); $x1++) {
+                //     if ($msg[$x1]['message_id']==$v[$x]['id']){
+                //         $flg="1";
+                //         break;
+                //     }
+                // }
+
+                if ($message_id==$v[$x]['id']) {
+                    // var_dump($msg);
+                    // var_dump($v[$x]);
+                    if (count($msg)>0){
+                        for ($x1=0; $x1<count($msg); $x1++) {
+                            if ($msg[$x1]['message_id']==$v[$x]['id']){
+                                $msg[$x1]['message_id']=$v[$x]['id'];
+                                $msg[$x1]['message']=$v[$x]['message'];
+                                $msg[$x1]['actiontime']=$v[$x]['actiontime'];
+                                if (!empty($mail_type)) {
+                                    $msg[$x1]['mail_type']=$mail_type;
+                                }
+                                if (!empty($phone_type)) {
+                                    $msg[$x1]['phone_type']=$phone_type;
+                                }
+                                if (!empty($wechat_type)) {
+                                    $msg[$x1]['wechat_type']=$wechat_type;
+                                }
+                                $t=[];
+                                $t['phone_number']=$v[$x]['phone_number'];
+                                $t['mail_to']=$v[$x]['mail_to'];
+                                $t['wechat_to']=$v[$x]['wechat_to'];
+                                $msg[$x1]['msg_action'][]=$t;
+                                // var_dump($msg['msg_action']);
+                                break;
+                                // $msg[]=$m;
+                                // $msg[$x1]['msg_action']=;
+                            }
+                        }
+                    } else {
+                        $msg_action=[];
+                        $m['message_id']=$v[$x]['id'];
+                        $m['message']=$v[$x]['message'];
+                        $m['actiontime']=$v[$x]['actiontime'];
+                        if (!empty($mail_type)) {
+                            $m['mail_type']=$mail_type;
+                        }
+                        if (!empty($phone_type)) {
+                            $m['phone_type']=$phone_type;
+                        }
+                        if (!empty($wechat_type)) {
+                            $m['wechat_type']=$wechat_type;
+                        }
+                        $t=[];
+                        $t['phone_number']=$v[$x]['phone_number'];
+                        $t['mail_to']=$v[$x]['mail_to'];
+                        $t['wechat_to']=$v[$x]['wechat_to'];
+                        $msg_action[]=$t;
+                        $m['msg_action']=$msg_action;
+                        $msg[]=$m;
+                    }
+
+                } else {
+                    // var_dump($msg);
+                    $msg_action=[];
+                    $m['message_id']=$v[$x]['id'];
+                        $m['message']=$v[$x]['message'];
+                    $m['actiontime']=$v[$x]['actiontime'];
+                    if (!empty($mail_type)) {
+                        $m['mail_type']=$mail_type;
+                    }
+                    if (!empty($phone_type)) {
+                        $m['phone_type']=$phone_type;
+                    }
+                    if (!empty($wechat_type)) {
+                        $m['wechat_type']=$wechat_type;
+                    }
+                    $t=[];
+                    $t['phone_number']=$v[$x]['phone_number'];
+                    $t['mail_to']=$v[$x]['mail_to'];
+                    $t['wechat_to']=$v[$x]['wechat_to'];
+                    $msg_action[]=$t;
+                    $m['msg_action']=$msg_action;
+                    $msg[]=$m;
+                }
+                $message_id=$v[$x]['id'];
+            }
+            // var_dump($msg);
+            $msg_arr[$k]=$msg;
+        }
         // $weeks_json = json_decode($weeks,TRUE);
         // var_dump($actoninfo1_json);
         $view_json=[];
-        $view_json[]=$actoninfo_json;
-        $view_json[]=$fluentd_sel;
-        $view_json[]=$actoninfo1_json;
-        $view_json[]=$weeks;
+        $view_json[]=$actoninfo_json;    // index=0
+        $view_json[]=$fluentd_sel;       // index=1
+        $view_json[]=$actoninfo1_json;   // index=2
+        $view_json[]=$weeks;             // index=3
+        $view_json[]=$msg_arr;           // index=4
+        // var_dump($msg_arr['2020-06-22']);
+        // var_dump($message_json);
         // var_dump($actoninfo1_json);
-        var_dump($view_json[0]);
-        var_dump($view_json[2]);
+        // var_dump($view_json[0]);
+        // var_dump($view_json[2]);
+        // var_dump($view_json[3]);
+        // var_dump($view_json[4]);
         $cnt = 0;
         // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         return $content
