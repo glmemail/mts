@@ -1,4 +1,30 @@
+<style> 
+    .all{
+        display:-moz-box; /* Firefox */
+        display:-webkit-box; /* Safari and Chrome */
+        display:box;
+        width:600px;
+        height: 600px;
+        border:1px solid black;
+    }
 
+    .item{
+        -moz-box-flex:1.0; /* Firefox */
+        /*-webkit-box-flex:1.0; /* Safari and Chrome */*/
+        box-flex:1.0;
+        
+   text-overflow: ellipsis;
+    display: -webkit-box; /*//将元素设为盒子伸缩模型显示*/
+    -webkit-box-orient: vertical; /*//伸缩方向设为垂直方向*/
+    -webkit-line-clamp: 4;  /*//超出3行隐藏，并显示省略号 */
+    width: 130px;
+    background: #00F7DE;
+    line-height:20px;max-height:80px;
+    height: 80px;
+    border: 1px solid #000000;
+    }
+
+</style>
 <div>
     <select>
         <option value="0" onchange="#">请选择</option>
@@ -19,7 +45,40 @@
     <canvas id="myChart2" style="width: 322px; display: block; height: 160px;" width="322" height="160" class="chartjs-render-monitor"></canvas>
 </div>
 <div class="col-md-4">
-    <canvas id="myChart3" style="width: 322px; display: block; height: 160px;" width="322" height="160" class="chartjs-render-monitor"></canvas>
+    <!-- <canvas id="myChart3" style="width: 322px; display: block; height: 160px;" width="322" height="160" class="chartjs-render-monitor"></canvas> -->
+
+        <?php
+        use Encore\Admin\Widgets\Box;
+        $content='sss : ';
+        $box = new Box('Message', $content.count($view_json[4]));
+        $box->removable();
+        $box->collapsable();
+        $box->style('info');
+        $box->solid();
+        // $box->scrollable();
+        echo $box;
+        $box = new Box('Mail', $content.count($view_json[4]));
+        $box->removable();
+        $box->collapsable();
+        $box->style('info');
+        $box->solid();
+        // $box->scrollable();
+        echo $box;
+        $box = new Box('Phone', $content.count($view_json[4]));
+        $box->removable();
+        $box->collapsable();
+        $box->style('info');
+        $box->solid();
+        // $box->scrollable();
+        echo $box;
+        $box = new Box('Wechat', $content.count($view_json[4]));
+        $box->removable();
+        $box->collapsable();
+        $box->style('info');
+        $box->solid();
+        // $box->scrollable();
+        echo $box;
+        ?>
 </div>
 </div>
 <div id="mail" class="box-body table-responsive no-padding" style="display: none">
@@ -75,16 +134,19 @@
         ?>
     </table>
 </div>
-<div id="index1" class="box-body table-responsive no-padding" style="display: none">
-    <h2>{{$view_json[3][0]}}</h2>
-    <table class="table table-hover grid-table">
-        <th class="column-id" style="width: 50%">内容</th>
-        <th class="column-id" style="width: 10%">时间</th>
-        <th class="column-id" style="width: 10%">方式</th>
-        <th class="column-id" style="width: 10%">通知次数</th>
-        <th class="column-id" style="width: 10%">通知详细</th>
-        <?php
-        foreach (!empty($view_json[4][$view_json[3][0]])?$view_json[4][$view_json[3][0]]:[] as $k => $v) {
+<?php
+    $i=0;
+    foreach ($view_json[3] as $k => $v) {
+        echo "<div id='index".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
+        echo "<h2>".$view_json[3][$i]."</h2>";
+        echo "<table class='table table-hover grid-table'>";
+        echo "<th class='column-id' style='width: 50%'>内容</th>";
+        echo "<th class='column-id' style='width: 10%'>时间</th>";
+        echo "<th class='column-id' style='width: 10%'>方式</th>";
+        echo "<th class='column-id' style='width: 10%'>Mail</th>";
+        echo "<th class='column-id' style='width: 10%'>Phone<br/><font size='1'>(▲当番处理)</font></th>";
+        echo "<th class='column-id' style='width: 10%'>Wechat</th>";
+        foreach (!empty($view_json[4][$view_json[3][$i]])?$view_json[4][$view_json[3][$i]]:[] as $k => $v) {
             echo "<tr>";
             echo "<td>".$v['message']."</td>";
             echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
@@ -94,277 +156,54 @@
             echo !empty($v['wechat_type'])?"Wechat<font size='5'>■</font><br/>":"Wechat<font size='5'>□</font><br/>";
             echo "</td>";
             echo "<td>";
-            echo count($v['msg_action']);
-            echo "</td>";
-            echo "<td>";
+
             for ($x=0; $x<count($v['msg_action']); $x++) {
-                if (!empty($v['msg_action'][$x]['phone_number'])) {
-                    echo "Phone:".$v['msg_action'][$x]['phone_number']."<br/>";
-                }
                 if (!empty($v['msg_action'][$x]['mail_to'])) {
-                    echo "Mail:".$v['msg_action'][$x]['mail_to']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['wechat_to'])) {
-                    echo "Wechat:".$v['msg_action'][$x]['wechat_to']."<br/>";
+                    echo $v['msg_action'][$x]['mail_to']."<br/>";
                 }
             }
             echo "</td>";
             echo "<td>";
-
-        }
-        ?>
-    </table>
-</div>
-<div id="index2" class="box-body table-responsive no-padding" style="display: none">
-    <h2>{{$view_json[3][1]}}</h2>
-    <table class="table table-hover grid-table">
-        <th class="column-id" style="width: 50%">内容</th>
-        <th class="column-id" style="width: 10%">时间</th>
-        <th class="column-id" style="width: 10%">方式</th>
-        <th class="column-id" style="width: 10%">通知次数</th>
-        <th class="column-id" style="width: 10%">通知详细</th>
-        <?php
-        foreach (!empty($view_json[4][$view_json[3][1]])?$view_json[4][$view_json[3][1]]:[] as $k => $v) {
-            echo "<tr>";
-            echo "<td>".$v['message']."</td>";
-            echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
-            echo "<td>";
-            echo !empty($v['phone_type'])?"Phone<font size='5'>■</font><br/>":"Phone<font size='5'>□</font><br/>";
-            echo !empty($v['mail_type'])?"Mail<font size='5'>■</font><br/>":"Mail<font size='5'>□</font><br/>";
-            echo !empty($v['wechat_type'])?"Wechat<font size='5'>■</font><br/>":"Wechat<font size='5'>□</font><br/>";
-            echo "</td>";
-            echo "<td>";
-            echo count($v['msg_action']);
-            echo "</td>";
-            echo "<td>";
             for ($x=0; $x<count($v['msg_action']); $x++) {
                 if (!empty($v['msg_action'][$x]['phone_number'])) {
-                    echo "Phone:".$v['msg_action'][$x]['phone_number']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['mail_to'])) {
-                    echo "Mail:".$v['msg_action'][$x]['mail_to']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['wechat_to'])) {
-                    echo "Wechat:".$v['msg_action'][$x]['wechat_to']."<br/>";
+                    echo "<font size='3'>".($x+1)."</font>：".$v['msg_action'][$x]['phone_number'];
+                    echo !empty($v['msg_action'][$x]['phone_dtmf'])?"<font size='4'>▲</font>":"";
+                    echo "<br/>";
                 }
             }
             echo "</td>";
             echo "<td>";
-
-        }
-        ?>
-    </table>
-</div>
-<div id="index3" class="box-body table-responsive no-padding" style="display: none">
-    <h2>{{$view_json[3][2]}}</h2>
-    <table class="table table-hover grid-table">
-        <th class="column-id" style="width: 50%">内容</th>
-        <th class="column-id" style="width: 10%">时间</th>
-        <th class="column-id" style="width: 10%">方式</th>
-        <th class="column-id" style="width: 10%">通知次数</th>
-        <th class="column-id" style="width: 10%">通知详细</th>
-        <?php
-        foreach (!empty($view_json[4][$view_json[3][2]])?$view_json[4][$view_json[3][2]]:[] as $k => $v) {
-            echo "<tr>";
-            echo "<td>".$v['message']."</td>";
-            echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
-            echo "<td>";
-            echo !empty($v['phone_type'])?"Phone<font size='5'>■</font><br/>":"Phone<font size='5'>□</font><br/>";
-            echo !empty($v['mail_type'])?"Mail<font size='5'>■</font><br/>":"Mail<font size='5'>□</font><br/>";
-            echo !empty($v['wechat_type'])?"Wechat<font size='5'>■</font><br/>":"Wechat<font size='5'>□</font><br/>";
-            echo "</td>";
-            echo "<td>";
-            echo count($v['msg_action']);
-            echo "</td>";
-            echo "<td>";
             for ($x=0; $x<count($v['msg_action']); $x++) {
-                if (!empty($v['msg_action'][$x]['phone_number'])) {
-                    echo "Phone:".$v['msg_action'][$x]['phone_number']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['mail_to'])) {
-                    echo "Mail:".$v['msg_action'][$x]['mail_to']."<br/>";
-                }
                 if (!empty($v['msg_action'][$x]['wechat_to'])) {
-                    echo "Wechat:".$v['msg_action'][$x]['wechat_to']."<br/>";
+                    echo $v['msg_action'][$x]['wechat_to']."<br/>";
                 }
             }
-            echo "</td>";
             echo "<td>";
-
+            echo "</tr>";
         }
-        ?>
-    </table>
-</div>
-<div id="index4" class="box-body table-responsive no-padding" style="display: none">
-    <h2>{{$view_json[3][3]}}</h2>
-    <table class="table table-hover grid-table">
-        <th class="column-id" style="width: 50%">内容</th>
-        <th class="column-id" style="width: 10%">时间</th>
-        <th class="column-id" style="width: 10%">方式</th>
-        <th class="column-id" style="width: 10%">通知次数</th>
-        <th class="column-id" style="width: 10%">通知详细</th>
-        <?php
-        foreach (!empty($view_json[4][$view_json[3][3]])?$view_json[4][$view_json[3][3]]:[] as $k => $v) {
-            echo "<tr>";
-            echo "<td>".$v['message']."</td>";
-            echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
-            echo "<td>";
-            echo !empty($v['phone_type'])?"Phone<font size='5'>■</font><br/>":"Phone<font size='5'>□</font><br/>";
-            echo !empty($v['mail_type'])?"Mail<font size='5'>■</font><br/>":"Mail<font size='5'>□</font><br/>";
-            echo !empty($v['wechat_type'])?"Wechat<font size='5'>■</font><br/>":"Wechat<font size='5'>□</font><br/>";
-            echo "</td>";
-            echo "<td>";
-            echo count($v['msg_action']);
-            echo "</td>";
-            echo "<td>";
-            for ($x=0; $x<count($v['msg_action']); $x++) {
-                if (!empty($v['msg_action'][$x]['phone_number'])) {
-                    echo "Phone:".$v['msg_action'][$x]['phone_number']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['mail_to'])) {
-                    echo "Mail:".$v['msg_action'][$x]['mail_to']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['wechat_to'])) {
-                    echo "Wechat:".$v['msg_action'][$x]['wechat_to']."<br/>";
-                }
-            }
-            echo "</td>";
-            echo "<td>";
 
-        }
-        ?>
-    </table>
-</div>
-<div id="index5" class="box-body table-responsive no-padding" style="display: none">
-    <h2>{{$view_json[3][4]}}</h2>
-    <table class="table table-hover grid-table">
-        <th class="column-id" style="width: 50%">内容</th>
-        <th class="column-id" style="width: 10%">时间</th>
-        <th class="column-id" style="width: 10%">方式</th>
-        <th class="column-id" style="width: 10%">通知次数</th>
-        <th class="column-id" style="width: 10%">通知详细</th>
-        <?php
-        foreach (!empty($view_json[4][$view_json[3][4]])?$view_json[4][$view_json[3][4]]:[] as $k => $v) {
-            echo "<tr>";
-            echo "<td>".$v['message']."</td>";
-            echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
-            echo "<td>";
-            echo !empty($v['phone_type'])?"Phone<font size='5'>■</font><br/>":"Phone<font size='5'>□</font><br/>";
-            echo !empty($v['mail_type'])?"Mail<font size='5'>■</font><br/>":"Mail<font size='5'>□</font><br/>";
-            echo !empty($v['wechat_type'])?"Wechat<font size='5'>■</font><br/>":"Wechat<font size='5'>□</font><br/>";
-            echo "</td>";
-            echo "<td>";
-            echo count($v['msg_action']);
-            echo "</td>";
-            echo "<td>";
-            for ($x=0; $x<count($v['msg_action']); $x++) {
-                if (!empty($v['msg_action'][$x]['phone_number'])) {
-                    echo "Phone:".$v['msg_action'][$x]['phone_number']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['mail_to'])) {
-                    echo "Mail:".$v['msg_action'][$x]['mail_to']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['wechat_to'])) {
-                    echo "Wechat:".$v['msg_action'][$x]['wechat_to']."<br/>";
-                }
-            }
-            echo "</td>";
-            echo "<td>";
-
-        }
-        ?>
-    </table>
-</div>
-<div id="index6" class="box-body table-responsive no-padding" style="display: none">
-    <h2>{{$view_json[3][5]}}</h2>
-    <table class="table table-hover grid-table">
-        <th class="column-id" style="width: 50%">内容</th>
-        <th class="column-id" style="width: 10%">时间</th>
-        <th class="column-id" style="width: 10%">方式</th>
-        <th class="column-id" style="width: 10%">通知次数</th>
-        <th class="column-id" style="width: 10%">通知详细</th>
-        <?php
-        foreach (!empty($view_json[4][$view_json[3][5]])?$view_json[4][$view_json[3][5]]:[] as $k => $v) {
-            echo "<tr>";
-            echo "<td>".$v['message']."</td>";
-            echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
-            echo "<td>";
-            echo !empty($v['phone_type'])?"Phone<font size='5'>■</font><br/>":"Phone<font size='5'>□</font><br/>";
-            echo !empty($v['mail_type'])?"Mail<font size='5'>■</font><br/>":"Mail<font size='5'>□</font><br/>";
-            echo !empty($v['wechat_type'])?"Wechat<font size='5'>■</font><br/>":"Wechat<font size='5'>□</font><br/>";
-            echo "</td>";
-            echo "<td>";
-            echo count($v['msg_action']);
-            echo "</td>";
-            echo "<td>";
-            for ($x=0; $x<count($v['msg_action']); $x++) {
-                if (!empty($v['msg_action'][$x]['phone_number'])) {
-                    echo "Phone:".$v['msg_action'][$x]['phone_number']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['mail_to'])) {
-                    echo "Mail:".$v['msg_action'][$x]['mail_to']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['wechat_to'])) {
-                    echo "Wechat:".$v['msg_action'][$x]['wechat_to']."<br/>";
-                }
-            }
-            echo "</td>";
-            echo "<td>";
-
-        }
-        ?>
-    </table>
-</div>
-<div id="index7" class="box-body table-responsive no-padding" style="display: none">
-    <h2>{{$view_json[3][6]}}</h2>
-    <table class="table table-hover grid-table">
-        <th class="column-id" style="width: 50%">内容</th>
-        <th class="column-id" style="width: 10%">时间</th>
-        <th class="column-id" style="width: 10%">方式</th>
-        <th class="column-id" style="width: 10%">通知次数</th>
-        <th class="column-id" style="width: 10%">通知详细</th>
-        <?php
-        foreach (!empty($view_json[4][$view_json[3][6]])?$view_json[4][$view_json[3][6]]:[] as $k => $v) {
-            echo "<tr>";
-            echo "<td>".$v['message']."</td>";
-            echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
-            echo "<td>";
-            echo !empty($v['phone_type'])?"Phone<font size='5'>■</font><br/>":"Phone<font size='5'>□</font><br/>";
-            echo !empty($v['mail_type'])?"Mail<font size='5'>■</font><br/>":"Mail<font size='5'>□</font><br/>";
-            echo !empty($v['wechat_type'])?"Wechat<font size='5'>■</font><br/>":"Wechat<font size='5'>□</font><br/>";
-            echo "</td>";
-            echo "<td>";
-            echo count($v['msg_action']);
-            echo "</td>";
-            echo "<td>";
-            for ($x=0; $x<count($v['msg_action']); $x++) {
-                if (!empty($v['msg_action'][$x]['phone_number'])) {
-                    echo "Phone:".$v['msg_action'][$x]['phone_number']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['mail_to'])) {
-                    echo "Mail:".$v['msg_action'][$x]['mail_to']."<br/>";
-                }
-                if (!empty($v['msg_action'][$x]['wechat_to'])) {
-                    echo "Wechat:".$v['msg_action'][$x]['wechat_to']."<br/>";
-                }
-            }
-            echo "</td>";
-            echo "<td>";
-
-        }
-        ?>
-    </table>
-</div>
+        echo "</table>";
+        echo "</div>";
+        $i++;
+    }
+?>
 <script>
 $(function () {
     var ctx = document.getElementById("myChart1").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["2020/01", "2020/02", "2020/03", "2020/04", "2020/05", "2020/06"],
+            labels: ["{{$view_json[3][0]}}", "{{$view_json[3][1]}}", "{{$view_json[3][2]}}", "{{$view_json[3][3]}}", "{{$view_json[3][4]}}", "{{$view_json[3][5]}}","{{$view_json[3][6]}}"],
             datasets: [{
                 label: 'Mail',
-                data: [1, 5, 9,16, 8, 4],
+                data: [
+                    {{ !empty($view_json[5][$view_json[3][0]]['mail_count'])?$view_json[5][$view_json[3][0]]['mail_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][1]]['mail_count'])?$view_json[5][$view_json[3][1]]['mail_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][2]]['mail_count'])?$view_json[5][$view_json[3][2]]['mail_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][3]]['mail_count'])?$view_json[5][$view_json[3][3]]['mail_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][4]]['mail_count'])?$view_json[5][$view_json[3][4]]['mail_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][5]]['mail_count'])?$view_json[5][$view_json[3][5]]['mail_count']:0 }}
+                    ],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(255, 99, 132, 0.2)',
@@ -385,7 +224,14 @@ $(function () {
             },
             {
                 label: 'Phone',
-                data: [3, 6, 4, 3, 6, 4],
+                data: [
+                    {{ !empty($view_json[5][$view_json[3][0]]['phone_count'])?$view_json[5][$view_json[3][0]]['phone_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][1]]['phone_count'])?$view_json[5][$view_json[3][1]]['phone_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][2]]['phone_count'])?$view_json[5][$view_json[3][2]]['phone_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][3]]['phone_count'])?$view_json[5][$view_json[3][3]]['phone_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][4]]['phone_count'])?$view_json[5][$view_json[3][4]]['phone_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][5]]['phone_count'])?$view_json[5][$view_json[3][5]]['phone_count']:0 }}
+                    ],
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -406,7 +252,14 @@ $(function () {
             },
             {
                 label: 'Wechat',
-                data: [15, 7, 5, 15, 7, 5],
+                data: [
+                    {{ !empty($view_json[5][$view_json[3][0]]['wechat_count'])?$view_json[5][$view_json[3][0]]['wechat_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][1]]['wechat_count'])?$view_json[5][$view_json[3][1]]['wechat_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][2]]['wechat_count'])?$view_json[5][$view_json[3][2]]['wechat_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][3]]['wechat_count'])?$view_json[5][$view_json[3][3]]['wechat_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][4]]['wechat_count'])?$view_json[5][$view_json[3][4]]['wechat_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][5]]['wechat_count'])?$view_json[5][$view_json[3][5]]['wechat_count']:0 }}
+                    ],
                 backgroundColor: [
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
@@ -433,6 +286,24 @@ $(function () {
                         beginAtZero:true
                     }
                 }]
+            },
+            events : ["mousemove", "mouseout", "click"],
+            onClick : function (event, bars){
+                var activeElement = bars[0];   //当前被选中的元素
+                var product = activeElement._model.label;
+                // console.log(bars);
+                document.getElementById("mail").style.display= "none";
+                document.getElementById("phone").style.display= "none";
+                document.getElementById("wechat").style.display= "none";
+                var count3 = {{ count($view_json[3]) }};
+                for (var x1=0;x1<count3;x1++)
+                {
+                    if (activeElement._index==x1) {
+                        document.getElementById("index"+(x1+1)).style.display= "block";
+                    } else {
+                        document.getElementById("index"+(x1+1)).style.display= "none";
+                    }
+                }
             }
         }
     });
@@ -488,7 +359,7 @@ $(function () {
             onClick : function (event, bars){
                 var activeElement = bars[0];   //当前被选中的元素
                 var product = activeElement._model.label;
-                console.log(activeElement);
+                // console.log(activeElement);
                 // alert(activeElement._index);
                 document.getElementById("mail").style.display= "none";
                 document.getElementById("phone").style.display= "none";
@@ -563,65 +434,65 @@ $(function () {
 
 
 
-    var ctx3 = document.getElementById("myChart3").getContext('2d');
-    var myChart3 = new Chart(ctx3, {
-        type: 'doughnut',
-        data: {
-            labels: ["Mail", "Phone", "Wechat"],
-            datasets: [{
-                label: '# of Votes',
-                data: [{{ count($view_json[0]["MAIL"]) }}, {{ count($view_json[0]["PHONE"]) }}, {{ count($view_json[0]["WECHAT"]) }}],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)'
+    // var ctx3 = document.getElementById("myChart3").getContext('2d');
+    // var myChart3 = new Chart(ctx3, {
+    //     type: 'doughnut',
+    //     data: {
+    //         labels: ["Mail", "Phone", "Wechat"],
+    //         datasets: [{
+    //             label: '# of Votes',
+    //             data: [{{ count($view_json[0]["MAIL"]) }}, {{ count($view_json[0]["PHONE"]) }}, {{ count($view_json[0]["WECHAT"]) }}],
+    //             backgroundColor: [
+    //                 'rgba(255, 99, 132, 0.2)',
+    //                 'rgba(54, 162, 235, 0.2)',
+    //                 'rgba(255, 206, 86, 0.2)'
 
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            },
-            events : ["mousemove", "mouseout", "click"],
-            onClick : function (event, bars){
-                     var activeElement = bars[0];   //当前被选中的元素
-                     var product = activeElement._model.label;
-                     // console.log(activeElement);
-                     // alert(activeElement._index);
-                    document.getElementById("index1").style.display= "none";
-                    document.getElementById("index2").style.display= "none";
-                    document.getElementById("index3").style.display= "none";
-                    document.getElementById("index4").style.display= "none";
-                    document.getElementById("index5").style.display= "none";
-                    document.getElementById("index6").style.display= "none";
-                    document.getElementById("index7").style.display= "none";
-                     if (activeElement._index==0) {
-                        document.getElementById("mail").style.display= "block";
-                        document.getElementById("phone").style.display= "none";
-                        document.getElementById("wechat").style.display= "none";
-                     } else if (activeElement._index==1) {
-                        document.getElementById("mail").style.display= "none";
-                        document.getElementById("phone").style.display= "block";
-                        document.getElementById("wechat").style.display= "none";
-                     } else if (activeElement._index==2) {
-                        document.getElementById("mail").style.display= "none";
-                        document.getElementById("phone").style.display= "none";
-                        document.getElementById("wechat").style.display= "block";
-                     }
-                     //load_version_chart(product);
-                 }
-        }
-    });
+    //             ],
+    //             borderColor: [
+    //                 'rgba(255,99,132,1)',
+    //                 'rgba(54, 162, 235, 1)',
+    //                 'rgba(255, 206, 86, 1)'
+    //             ],
+    //             borderWidth: 1
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             yAxes: [{
+    //                 ticks: {
+    //                     beginAtZero:true
+    //                 }
+    //             }]
+    //         },
+    //         events : ["mousemove", "mouseout", "click"],
+    //         onClick : function (event, bars){
+    //                  var activeElement = bars[0];   //当前被选中的元素
+    //                  var product = activeElement._model.label;
+    //                  // console.log(activeElement);
+    //                  // alert(activeElement._index);
+    //                 document.getElementById("index1").style.display= "none";
+    //                 document.getElementById("index2").style.display= "none";
+    //                 document.getElementById("index3").style.display= "none";
+    //                 document.getElementById("index4").style.display= "none";
+    //                 document.getElementById("index5").style.display= "none";
+    //                 document.getElementById("index6").style.display= "none";
+    //                 document.getElementById("index7").style.display= "none";
+    //                  if (activeElement._index==0) {
+    //                     document.getElementById("mail").style.display= "block";
+    //                     document.getElementById("phone").style.display= "none";
+    //                     document.getElementById("wechat").style.display= "none";
+    //                  } else if (activeElement._index==1) {
+    //                     document.getElementById("mail").style.display= "none";
+    //                     document.getElementById("phone").style.display= "block";
+    //                     document.getElementById("wechat").style.display= "none";
+    //                  } else if (activeElement._index==2) {
+    //                     document.getElementById("mail").style.display= "none";
+    //                     document.getElementById("phone").style.display= "none";
+    //                     document.getElementById("wechat").style.display= "block";
+    //                  }
+    //                  //load_version_chart(product);
+    //              }
+    //     }
+    // });
 });
 </script>

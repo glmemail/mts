@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Models\Fluentd;
 use App\Models\Message;
 use App\Models\Action_info;
+use App\Models\Aliivr;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\Dashboard;
 use Encore\Admin\Layout\Column;
@@ -90,7 +91,7 @@ class ChartjsController extends Controller
             $weeks[]=date("Y-m-d",strtotime($day_str));
         }
         // var_dump($weeks);
-        $message = Message::select(array('message.id','message.message','action_info.message_id', 'action_info.actiontime', 'action_info.actiontype', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
+        $message = Message::select(array('message.id','message.message','action_info.message_id', 'action_info.actiontime', 'action_info.actiontype', 'phone_info.phone_number', 'phone_info.call_id', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->leftjoin('action_info','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
                 $join->on('message.sysid', '=', 'fluentd.sysid')
@@ -118,9 +119,13 @@ class ChartjsController extends Controller
         $message_json = json_decode($message,TRUE);
         $msg = [];
         $msg_arr= [];
+        $msg_count= [];
         $message_id=0;
         foreach ($message_json as $k => $v) {
             // $message_id=$v[0]['id'];
+            $mail_count=0;
+            $phone_count=0;
+            $wechat_count=0;
             $msg=[];
             for ($x=0; $x<count($v); $x++) {
                 // var_dump($v[$x]);
@@ -129,26 +134,18 @@ class ChartjsController extends Controller
                 $wechat_type="";
                 $m=[];
                 if ($v[$x]['actiontype']=='MAIL'){
+                    $mail_count++;
                     $mail_type="MAIL";
                 }
                 if ($v[$x]['actiontype']=='PHONE'){
+                    $phone_count++;
                     $phone_type="PHONE";
                 }
                 if ($v[$x]['actiontype']=='WECHAT'){
+                    $wechat_count++;
                     $wechat_type="WECHAT";
                 }
-                // var_dump($message_id);
-                // var_dump($v[$x]['id']);
-                // for ($x1=0; $x1<count($msg); $x1++) {
-                //     if ($msg[$x1]['message_id']==$v[$x]['id']){
-                //         $flg="1";
-                //         break;
-                //     }
-                // }
-
                 if ($message_id==$v[$x]['id']) {
-                    // var_dump($msg);
-                    // var_dump($v[$x]);
                     if (count($msg)>0){
                         for ($x1=0; $x1<count($msg); $x1++) {
                             if ($msg[$x1]['message_id']==$v[$x]['id']){
@@ -166,13 +163,23 @@ class ChartjsController extends Controller
                                 }
                                 $t=[];
                                 $t['phone_number']=$v[$x]['phone_number'];
+                                $aliivr=Aliivr::select('call_id','dtmf')
+                                ->where('call_id', $v[$x]['call_id'])
+                                ->where('dtmf', '2')
+                                ->get()
+                                ->groupBy('call_id');
+                                $aliivr_json = json_decode($aliivr,TRUE);
+                                var_dump($aliivr_json);
+                                if(count($aliivr_json)>0) {
+                                    $dtmf=$aliivr_json[$v[$x]['call_id']][0]['dtmf'];
+                                    $t['phone_dtmf']=$dtmf;
+                                } else {
+                                    $t['phone_dtmf']="";
+                                }
                                 $t['mail_to']=$v[$x]['mail_to'];
                                 $t['wechat_to']=$v[$x]['wechat_to'];
                                 $msg[$x1]['msg_action'][]=$t;
-                                // var_dump($msg['msg_action']);
                                 break;
-                                // $msg[]=$m;
-                                // $msg[$x1]['msg_action']=;
                             }
                         }
                     } else {
@@ -199,7 +206,6 @@ class ChartjsController extends Controller
                     }
 
                 } else {
-                    // var_dump($msg);
                     $msg_action=[];
                     $m['message_id']=$v[$x]['id'];
                         $m['message']=$v[$x]['message'];
@@ -223,17 +229,18 @@ class ChartjsController extends Controller
                 }
                 $message_id=$v[$x]['id'];
             }
-            // var_dump($msg);
             $msg_arr[$k]=$msg;
+            $msg_count[$k]['mail_count']=$mail_count;
+            $msg_count[$k]['phone_count']=$phone_count;
+            $msg_count[$k]['wechat_count']=$wechat_count;
         }
-        // $weeks_json = json_decode($weeks,TRUE);
-        // var_dump($actoninfo1_json);
         $view_json=[];
         $view_json[]=$actoninfo_json;    // index=0
         $view_json[]=$fluentd_sel;       // index=1
         $view_json[]=$actoninfo1_json;   // index=2
         $view_json[]=$weeks;             // index=3
         $view_json[]=$msg_arr;           // index=4
+        $view_json[]=$msg_count;           // index=4
         // var_dump($msg_arr['2020-06-22']);
         // var_dump($message_json);
         // var_dump($actoninfo1_json);
@@ -241,6 +248,7 @@ class ChartjsController extends Controller
         // var_dump($view_json[2]);
         // var_dump($view_json[3]);
         // var_dump($view_json[4]);
+        // var_dump($view_json[5]);
         $cnt = 0;
         // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         return $content
