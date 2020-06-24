@@ -49,7 +49,7 @@
 
         <?php
         use Encore\Admin\Widgets\Box;
-        $content='sss : ';
+        $content='Counts : ';
         $box = new Box('Message', $content.count($view_json[4]));
         $box->removable();
         $box->collapsable();
@@ -57,21 +57,21 @@
         $box->solid();
         // $box->scrollable();
         echo $box;
-        $box = new Box('Mail', $content.count($view_json[4]));
+        $box = new Box('Mail', $content.count($view_json[0]['MAIL']));
         $box->removable();
         $box->collapsable();
         $box->style('info');
         $box->solid();
         // $box->scrollable();
         echo $box;
-        $box = new Box('Phone', $content.count($view_json[4]));
+        $box = new Box('Phone', $content.count($view_json[0]['PHONE']));
         $box->removable();
         $box->collapsable();
         $box->style('info');
         $box->solid();
         // $box->scrollable();
         echo $box;
-        $box = new Box('Wechat', $content.count($view_json[4]));
+        $box = new Box('Wechat', $content.count($view_json[0]['WECHAT']));
         $box->removable();
         $box->collapsable();
         $box->style('info');
@@ -164,11 +164,13 @@
             }
             echo "</td>";
             echo "<td>";
+            $x1=0;
             for ($x=0; $x<count($v['msg_action']); $x++) {
                 if (!empty($v['msg_action'][$x]['phone_number'])) {
-                    echo "<font size='3'>".($x+1)."</font>：".$v['msg_action'][$x]['phone_number'];
+                    echo "<font size='3'>".($x1+1)."</font>：".$v['msg_action'][$x]['phone_number'];
                     echo !empty($v['msg_action'][$x]['phone_dtmf'])?"<font size='4'>▲</font>":"";
                     echo "<br/>";
+                    $x1++;
                 }
             }
             echo "</td>";

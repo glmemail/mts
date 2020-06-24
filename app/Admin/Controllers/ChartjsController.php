@@ -93,7 +93,7 @@ class ChartjsController extends Controller
         // var_dump($weeks);
         $message = Message::select(array('message.id','message.message','action_info.message_id', 'action_info.actiontime', 'action_info.actiontype', 'phone_info.phone_number', 'phone_info.call_id', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->leftjoin('action_info','action_info.message_id','=','message.id')
-            ->join('fluentd',function ($join) {
+            ->leftjoin('fluentd',function ($join) {
                 $join->on('message.sysid', '=', 'fluentd.sysid')
                     ->on('message.svrid', '=', 'fluentd.svrid')
                     ->on('message.subsysid', '=', 'fluentd.subsysid')
@@ -106,7 +106,7 @@ class ChartjsController extends Controller
             ->leftjoin('mail_info','action_info.mail_id','=','mail_info.id')
             ->leftjoin('wechat_info','action_info.wechat_id','=','wechat_info.id')
             ->where('user_fluentd.user_id', $user['username'])
-            ->where('action_info.actiontime','>=', $showtime)
+            ->where('message.actiontime','>=', $showtime)
             ->orderBy('actiontime', 'asc')
             ->orderBy('message.id', 'asc')
             ->get()
@@ -121,7 +121,9 @@ class ChartjsController extends Controller
         $msg_arr= [];
         $msg_count= [];
         $message_id=0;
+        $message_count=0;
         foreach ($message_json as $k => $v) {
+            $message_count++;
             // $message_id=$v[0]['id'];
             $mail_count=0;
             $phone_count=0;
@@ -169,7 +171,6 @@ class ChartjsController extends Controller
                                 ->get()
                                 ->groupBy('call_id');
                                 $aliivr_json = json_decode($aliivr,TRUE);
-                                var_dump($aliivr_json);
                                 if(count($aliivr_json)>0) {
                                     $dtmf=$aliivr_json[$v[$x]['call_id']][0]['dtmf'];
                                     $t['phone_dtmf']=$dtmf;
@@ -247,7 +248,7 @@ class ChartjsController extends Controller
         // var_dump($view_json[0]);
         // var_dump($view_json[2]);
         // var_dump($view_json[3]);
-        // var_dump($view_json[4]);
+        var_dump($message_json);
         // var_dump($view_json[5]);
         $cnt = 0;
         // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
