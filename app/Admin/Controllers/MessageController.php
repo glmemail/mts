@@ -38,15 +38,20 @@ class MessageController extends AdminController
             return $this->message;
             // return "<span class='label label-warning'>{$action}</span>";
         })->width(900);
+        $grid->column('sysid', 'SYS_ID');
+        $grid->column('svrid', 'SVR_ID');
+        $grid->column('subsysid', 'SUB_SYS_ID');
+        $grid->column('cmpid', 'CMP_ID');
         $grid->column('actiontime', 'ActionTime');
-        $grid->column('action', 'ActionCount')->display(function ($action) {
-            $count = count($action);
-            return "$count";
-            // return "<span class='label label-warning'>{$action}</span>";
-        });
+        // $grid->column('action', 'ActionCount')->display(function ($action) {
+        //     $count = count($action);
+        //     return "$count";
+        //     // return "<span class='label label-warning'>{$action}</span>";
+        // });
 
         $grid->disableCreateButton();
         $grid->disableActions();
+        // var_dump($grid);
         return $grid;
     }
 

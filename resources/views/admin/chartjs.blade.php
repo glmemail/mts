@@ -26,16 +26,15 @@
 
 </style>
 <div>
-    <select>
-        <option value="0" onchange="#">请选择</option>
+    <select id="fluentd_id" onchange="combaction()">
+        <option value="0" >请选择</option>
         <?php
-        // $arr=array($view_json[1]);
-        // var_dump($view_json[3]);
-        foreach ($view_json[1] as $v) {
-            echo "<option value='".$v."''>".$v."</option>";
+        foreach ($view_json[1] as $k => $v) {
+            echo "<option value='".$k."''>".$v."</option>";
         }
         ?>
     </select>
+    <!-- <input id="aaa" type="button" onclick="combaction()" value="aaa"/> -->
 </div>
 <div class="row">
 <div class="col-md-4">
@@ -48,37 +47,94 @@
     <!-- <canvas id="myChart3" style="width: 322px; display: block; height: 160px;" width="322" height="160" class="chartjs-render-monitor"></canvas> -->
 
         <?php
-        use Encore\Admin\Widgets\Box;
-        $content='Counts : ';
-        $box = new Box('Message', $content.count($view_json[4]));
-        $box->removable();
-        $box->collapsable();
-        $box->style('info');
-        $box->solid();
-        // $box->scrollable();
-        echo $box;
-        $box = new Box('Mail', $content.count($view_json[0]['MAIL']));
-        $box->removable();
-        $box->collapsable();
-        $box->style('info');
-        $box->solid();
-        // $box->scrollable();
-        echo $box;
-        $box = new Box('Phone', $content.count($view_json[0]['PHONE']));
-        $box->removable();
-        $box->collapsable();
-        $box->style('info');
-        $box->solid();
-        // $box->scrollable();
-        echo $box;
-        $box = new Box('Wechat', $content.count($view_json[0]['WECHAT']));
-        $box->removable();
-        $box->collapsable();
-        $box->style('info');
-        $box->solid();
-        // $box->scrollable();
-        echo $box;
+        // use Encore\Admin\Widgets\Box;
+        // $content='Counts : ';
+        // $box = new Box('Message', $content.count($view_json[4]));
+        // $box->removable();
+        // $box->collapsable();
+        // $box->style('info');
+        // $box->solid();
+        // // $box->scrollable();
+        // echo $box;
+        // $box = new Box('Mail', $content.count($view_json[0]['MAIL']));
+        // $box->removable();
+        // $box->collapsable();
+        // $box->style('info');
+        // $box->solid();
+        // // $box->scrollable();
+        // echo $box;
+        // $box = new Box('Phone', $content.count($view_json[0]['PHONE']));
+        // $box->removable();
+        // $box->collapsable();
+        // $box->style('info');
+        // $box->solid();
+        // // $box->scrollable();
+        // echo $box;
+        // $box = new Box('Wechat', $content.count($view_json[0]['WECHAT']));
+        // $box->removable();
+        // $box->collapsable();
+        // $box->style('info');
+        // $box->solid();
+        // // $box->scrollable();
+        // echo $box;
         ?>
+    <div class="col-md-5"><div class="small-box bg-aqua">
+        <div class="inner">
+            <h3>{{$view_json[6]['msg_all_count']}}</h3>
+
+            <p>Message</p>
+        </div>
+        <div class="icon">
+            <i class="fa fa-users"></i>
+        </div>
+        <a href="/admin/message" class="small-box-footer">
+            更多&nbsp;
+            <i class="fa fa-arrow-circle-right"></i>
+        </a>
+    </div></div>
+    <div class="col-md-5"><div class="small-box bg-green">
+        <div class="inner">
+            <h3>{{count($view_json[0]['MAIL'])}}</h3>
+
+            <p>Mail</p>
+        </div>
+        <div class="icon">
+            <i class="fa fa-users"></i>
+        </div>
+        <a href="/admin/message" class="small-box-footer">
+            更多&nbsp;
+            <i class="fa fa-arrow-circle-right"></i>
+        </a>
+    </div></div>
+    <div class="col-md-5"><div class="small-box bg-green">
+        <div class="inner">
+            <h3>{{count($view_json[0]['PHONE'])}}</h3>
+
+            <p>Phone</p>
+        </div>
+        <div class="icon">
+            <i class="fa fa-users"></i>
+        </div>
+        <a href="/admin/message" class="small-box-footer">
+            更多&nbsp;
+            <i class="fa fa-arrow-circle-right"></i>
+        </a>
+    </div></div>
+    <div class="col-md-5"><div class="small-box bg-green">
+        <div class="inner">
+            <h3>{{count($view_json[0]['WECHAT'])}}</h3>
+
+            <p>Wechat</p>
+        </div>
+        <div class="icon">
+            <i class="fa fa-users"></i>
+        </div>
+        <a href="/admin/message" class="small-box-footer">
+            更多&nbsp;
+            <i class="fa fa-arrow-circle-right"></i>
+        </a>
+    </div></div>
+
 </div>
 </div>
 <div id="mail" class="box-body table-responsive no-padding" style="display: none">
@@ -497,4 +553,14 @@ $(function () {
     //     }
     // });
 });
+
+function combaction(){
+ //获取被选中的option标签
+ // var vs = $('select  option:selected').val();
+ // var vs = $('aaa').val();
+ var vs = document.getElementById("fluentd_id").value
+ alert(vs);
+    // window.location.href = 'admin/chartjs/combaction?id=1';
+    location.href = '/admin/chartjs/' + vs;
+}
 </script>

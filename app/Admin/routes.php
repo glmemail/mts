@@ -14,7 +14,7 @@ Route::group([
     $router->resource('users', UserController::class);
     $router->resource('message', MessageController::class);
     $router->get('/chartjs', 'ChartjsController@index')->name('admin.chartjs');
-
+    $router->get('/chartjs/{fluentd_id}', 'ChartjsController@combaction')->name('admin.chartjsid');
 
     $router->resource('action', ActionController::class);
 
