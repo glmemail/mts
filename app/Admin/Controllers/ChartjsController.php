@@ -36,14 +36,11 @@ class ChartjsController extends Controller
             ->groupBy('keyid');
         // $svrid = "";
         $fluentd_json = json_decode($fluentd,true);
-        // var_dump($fluentd_json);
         $s = [];
         foreach ($fluentd_json as $k => $v) {
             $s[$k] = $v[0]['sysid'] ." ". $v[0]['svrid'] ." ". $v[0]['subsysid'] ." ". $v[0]['cmpid'];
         }
-        // var_dump($s);
         $fluentd_sel = $s;
-        // var_dump($fluentd_sel);
         $actoninfo = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
@@ -64,7 +61,6 @@ class ChartjsController extends Controller
         // $days = Input::get('days', 7);
         // $range = Carbon::now()->subDays($days);
         $showtime=date("Y-m-d",strtotime("-7 day"));
-        // var_dump($showtime);
         $actoninfo1 = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
@@ -91,7 +87,6 @@ class ChartjsController extends Controller
             $day_str="-".$x." day";
             $weeks[]=date("Y-m-d",strtotime($day_str));
         }
-        // var_dump($weeks);
         $message = Message::select(array('message.id','message.message','action_info.message_id', 'action_info.actiontime', 'action_info.actiontype', 'phone_info.phone_number', 'phone_info.call_id', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->leftjoin('action_info','action_info.message_id','=','message.id')
             ->leftjoin('fluentd',function ($join) {
@@ -140,7 +135,6 @@ class ChartjsController extends Controller
             $wechat_count=0;
             $msg=[];
             for ($x=0; $x<count($v); $x++) {
-                // var_dump($v[$x]);
                 $mail_type="";
                 $phone_type="";
                 $wechat_type="";
@@ -180,7 +174,7 @@ class ChartjsController extends Controller
                                 $t['phone_number']=$v[$x]['phone_number'];
                                 $aliivr=Aliivr::select('call_id','dtmf')
                                 ->where('call_id', $v[$x]['call_id'])
-                                ->where('dtmf', '2')
+                                // ->where('dtmf', '2')
                                 ->get()
                                 ->groupBy('call_id');
                                 $aliivr_json = json_decode($aliivr,TRUE);
@@ -212,6 +206,18 @@ class ChartjsController extends Controller
                         }
                         $t=[];
                         $t['phone_number']=$v[$x]['phone_number'];
+                        $aliivr=Aliivr::select('call_id','dtmf')
+                        ->where('call_id', $v[$x]['call_id'])
+                        // ->where('dtmf', '2')
+                        ->get()
+                        ->groupBy('call_id');
+                        $aliivr_json = json_decode($aliivr,TRUE);
+                        if(count($aliivr_json)>0) {
+                            $dtmf=$aliivr_json[$v[$x]['call_id']][0]['dtmf'];
+                            $t['phone_dtmf']=$dtmf;
+                        } else {
+                            $t['phone_dtmf']="";
+                        }
                         $t['mail_to']=$v[$x]['mail_to'];
                         $t['wechat_to']=$v[$x]['wechat_to'];
                         $msg_action[]=$t;
@@ -220,6 +226,7 @@ class ChartjsController extends Controller
                     }
 
                 } else {
+
                     $msg_action=[];
                     $m['message_id']=$v[$x]['id'];
                         $m['message']=$v[$x]['message'];
@@ -235,6 +242,18 @@ class ChartjsController extends Controller
                     }
                     $t=[];
                     $t['phone_number']=$v[$x]['phone_number'];
+                    $aliivr=Aliivr::select('call_id','dtmf')
+                    ->where('call_id', $v[$x]['call_id'])
+                    // ->where('dtmf', '2')
+                    ->get()
+                    ->groupBy('call_id');
+                    $aliivr_json = json_decode($aliivr,TRUE);
+                    if(count($aliivr_json)>0) {
+                        $dtmf=$aliivr_json[$v[$x]['call_id']][0]['dtmf'];
+                        $t['phone_dtmf']=$dtmf;
+                    } else {
+                        $t['phone_dtmf']="";
+                    }
                     $t['mail_to']=$v[$x]['mail_to'];
                     $t['wechat_to']=$v[$x]['wechat_to'];
                     $msg_action[]=$t;
@@ -256,7 +275,6 @@ class ChartjsController extends Controller
                 $msg_all_count++;
             }
         }
-        // var_dump($msg_arr);
         $msg_all_counts['msg_all_count']=$msg_all_count;
         $msg_all_counts['mail_all_count']=$mail_all_count;
         $msg_all_counts['phone_all_count']=$phone_all_count;
@@ -279,6 +297,7 @@ class ChartjsController extends Controller
         // var_dump($view_json[4]);
         // var_dump($view_json[5]);
         // var_dump($view_json[6]);
+        // var_dump($view_json[5][$view_json[3][6]]['mail_count']);
         $cnt = 0;
         // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         return $content
@@ -304,14 +323,11 @@ class ChartjsController extends Controller
             ->groupBy('keyid');
         // $svrid = "";
         $fluentd_json = json_decode($fluentd,true);
-        // var_dump($fluentd_json);
         $s = [];
         foreach ($fluentd_json as $k => $v) {
             $s[$k] = $v[0]['sysid'] ." ". $v[0]['svrid'] ." ". $v[0]['subsysid'] ." ". $v[0]['cmpid'];
         }
-        // var_dump($s);
         $fluentd_sel = $s;
-        // var_dump($fluentd_sel);
         $actoninfo = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
@@ -333,7 +349,6 @@ class ChartjsController extends Controller
         // $days = Input::get('days', 7);
         // $range = Carbon::now()->subDays($days);
         $showtime=date("Y-m-d",strtotime("-7 day"));
-        // var_dump($showtime);
         $actoninfo1 = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
@@ -361,7 +376,7 @@ class ChartjsController extends Controller
             $day_str="-".$x." day";
             $weeks[]=date("Y-m-d",strtotime($day_str));
         }
-        // var_dump($weeks);
+
         $message = Message::select(array('message.id','message.message','action_info.message_id', 'action_info.actiontime', 'action_info.actiontype', 'phone_info.phone_number', 'phone_info.call_id', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->leftjoin('action_info','action_info.message_id','=','message.id')
             ->leftjoin('fluentd',function ($join) {
@@ -385,7 +400,6 @@ class ChartjsController extends Controller
             ->groupBy(function($date) {
                 return Carbon::parse($date->actiontime)->format('yy-m-d');
                 });
-
         $message_all = Message::select(array('message.id','message.actiontime'))
             ->where('message.actiontime','>=', $showtime)
             ->orderBy('actiontime', 'asc')
@@ -411,7 +425,6 @@ class ChartjsController extends Controller
             $wechat_count=0;
             $msg=[];
             for ($x=0; $x<count($v); $x++) {
-                // var_dump($v[$x]);
                 $mail_type="";
                 $phone_type="";
                 $wechat_type="";
@@ -483,6 +496,18 @@ class ChartjsController extends Controller
                         }
                         $t=[];
                         $t['phone_number']=$v[$x]['phone_number'];
+                        $aliivr=Aliivr::select('call_id','dtmf')
+                        ->where('call_id', $v[$x]['call_id'])
+                        // ->where('dtmf', '2')
+                        ->get()
+                        ->groupBy('call_id');
+                        $aliivr_json = json_decode($aliivr,TRUE);
+                        if(count($aliivr_json)>0) {
+                            $dtmf=$aliivr_json[$v[$x]['call_id']][0]['dtmf'];
+                            $t['phone_dtmf']=$dtmf;
+                        } else {
+                            $t['phone_dtmf']="";
+                        }
                         $t['mail_to']=$v[$x]['mail_to'];
                         $t['wechat_to']=$v[$x]['wechat_to'];
                         $msg_action[]=$t;
@@ -506,6 +531,18 @@ class ChartjsController extends Controller
                     }
                     $t=[];
                     $t['phone_number']=$v[$x]['phone_number'];
+                        $aliivr=Aliivr::select('call_id','dtmf')
+                        ->where('call_id', $v[$x]['call_id'])
+                        // ->where('dtmf', '2')
+                        ->get()
+                        ->groupBy('call_id');
+                        $aliivr_json = json_decode($aliivr,TRUE);
+                        if(count($aliivr_json)>0) {
+                            $dtmf=$aliivr_json[$v[$x]['call_id']][0]['dtmf'];
+                            $t['phone_dtmf']=$dtmf;
+                        } else {
+                            $t['phone_dtmf']="";
+                        }
                     $t['mail_to']=$v[$x]['mail_to'];
                     $t['wechat_to']=$v[$x]['wechat_to'];
                     $msg_action[]=$t;
@@ -527,19 +564,19 @@ class ChartjsController extends Controller
                 $msg_all_count++;
             }
         }
-        // var_dump($msg_arr);
         $msg_all_counts['msg_all_count']=$msg_all_count;
         $msg_all_counts['mail_all_count']=$mail_all_count;
         $msg_all_counts['phone_all_count']=$phone_all_count;
         $msg_all_counts['wechat_all_count']=$wechat_all_count;
         $view_json=[];
-        $view_json[]=$actoninfo_json;    // index=0
-        $view_json[]=$fluentd_sel;       // index=1
-        $view_json[]=$actoninfo1_json;   // index=2
-        $view_json[]=$weeks;             // index=3 一周内日期List
-        $view_json[]=$msg_arr;           // index=4
-        $view_json[]=$msg_count;           // index=5
-        $view_json[]=$msg_all_counts;           // index=6 一周内msg_counts
+        $view_json[]=$actoninfo_json;         // index=0
+        $view_json[]=$fluentd_sel;            // index=1
+        $view_json[]=$actoninfo1_json;        // index=2
+        $view_json[]=$weeks;                  // index=3 一周内日期List
+        $view_json[]=$msg_arr;                // index=4
+        $view_json[]=$msg_count;              // index=5
+        $view_json[]=$msg_all_counts;         // index=6 一周内msg_counts
+        $view_json[]=$fluentd_id;             // index=7 fluentd下拉框默认选择
         $cnt = 0;
         // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         $content = new Content();

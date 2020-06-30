@@ -30,7 +30,12 @@
         <option value="0" >请选择</option>
         <?php
         foreach ($view_json[1] as $k => $v) {
-            echo "<option value='".$k."''>".$v."</option>";
+            // $select=
+            if (!empty($view_json[7])?$view_json[7]:0==$k) {
+                echo "<option value='".$k."'' selected>".$v."</option>";
+            } else {
+                echo "<option value='".$k."''>".$v."</option>";
+            }
         }
         ?>
     </select>
@@ -81,7 +86,6 @@
     <div class="col-md-5"><div class="small-box bg-aqua">
         <div class="inner">
             <h3>{{$view_json[6]['msg_all_count']}}</h3>
-
             <p>Message</p>
         </div>
         <div class="icon">
@@ -95,13 +99,12 @@
     <div class="col-md-5"><div class="small-box bg-green">
         <div class="inner">
             <h3>{{count($view_json[0]['MAIL'])}}</h3>
-
             <p>Mail</p>
         </div>
         <div class="icon">
             <i class="fa fa-users"></i>
         </div>
-        <a href="/admin/message" class="small-box-footer">
+        <a href="/admin/mail" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -129,7 +132,7 @@
         <div class="icon">
             <i class="fa fa-users"></i>
         </div>
-        <a href="/admin/message" class="small-box-footer">
+        <a href="/admin/wechat" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -200,7 +203,7 @@
         echo "<th class='column-id' style='width: 10%'>时间</th>";
         echo "<th class='column-id' style='width: 10%'>方式</th>";
         echo "<th class='column-id' style='width: 10%'>Mail</th>";
-        echo "<th class='column-id' style='width: 10%'>Phone<br/><font size='1'>(▲当番处理)</font></th>";
+        echo "<th class='column-id' style='width: 10%'>Phone</th>";
         echo "<th class='column-id' style='width: 10%'>Wechat</th>";
         foreach (!empty($view_json[4][$view_json[3][$i]])?$view_json[4][$view_json[3][$i]]:[] as $k => $v) {
             echo "<tr>";
@@ -224,7 +227,15 @@
             for ($x=0; $x<count($v['msg_action']); $x++) {
                 if (!empty($v['msg_action'][$x]['phone_number'])) {
                     echo "<font size='3'>".($x1+1)."</font>：".$v['msg_action'][$x]['phone_number'];
-                    echo !empty($v['msg_action'][$x]['phone_dtmf'])?"<font size='4'>▲</font>":"";
+                    $phone_dtmf=!empty($v['msg_action'][$x]['phone_dtmf'])?$v['msg_action'][$x]['phone_dtmf']:"";
+                    if ($phone_dtmf=="2") {
+                    // echo !empty($v['msg_action'][$x]['phone_dtmf'])?"<font size='4'>▲</font>":"";
+                        echo "<font size='2'> 当番处理</font>";
+                    } else if ($phone_dtmf=="0") {
+                        echo "<font size='2'> 接通未处理</font>";
+                    } else {
+                        echo "<font size='2'> 未接通</font>";
+                    }
                     echo "<br/>";
                     $x1++;
                 }
@@ -260,9 +271,11 @@ $(function () {
                     {{ !empty($view_json[5][$view_json[3][2]]['mail_count'])?$view_json[5][$view_json[3][2]]['mail_count']:0 }},
                     {{ !empty($view_json[5][$view_json[3][3]]['mail_count'])?$view_json[5][$view_json[3][3]]['mail_count']:0 }},
                     {{ !empty($view_json[5][$view_json[3][4]]['mail_count'])?$view_json[5][$view_json[3][4]]['mail_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][5]]['mail_count'])?$view_json[5][$view_json[3][5]]['mail_count']:0 }}
+                    {{ !empty($view_json[5][$view_json[3][5]]['mail_count'])?$view_json[5][$view_json[3][5]]['mail_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][6]]['mail_count'])?$view_json[5][$view_json[3][6]]['mail_count']:0 }}
                     ],
                 backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(255, 99, 132, 0.2)',
@@ -271,6 +284,7 @@ $(function () {
                     'rgba(255, 99, 132, 0.2)'
                 ],
                 borderColor: [
+                    'rgba(255,99,132,1)',
                     'rgba(255,99,132,1)',
                     'rgba(255,99,132,1)',
                     'rgba(255,99,132,1)',
@@ -288,9 +302,11 @@ $(function () {
                     {{ !empty($view_json[5][$view_json[3][2]]['phone_count'])?$view_json[5][$view_json[3][2]]['phone_count']:0 }},
                     {{ !empty($view_json[5][$view_json[3][3]]['phone_count'])?$view_json[5][$view_json[3][3]]['phone_count']:0 }},
                     {{ !empty($view_json[5][$view_json[3][4]]['phone_count'])?$view_json[5][$view_json[3][4]]['phone_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][5]]['phone_count'])?$view_json[5][$view_json[3][5]]['phone_count']:0 }}
+                    {{ !empty($view_json[5][$view_json[3][5]]['phone_count'])?$view_json[5][$view_json[3][5]]['phone_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][6]]['phone_count'])?$view_json[5][$view_json[3][6]]['phone_count']:0 }}
                     ],
                 backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -299,6 +315,7 @@ $(function () {
                     'rgba(54, 162, 235, 0.2)'
                 ],
                 borderColor: [
+                    'rgba(54, 162, 235, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(54, 162, 235, 1)',
@@ -316,9 +333,11 @@ $(function () {
                     {{ !empty($view_json[5][$view_json[3][2]]['wechat_count'])?$view_json[5][$view_json[3][2]]['wechat_count']:0 }},
                     {{ !empty($view_json[5][$view_json[3][3]]['wechat_count'])?$view_json[5][$view_json[3][3]]['wechat_count']:0 }},
                     {{ !empty($view_json[5][$view_json[3][4]]['wechat_count'])?$view_json[5][$view_json[3][4]]['wechat_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][5]]['wechat_count'])?$view_json[5][$view_json[3][5]]['wechat_count']:0 }}
+                    {{ !empty($view_json[5][$view_json[3][5]]['wechat_count'])?$view_json[5][$view_json[3][5]]['wechat_count']:0 }},
+                    {{ !empty($view_json[5][$view_json[3][6]]['wechat_count'])?$view_json[5][$view_json[3][6]]['wechat_count']:0 }}
                     ],
                 backgroundColor: [
+                    'rgba(255, 206, 86, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
                     'rgba(255, 206, 86, 0.2)',
@@ -327,6 +346,7 @@ $(function () {
                     'rgba(255, 206, 86, 0.2)'
                 ],
                 borderColor: [
+                    'rgba(255, 206, 86, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(255, 206, 86, 1)',
@@ -555,12 +575,16 @@ $(function () {
 });
 
 function combaction(){
- //获取被选中的option标签
- // var vs = $('select  option:selected').val();
- // var vs = $('aaa').val();
- var vs = document.getElementById("fluentd_id").value
- alert(vs);
+    //获取被选中的option标签
+    var vs = document.getElementById("fluentd_id").value
+
+    // alert(vs);
     // window.location.href = 'admin/chartjs/combaction?id=1';
-    location.href = '/admin/chartjs/' + vs;
+    if (vs=="0"){
+        location.href = '/admin/chartjs';
+    } else {
+        location.href = '/admin/chartjs/' + vs;
+    }
+
 }
 </script>
