@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 // use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
+use DB;
 
 class ChartjsController extends Controller
 {
@@ -109,7 +110,7 @@ class ChartjsController extends Controller
             ->groupBy(function($date) {
                 return Carbon::parse($date->actiontime)->format('yy-m-d');
                 });
-        // TODO 臨時刪除
+
         // $message_all = Message::select(array('message.id','message.actiontime'))
         //     ->where('message.actiontime','>=', $showtime)
         //     ->orderBy('actiontime', 'asc')
@@ -118,11 +119,14 @@ class ChartjsController extends Controller
         //     ->groupBy(function($date) {
         //         return Carbon::parse($date->actiontime)->format('yy-m-d');
         //         });
+        $sql="select * from message "." where message.actiontime >= '".$showtime."'";
+        $message_all = DB::select($sql);
+        $msg_all_count = count($message_all);
         $actoninfo_json = json_decode($actoninfo,TRUE);
         $actoninfo1_json = json_decode($actoninfo1,TRUE);
         $message_json = json_decode($message,TRUE);
-        // $message_all_json = json_decode($message_all,TRUE);        // TODO 臨時刪除
-        $msg=[];
+        // $message_all_json = json_decode($message_all,TRUE);
+        // $msg=[];
         $msg_arr=[];
         $msg_count=[];
         $message_id=0;
@@ -269,8 +273,7 @@ class ChartjsController extends Controller
         }
 
         $msg_all_counts=[];
-        $msg_all_count=0;
-        // TODO 臨時刪除
+        // $msg_all_count=0;
         // foreach ($message_all_json as $k => $v) {
         //     for ($x=0; $x<count($v); $x++) {
         //         $msg_all_count++;
@@ -291,7 +294,7 @@ class ChartjsController extends Controller
         // var_dump($msg_arr['2020-06-22']);
         // var_dump($message_json);
         // var_dump($actoninfo1_json);
-        var_dump($view_json[0]);
+        // var_dump($view_json[0]);
         // var_dump($view_json[1]);
         // var_dump($view_json[2]);
         // var_dump($view_json[3]);
@@ -401,18 +404,28 @@ class ChartjsController extends Controller
             ->groupBy(function($date) {
                 return Carbon::parse($date->actiontime)->format('yy-m-d');
                 });
-        $message_all = Message::select(array('message.id','message.actiontime'))
-            ->where('message.actiontime','>=', $showtime)
-            ->orderBy('actiontime', 'asc')
-            ->orderBy('message.id', 'asc')
-            ->get()
-            ->groupBy(function($date) {
-                return Carbon::parse($date->actiontime)->format('yy-m-d');
-                });
+        // $message_all = Message::select(array('message.id','message.actiontime'))
+        //     ->where('message.actiontime','>=', $showtime)
+        //     ->orderBy('actiontime', 'asc')
+        //     ->orderBy('message.id', 'asc')
+        //     ->get()
+        //     ->groupBy(function($date) {
+        //         return Carbon::parse($date->actiontime)->format('yy-m-d');
+        //         });
+        $sql="select * from fluentd "." where fluentd.keyid = ".$fluentd_id;
+        $sel_fluentd = DB::select($sql);
+        // var_dump($sel_fluentd[0]->sysid);
+        $sql="select * from message "." where message.actiontime >= '".$showtime."'";
+        $sql=$sql." and message.sysid='".$sel_fluentd[0]->sysid."'";
+        $sql=$sql." and message.svrid='".$sel_fluentd[0]->svrid."'";
+        $sql=$sql." and message.subsysid='".$sel_fluentd[0]->subsysid."'";
+        $sql=$sql." and message.cmpid='".$sel_fluentd[0]->cmpid."'";
+        $message_all = DB::select($sql);
+        $msg_all_count = count($message_all);
         $actoninfo_json = json_decode($actoninfo,TRUE);
         $actoninfo1_json = json_decode($actoninfo1,TRUE);
         $message_json = json_decode($message,TRUE);
-        $message_all_json = json_decode($message_all,TRUE);
+        // $message_all_json = json_decode($message_all,TRUE);
         $msg=[];
         $msg_arr=[];
         $msg_count=[];
@@ -559,12 +572,12 @@ class ChartjsController extends Controller
         }
 
         $msg_all_counts=[];
-        $msg_all_count=0;
-        foreach ($message_all_json as $k => $v) {
-            for ($x=0; $x<count($v); $x++) {
-                $msg_all_count++;
-            }
-        }
+        // $msg_all_count=0;
+        // foreach ($message_all_json as $k => $v) {
+        //     for ($x=0; $x<count($v); $x++) {
+        //         $msg_all_count++;
+        //     }
+        // }
         $msg_all_counts['msg_all_count']=$msg_all_count;
         $msg_all_counts['mail_all_count']=$mail_all_count;
         $msg_all_counts['phone_all_count']=$phone_all_count;
