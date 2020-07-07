@@ -290,7 +290,7 @@ class ChartjsController extends Controller
         // var_dump($msg_arr['2020-06-22']);
         // var_dump($message_json);
         // var_dump($actoninfo1_json);
-        // var_dump($view_json[0]);
+        var_dump($view_json[0]);
         // var_dump($view_json[1]);
         // var_dump($view_json[2]);
         // var_dump($view_json[3]);

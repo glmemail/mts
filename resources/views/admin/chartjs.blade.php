@@ -98,7 +98,7 @@
     </div></div>
     <div class="col-md-5"><div class="small-box bg-green">
         <div class="inner">
-            <h3>{{count($view_json[0]['MAIL'])}}</h3>
+            <h3>{{count(!empty($view_json[0]['MAIL'])?$view_json[0]['MAIL']:[])}}</h3>
             <p>Mail</p>
         </div>
         <div class="icon">
@@ -111,7 +111,7 @@
     </div></div>
     <div class="col-md-5"><div class="small-box bg-green">
         <div class="inner">
-            <h3>{{count($view_json[0]['PHONE'])}}</h3>
+            <h3>{{count(!empty($view_json[0]['PHONE'])?$view_json[0]['PHONE']:[])}}</h3>
 
             <p>Phone</p>
         </div>
@@ -125,7 +125,7 @@
     </div></div>
     <div class="col-md-5"><div class="small-box bg-green">
         <div class="inner">
-            <h3>{{count($view_json[0]['WECHAT'])}}</h3>
+            <h3>{{count(!empty($view_json[0]['WECHAT'])?$view_json[0]['WECHAT']:[])}}</h3>
 
             <p>Wechat</p>
         </div>
@@ -149,7 +149,7 @@
         <?php
         // var_dump($actoninfo_json);
         // var_dump($view_json[0]);
-        foreach ($view_json[0]['MAIL'] as $k1 => $v1) {
+        foreach (!empty($view_json[0]['MAIL'])?$view_json[0]['MAIL']:[] as $k1 => $v1) {
             echo "<tr>";
             echo "<td>".$v1['mail_to']."</td>";
             echo "<td>".$v1['actiontime']."</td>";
@@ -166,7 +166,7 @@
         <th class="column-id" style="width: 33%">时间</th>
         <th class="column-id" style="width: 33%">FluentdID</th>
         <?php
-        foreach ($view_json[0]['PHONE'] as $k1 => $v1) {
+        foreach (!empty($view_json[0]['PHONE'])?$view_json[0]['PHONE']:[] as $k1 => $v1) {
             echo "<tr>";
             echo "<td>".$v1['phone_number']."</td>";
             echo "<td>".$v1['actiontime']."</td>";
@@ -183,7 +183,7 @@
         <th class="column-id" style="width: 33%">时间</th>
         <th class="column-id" style="width: 33%">FluentdID</th>
         <?php
-        foreach ($view_json[0]['WECHAT'] as $k1 => $v1) {
+        foreach (!empty($view_json[0]['WECHAT'])?$view_json[0]['WECHAT']:[] as $k1 => $v1) {
             echo "<tr>";
             echo "<td>".$v1['wechat_to']."</td>";
             echo "<td>".$v1['actiontime']."</td>";
@@ -512,66 +512,6 @@ $(function () {
 
 
 
-    // var ctx3 = document.getElementById("myChart3").getContext('2d');
-    // var myChart3 = new Chart(ctx3, {
-    //     type: 'doughnut',
-    //     data: {
-    //         labels: ["Mail", "Phone", "Wechat"],
-    //         datasets: [{
-    //             label: '# of Votes',
-    //             data: [{{ count($view_json[0]["MAIL"]) }}, {{ count($view_json[0]["PHONE"]) }}, {{ count($view_json[0]["WECHAT"]) }}],
-    //             backgroundColor: [
-    //                 'rgba(255, 99, 132, 0.2)',
-    //                 'rgba(54, 162, 235, 0.2)',
-    //                 'rgba(255, 206, 86, 0.2)'
-
-    //             ],
-    //             borderColor: [
-    //                 'rgba(255,99,132,1)',
-    //                 'rgba(54, 162, 235, 1)',
-    //                 'rgba(255, 206, 86, 1)'
-    //             ],
-    //             borderWidth: 1
-    //         }]
-    //     },
-    //     options: {
-    //         scales: {
-    //             yAxes: [{
-    //                 ticks: {
-    //                     beginAtZero:true
-    //                 }
-    //             }]
-    //         },
-    //         events : ["mousemove", "mouseout", "click"],
-    //         onClick : function (event, bars){
-    //                  var activeElement = bars[0];   //当前被选中的元素
-    //                  var product = activeElement._model.label;
-    //                  // console.log(activeElement);
-    //                  // alert(activeElement._index);
-    //                 document.getElementById("index1").style.display= "none";
-    //                 document.getElementById("index2").style.display= "none";
-    //                 document.getElementById("index3").style.display= "none";
-    //                 document.getElementById("index4").style.display= "none";
-    //                 document.getElementById("index5").style.display= "none";
-    //                 document.getElementById("index6").style.display= "none";
-    //                 document.getElementById("index7").style.display= "none";
-    //                  if (activeElement._index==0) {
-    //                     document.getElementById("mail").style.display= "block";
-    //                     document.getElementById("phone").style.display= "none";
-    //                     document.getElementById("wechat").style.display= "none";
-    //                  } else if (activeElement._index==1) {
-    //                     document.getElementById("mail").style.display= "none";
-    //                     document.getElementById("phone").style.display= "block";
-    //                     document.getElementById("wechat").style.display= "none";
-    //                  } else if (activeElement._index==2) {
-    //                     document.getElementById("mail").style.display= "none";
-    //                     document.getElementById("phone").style.display= "none";
-    //                     document.getElementById("wechat").style.display= "block";
-    //                  }
-    //                  //load_version_chart(product);
-    //              }
-    //     }
-    // });
 });
 
 function combaction(){
