@@ -109,19 +109,19 @@ class ChartjsController extends Controller
             ->groupBy(function($date) {
                 return Carbon::parse($date->actiontime)->format('yy-m-d');
                 });
-
-        $message_all = Message::select(array('message.id','message.actiontime'))
-            ->where('message.actiontime','>=', $showtime)
-            ->orderBy('actiontime', 'asc')
-            ->orderBy('message.id', 'asc')
-            ->get()
-            ->groupBy(function($date) {
-                return Carbon::parse($date->actiontime)->format('yy-m-d');
-                });
+        // TODO 臨時刪除
+        // $message_all = Message::select(array('message.id','message.actiontime'))
+        //     ->where('message.actiontime','>=', $showtime)
+        //     ->orderBy('actiontime', 'asc')
+        //     ->orderBy('message.id', 'asc')
+        //     ->get()
+        //     ->groupBy(function($date) {
+        //         return Carbon::parse($date->actiontime)->format('yy-m-d');
+        //         });
         $actoninfo_json = json_decode($actoninfo,TRUE);
         $actoninfo1_json = json_decode($actoninfo1,TRUE);
         $message_json = json_decode($message,TRUE);
-        $message_all_json = json_decode($message_all,TRUE);
+        // $message_all_json = json_decode($message_all,TRUE);        // TODO 臨時刪除
         $msg=[];
         $msg_arr=[];
         $msg_count=[];
@@ -270,11 +270,12 @@ class ChartjsController extends Controller
 
         $msg_all_counts=[];
         $msg_all_count=0;
-        foreach ($message_all_json as $k => $v) {
-            for ($x=0; $x<count($v); $x++) {
-                $msg_all_count++;
-            }
-        }
+        // TODO 臨時刪除
+        // foreach ($message_all_json as $k => $v) {
+        //     for ($x=0; $x<count($v); $x++) {
+        //         $msg_all_count++;
+        //     }
+        // }
         $msg_all_counts['msg_all_count']=$msg_all_count;
         $msg_all_counts['mail_all_count']=$mail_all_count;
         $msg_all_counts['phone_all_count']=$phone_all_count;

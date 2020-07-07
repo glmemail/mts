@@ -1,4 +1,4 @@
-<style> 
+<style>
     .all{
         display:-moz-box; /* Firefox */
         display:-webkit-box; /* Safari and Chrome */
@@ -13,12 +13,12 @@
         /*-webkit-box-flex:1.0; /* Safari and Chrome */*/
         box-flex:1.0;
 
-   text-overflow: ellipsis;
-    display: -webkit-box; /*//将元素设为盒子伸缩模型显示*/
-    -webkit-box-orient: vertical; /*//伸缩方向设为垂直方向*/
-    -webkit-line-clamp: 4;  /*//超出3行隐藏，并显示省略号 */
-    width: 130px;
-    background: #00F7DE;
+   text-overflow: ellipsis;
+    display: -webkit-box; /*//将元素设为盒子伸缩模型显示*/
+    -webkit-box-orient: vertical; /*//伸缩方向设为垂直方向*/
+    -webkit-line-clamp: 4;  /*//超出3行隐藏，并显示省略号 */
+    width: 130px;
+    background: #00F7DE;
     line-height:20px;max-height:80px;
     height: 80px;
     border: 1px solid #000000;
