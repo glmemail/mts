@@ -1,28 +1,28 @@
 <style> 
-    .all{
-        display:-moz-box; /* Firefox */
-        display:-webkit-box; /* Safari and Chrome */
-        display:box;
-        width:600px;
-        height: 600px;
-        border:1px solid black;
-    }
+    .all{
+        display:-moz-box; /* Firefox */
+        display:-webkit-box; /* Safari and Chrome */
+        display:box;
+        width:600px;
+        height: 600px;
+        border:1px solid black;
+    }
 
-    .item{
-        -moz-box-flex:1.0; /* Firefox */
-        /*-webkit-box-flex:1.0; /* Safari and Chrome */*/
-        box-flex:1.0;
-        
-   text-overflow: ellipsis;
-    display: -webkit-box; /*//将元素设为盒子伸缩模型显示*/
-    -webkit-box-orient: vertical; /*//伸缩方向设为垂直方向*/
-    -webkit-line-clamp: 4;  /*//超出3行隐藏，并显示省略号 */
-    width: 130px;
-    background: #00F7DE;
-    line-height:20px;max-height:80px;
-    height: 80px;
-    border: 1px solid #000000;
-    }
+    .item{
+        -moz-box-flex:1.0; /* Firefox */
+        /*-webkit-box-flex:1.0; /* Safari and Chrome */*/
+        box-flex:1.0;
+
+   text-overflow: ellipsis;
+    display: -webkit-box; /*//将元素设为盒子伸缩模型显示*/
+    -webkit-box-orient: vertical; /*//伸缩方向设为垂直方向*/
+    -webkit-line-clamp: 4;  /*//超出3行隐藏，并显示省略号 */
+    width: 130px;
+    background: #00F7DE;
+    line-height:20px;max-height:80px;
+    height: 80px;
+    border: 1px solid #000000;
+    }
 
 </style>
 <div>
