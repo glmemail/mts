@@ -110,7 +110,7 @@ class ChartjsController extends Controller
             ->groupBy(function($date) {
                 return Carbon::parse($date->actiontime)->format('yy-m-d');
                 });
-
+        $msg_all_count=0;
         foreach ($fluentd_json as $k => $v) {
             $sysid = $v[0]['sysid'];
             $svrid = $v[0]['svrid'];
