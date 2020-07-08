@@ -117,10 +117,10 @@ class ChartjsController extends Controller
             $subsysid = $v[0]['subsysid'];
             $cmpid = $v[0]['cmpid'];
             $sql="select * from message "." where message.actiontime >= '".$showtime."'";
-            $sql=$sql." and 'sysid'='".$sysid."'";
-            $sql=$sql." and svrid='".$svrid."'";
-            $sql=$sql." and subsysid='".$subsysid."'";
-            $sql=$sql." and cmpid='".$cmpid."'";
+            $sql=$sql." and message.sysid='".$sysid."'";
+            $sql=$sql." and message.svrid='".$svrid."'";
+            $sql=$sql." and message.subsysid='".$subsysid."'";
+            $sql=$sql." and message.cmpid='".$cmpid."'";
             $message_all = DB::select($sql);
             $msg_all_count = $msg_all_count + count($message_all);
         }
@@ -398,14 +398,6 @@ class ChartjsController extends Controller
             ->groupBy(function($date) {
                 return Carbon::parse($date->actiontime)->format('yy-m-d');
                 });
-        // $message_all = Message::select(array('message.id','message.actiontime'))
-        //     ->where('message.actiontime','>=', $showtime)
-        //     ->orderBy('actiontime', 'asc')
-        //     ->orderBy('message.id', 'asc')
-        //     ->get()
-        //     ->groupBy(function($date) {
-        //         return Carbon::parse($date->actiontime)->format('yy-m-d');
-        //         });
         $sql="select * from fluentd "." where fluentd.keyid = ".$fluentd_id;
         $sel_fluentd = DB::select($sql);
         // var_dump($sel_fluentd[0]->sysid);
