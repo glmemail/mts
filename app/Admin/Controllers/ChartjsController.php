@@ -117,10 +117,10 @@ class ChartjsController extends Controller
             $subsysid = $v[0]['subsysid'];
             $cmpid = $v[0]['cmpid'];
             $sql="select * from message "." where message.actiontime >= '".$showtime."'";
-            $sql=$sql." and 'sysid'=".$sysid;
-            $sql=$sql." and svrid=".$svrid;
-            $sql=$sql." and subsysid=".$subsysid;
-            $sql=$sql." and cmpid=".$cmpid;
+            $sql=$sql." and 'sysid'='".$sysid."'";
+            $sql=$sql." and svrid='".$svrid."'";
+            $sql=$sql." and subsysid='".$subsysid."'";
+            $sql=$sql." and cmpid='".$cmpid."'";
             $message_all = DB::select($sql);
             $msg_all_count = $msg_all_count + count($message_all);
         }
