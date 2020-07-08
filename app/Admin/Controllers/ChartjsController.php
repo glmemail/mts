@@ -111,22 +111,22 @@ class ChartjsController extends Controller
                 return Carbon::parse($date->actiontime)->format('yy-m-d');
                 });
 
-        // $message_all = Message::select(array('message.id','message.actiontime'))
-        //     ->where('message.actiontime','>=', $showtime)
-        //     ->orderBy('actiontime', 'asc')
-        //     ->orderBy('message.id', 'asc')
-        //     ->get()
-        //     ->groupBy(function($date) {
-        //         return Carbon::parse($date->actiontime)->format('yy-m-d');
-        //         });
-        $sql="select * from message "." where message.actiontime >= '".$showtime."'";
-        $message_all = DB::select($sql);
-        $msg_all_count = count($message_all);
+        foreach ($fluentd_json as $k => $v) {
+            $sysid = $v[0]['sysid'];
+            $svrid = $v[0]['svrid'];
+            $subsysid = $v[0]['subsysid'];
+            $cmpid = $v[0]['cmpid'];
+            $sql="select * from message "." where message.actiontime >= '".$showtime."'";
+            $sql=$sql." and 'sysid'=".$sysid;
+            $sql=$sql." and svrid=".$svrid;
+            $sql=$sql." and subsysid=".$subsysid;
+            $sql=$sql." and cmpid=".$cmpid;
+            $message_all = DB::select($sql);
+            $msg_all_count = $msg_all_count + count($message_all);
+        }
         $actoninfo_json = json_decode($actoninfo,TRUE);
         $actoninfo1_json = json_decode($actoninfo1,TRUE);
         $message_json = json_decode($message,TRUE);
-        // $message_all_json = json_decode($message_all,TRUE);
-        // $msg=[];
         $msg_arr=[];
         $msg_count=[];
         $message_id=0;
@@ -273,12 +273,6 @@ class ChartjsController extends Controller
         }
 
         $msg_all_counts=[];
-        // $msg_all_count=0;
-        // foreach ($message_all_json as $k => $v) {
-        //     for ($x=0; $x<count($v); $x++) {
-        //         $msg_all_count++;
-        //     }
-        // }
         $msg_all_counts['msg_all_count']=$msg_all_count;
         $msg_all_counts['mail_all_count']=$mail_all_count;
         $msg_all_counts['phone_all_count']=$phone_all_count;
