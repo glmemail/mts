@@ -30,8 +30,8 @@
         <option value="0" >请选择</option>
         <?php
         foreach ($view_json[1] as $k => $v) {
-            // $select=
-            if (!empty($view_json[7])?$view_json[7]:0==$k) {
+            $fluentd_id=!empty($view_json[7])?$view_json[7]:0;
+            if ($fluentd_id==$k) {
                 echo "<option value='".$k."'' selected>".$v."</option>";
             } else {
                 echo "<option value='".$k."''>".$v."</option>";
@@ -521,9 +521,9 @@ function combaction(){
     // alert(vs);
     // window.location.href = 'admin/chartjs/combaction?id=1';
     if (vs=="0"){
-        location.href = '/admin/chartjs';
+        location.href = '/index.php/admin/chartjs';
     } else {
-        location.href = '/admin/chartjs/' + vs;
+        location.href = '/index.php/admin/chartjs/' + vs;
     }
 
 }

@@ -42,6 +42,7 @@ class ChartjsController extends Controller
             $s[$k] = $v[0]['sysid'] ." ". $v[0]['svrid'] ." ". $v[0]['subsysid'] ." ". $v[0]['cmpid'];
         }
         $fluentd_sel = $s;
+        $showtime=date("Y-m-d",strtotime("-6 day"));
         $actoninfo = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
@@ -57,11 +58,11 @@ class ChartjsController extends Controller
             ->leftjoin('mail_info','action_info.mail_id','=','mail_info.id')
             ->leftjoin('wechat_info','action_info.wechat_id','=','wechat_info.id')
             ->where('user_fluentd.user_id', $user['username'])
+            ->where('action_info.actiontime','>=', $showtime)
             ->get()
             ->groupBy('actiontype'); // 按actiontype分组
         // $days = Input::get('days', 7);
         // $range = Carbon::now()->subDays($days);
-        $showtime=date("Y-m-d",strtotime("-7 day"));
         $actoninfo1 = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
@@ -116,14 +117,17 @@ class ChartjsController extends Controller
             $svrid = $v[0]['svrid'];
             $subsysid = $v[0]['subsysid'];
             $cmpid = $v[0]['cmpid'];
-            $sql="select * from message "." where message.actiontime >= '".$showtime."'";
+            $sql="select count(*) from message "." where message.actiontime >= '".$showtime."'";
             $sql=$sql." and message.sysid='".$sysid."'";
             $sql=$sql." and message.svrid='".$svrid."'";
             $sql=$sql." and message.subsysid='".$subsysid."'";
             $sql=$sql." and message.cmpid='".$cmpid."'";
+
             $message_all = DB::select($sql);
-            $msg_all_count = $msg_all_count + count($message_all);
+            // var_dump($message_all[0]->count);
+            $msg_all_count = $msg_all_count + $message_all[0]->count;
         }
+        var_dump($msg_all_count);
         $actoninfo_json = json_decode($actoninfo,TRUE);
         $actoninfo1_json = json_decode($actoninfo1,TRUE);
         $message_json = json_decode($message,TRUE);
@@ -295,7 +299,7 @@ class ChartjsController extends Controller
         // var_dump($view_json[4]);
         // var_dump($view_json[5]);
         // var_dump($view_json[6]);
-        // var_dump($view_json[5][$view_json[3][6]]['mail_count']);
+        // var_dump($view_json[7]);
         $cnt = 0;
         // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         return $content
@@ -326,6 +330,7 @@ class ChartjsController extends Controller
             $s[$k] = $v[0]['sysid'] ." ". $v[0]['svrid'] ." ". $v[0]['subsysid'] ." ". $v[0]['cmpid'];
         }
         $fluentd_sel = $s;
+        $showtime=date("Y-m-d",strtotime("-6 day"));
         $actoninfo = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
@@ -342,11 +347,11 @@ class ChartjsController extends Controller
             ->leftjoin('wechat_info','action_info.wechat_id','=','wechat_info.id')
             ->where('user_fluentd.user_id', $user['username'])
             ->where('fluentd.keyid', $fluentd_id)
+            ->where('action_info.actiontime','>=', $showtime)
             ->get()
             ->groupBy('actiontype'); // 按actiontype分组
         // $days = Input::get('days', 7);
         // $range = Carbon::now()->subDays($days);
-        $showtime=date("Y-m-d",strtotime("-7 day"));
         $actoninfo1 = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
             ->join('message','action_info.message_id','=','message.id')
             ->join('fluentd',function ($join) {
@@ -409,6 +414,7 @@ class ChartjsController extends Controller
         $message_all = DB::select($sql);
         $msg_all_count = count($message_all);
         $actoninfo_json = json_decode($actoninfo,TRUE);
+        // var_dump($actoninfo_json);
         $actoninfo1_json = json_decode($actoninfo1,TRUE);
         $message_json = json_decode($message,TRUE);
         // $message_all_json = json_decode($message_all,TRUE);
@@ -577,6 +583,8 @@ class ChartjsController extends Controller
         $view_json[]=$msg_count;              // index=5
         $view_json[]=$msg_all_counts;         // index=6 一周内msg_counts
         $view_json[]=$fluentd_id;             // index=7 fluentd下拉框默认选择
+        // var_dump($view_json[1]);
+        // var_dump($view_json[7]);
         $cnt = 0;
         // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         $content = new Content();
