@@ -91,7 +91,7 @@
         <div class="icon">
             <i class="fa fa-users"></i>
         </div>
-        <a href="/admin/message" class="small-box-footer">
+        <a href="/index.php/admin/message" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -104,7 +104,7 @@
         <div class="icon">
             <i class="fa fa-users"></i>
         </div>
-        <a href="/admin/mail" class="small-box-footer">
+        <a href="/index.php/admin/mail" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -118,7 +118,7 @@
         <div class="icon">
             <i class="fa fa-users"></i>
         </div>
-        <a href="/admin/message" class="small-box-footer">
+        <a href="/index.php/admin/message" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -132,7 +132,7 @@
         <div class="icon">
             <i class="fa fa-users"></i>
         </div>
-        <a href="/admin/wechat" class="small-box-footer">
+        <a href="/index.php/admin/wechat" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
