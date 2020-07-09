@@ -198,7 +198,7 @@
     foreach ($view_json[3] as $k => $v) {
         echo "<div id='index".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
         echo "<h2>".$view_json[3][$i]."</h2>";
-        echo "<table class='table table-hover grid-table'>";
+        echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' style='width: 50%'>内容</th>";
         echo "<th class='column-id' style='width: 10%'>时间</th>";
         echo "<th class='column-id' style='width: 10%'>方式</th>";
@@ -206,7 +206,7 @@
         echo "<th class='column-id' style='width: 10%'>Phone</th>";
         echo "<th class='column-id' style='width: 10%'>Wechat</th>";
         foreach (!empty($view_json[4][$view_json[3][$i]])?$view_json[4][$view_json[3][$i]]:[] as $k => $v) {
-            echo "<tr>";
+            echo "<tr style='border-bottom: 1px solid red;'>";
             echo "<td>".$v['message']."</td>";
             echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
             echo "<td>";
