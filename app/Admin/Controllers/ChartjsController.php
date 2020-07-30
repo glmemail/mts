@@ -452,10 +452,12 @@ class ChartjsController extends Controller
         $view_json[]=$msg_arr_24;               // index=9
         $view_json[]=$hour;                     // index=10
         $view_json[]=$msg_count_24;             // index=11
-        // var_dump($view_json[1]);
+        // var_dump($view_json[3]);
         // var_dump($view_json[4]);
         // var_dump($view_json[5]);
+        // var_dump($view_json[6]);
         // var_dump($view_json[7]);
+        // var_dump($view_json[8]);
         $content = new Content();
         return $content
             ->header('Chartjs')

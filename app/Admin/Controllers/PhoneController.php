@@ -31,7 +31,6 @@ class PhoneController extends AdminController
     {
         $grid = new Grid(new phone_info());
 
-        $grid->column('call_id', __('Call id'));
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
@@ -42,6 +41,26 @@ class PhoneController extends AdminController
             $filter->like('cmp_id', 'CMP_ID');
             $filter->like('phone_number', 'PHONE_NUMBER');
             $filter->like('actiontime', 'ActionTime');
+        });
+        // $grid->column('call_id', __('Call id'));
+
+        $grid->column('call_id', __('Call id -> Message id'))->display(function($id) {
+
+            $sql = "";
+            $sql = $sql." select ";
+            $sql = $sql." * ";
+            $sql = $sql." from ";
+            $sql = $sql." action_info ai ";
+            $sql = $sql." where ";
+            $sql = $sql." ai.phone_id = '".$id."' ";
+            $r = DB::select($sql);
+            $t = "<span>";
+            $t = "".$t.$id."</span><br/><span>";
+            for ($x=0; $x<count($r); $x++) {
+                $t = $t."<font color='blue' >->".$r[$x]->message_id."</font><br/>";
+            }
+            $t = $t."</span>";
+            return $t;
         });
         $grid->column('sys_id', __('Sys id'));
         $grid->column('svr_id', __('Svr id'));
@@ -113,7 +132,6 @@ class PhoneController extends AdminController
         $grid = new Grid(new phone_info());
 
         $showtime=date("Y-m-d",strtotime("-6 day"));
-        $grid->column('call_id', __('Call id'));
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
@@ -124,6 +142,24 @@ class PhoneController extends AdminController
             $filter->like('cmp_id', 'CMP_ID');
             $filter->like('phone_number', 'PHONE_NUMBER');
             $filter->like('actiontime', 'ActionTime');
+        });
+        $grid->column('call_id', __('Call id -> Message id'))->display(function($id) {
+
+            $sql = "";
+            $sql = $sql." select ";
+            $sql = $sql." * ";
+            $sql = $sql." from ";
+            $sql = $sql." action_info ai ";
+            $sql = $sql." where ";
+            $sql = $sql." ai.phone_id = '".$id."' ";
+            $r = DB::select($sql);
+            $t = "<span>";
+            $t = "".$t.$id."</span><br/><span>";
+            for ($x=0; $x<count($r); $x++) {
+                $t = $t."<font color='blue' >->".$r[$x]->message_id."</font><br/>";
+            }
+            $t = $t."</span>";
+            return $t;
         });
         $grid->column('sys_id', __('Sys id'));
         $grid->column('svr_id', __('Svr id'));

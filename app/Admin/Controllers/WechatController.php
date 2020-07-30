@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Models\wechat_info;
+use App\Models\Action_info;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -31,7 +32,6 @@ class WechatController extends AdminController
     {
         $grid = new Grid(new wechat_info());
 
-        $grid->column('id', __('Id'));
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
@@ -43,6 +43,23 @@ class WechatController extends AdminController
             $filter->like('contact_name', 'CONTACT_NAME');
             $filter->like('wechat_to', 'WECHAT_TO');
             $filter->like('actiontime', 'ActionTime');
+        });
+        // $grid->column('id', __('Id'));
+        $grid->column('id', __('Message id'))->display(function($wechat_id) {
+
+            $sql = "";
+            $sql = $sql." select ";
+            $sql = $sql." * ";
+            $sql = $sql." from ";
+            $sql = $sql." action_info ai ";
+            $sql = $sql." where ";
+            $sql = $sql." ai.wechat_id = '".$wechat_id."' ";
+            $r = DB::select($sql);
+            $t = "";
+            for ($x=0; $x<count($r); $x++) {
+                $t = $t.$r[$x]->message_id."<br/>";
+            }
+            return $t;
         });
         $grid->column('sys_id', __('Sys id'));
         $grid->column('svr_id', __('Svr id'));
@@ -66,6 +83,7 @@ class WechatController extends AdminController
             $sysid = $v[0]['sysid'];
             $grid->model()->Orwhere('sys_id', '=', $sysid);
         }
+        $showtime=date("Y-m-d",strtotime("-6 day"));
         $grid->model()->where('actiontime', '>=', $showtime);
         $grid->disableCreateButton();
         $grid->disableActions();
@@ -101,7 +119,6 @@ class WechatController extends AdminController
         $grid = new Grid(new wechat_info());
 
         $showtime=date("Y-m-d",strtotime("-6 day"));
-        $grid->column('id', __('Id'));
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
@@ -113,6 +130,26 @@ class WechatController extends AdminController
             $filter->like('contact_name', 'CONTACT_NAME');
             $filter->like('wechat_to', 'WECHAT_TO');
             $filter->like('actiontime', 'ActionTime');
+        });
+        // $grid->column('id', __('Id'));
+        // $grid->column('id', __('Id'));
+        $grid->column('id', __('Wechat id -> Message id'))->display(function($id) {
+
+            $sql = "";
+            $sql = $sql." select ";
+            $sql = $sql." * ";
+            $sql = $sql." from ";
+            $sql = $sql." action_info ai ";
+            $sql = $sql." where ";
+            $sql = $sql." ai.wechat_id = ".$id." ";
+            $r = DB::select($sql);
+            $t = "<span>";
+            $t = "".$t.$id."</span><br/><span>";
+            for ($x=0; $x<count($r); $x++) {
+                $t = $t."<font color='blue' >->".$r[$x]->message_id."</font><br/>";
+            }
+            $t = $t."</span>";
+            return $t;
         });
         $grid->column('sys_id', __('Sys id'));
         $grid->column('svr_id', __('Svr id'));

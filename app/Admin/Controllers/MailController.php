@@ -31,7 +31,6 @@ class MailController extends AdminController
     {
         $grid = new Grid(new mail_info());
         $showtime=date("Y-m-d",strtotime("-6 day"));
-        $grid->column('id', __('Id'));
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
@@ -44,6 +43,24 @@ class MailController extends AdminController
             $filter->like('mail_to', 'MAIL_TO');
             $filter->like('mail_from', 'MAIL_FROM');
             $filter->like('actiontime', 'ActionTime');
+        });
+        $grid->column('id', __('Mail id -> Message id'))->display(function($id) {
+
+            $sql = "";
+            $sql = $sql." select ";
+            $sql = $sql." * ";
+            $sql = $sql." from ";
+            $sql = $sql." action_info ai ";
+            $sql = $sql." where ";
+            $sql = $sql." ai.mail_id = ".$id." ";
+            $r = DB::select($sql);
+            $t = "<span>";
+            $t = "".$t.$id."</span><br/><span>";
+            for ($x=0; $x<count($r); $x++) {
+                $t = $t."<font color='blue' >->".$r[$x]->message_id."</font><br/>";
+            }
+            $t = $t."</span>";
+            return $t;
         });
         $grid->column('sys_id', __('Sys id'));
         $grid->column('svr_id', __('Svr id'));
@@ -94,7 +111,6 @@ class MailController extends AdminController
 
         $grid = new Grid(new mail_info());
         $showtime=date("Y-m-d",strtotime("-6 day"));
-        $grid->column('id', __('Id'));
         $grid->filter(function($filter){
             // 去掉默认的id过滤器
             $filter->disableIdFilter();
@@ -107,6 +123,24 @@ class MailController extends AdminController
             $filter->like('mail_to', 'MAIL_TO');
             $filter->like('mail_from', 'MAIL_FROM');
             $filter->like('actiontime', 'ActionTime');
+        });
+        $grid->column('id', __('Mail id -> Message id'))->display(function($id) {
+
+            $sql = "";
+            $sql = $sql." select ";
+            $sql = $sql." * ";
+            $sql = $sql." from ";
+            $sql = $sql." action_info ai ";
+            $sql = $sql." where ";
+            $sql = $sql." ai.mail_id = ".$id." ";
+            $r = DB::select($sql);
+            $t = "<span>";
+            $t = "".$t.$id."</span><br/><span>";
+            for ($x=0; $x<count($r); $x++) {
+                $t = $t."<font color='blue' >->".$r[$x]->message_id."</font><br/>";
+            }
+            $t = $t."</span>";
+            return $t;
         });
         $grid->column('sys_id', __('Sys id'));
         $grid->column('svr_id', __('Svr id'));

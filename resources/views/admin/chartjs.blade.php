@@ -177,7 +177,8 @@
         echo "<div id='myChart1_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
         echo "<h2>".$view_json[3][$i]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
-        echo "<th class='column-id' style='width: 50%'>内容</th>";
+        echo "<th class='column-id' style='width: 10%'>MSG_ID</th>";
+        echo "<th class='column-id' style='width: 40%'>内容</th>";
         echo "<th class='column-id' style='width: 10%'>时间</th>";
         echo "<th class='column-id' style='width: 10%'>方式";
         echo "<select name='type_sel' onchange='combtype(this)'>";
@@ -192,6 +193,7 @@
         echo "<th class='column-id' style='width: 10%'>Wechat</th>";
         foreach (!empty($view_json[4][$view_json[3][$i]])?$view_json[4][$view_json[3][$i]]:[] as $k => $v) {
             echo "<tr>";
+            echo "<td>".$v['message_id']."</td>";
             echo "<td>".$v['message']."</td>";
             echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
             echo "<td>";
@@ -249,10 +251,12 @@
         echo "<div id='myChart2_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
         echo "<h2>".$view_json[3][$i]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
+        echo "<th class='column-id' style='width: 10%'>MSG_ID</th>";
         echo "<th class='column-id' style='width: 50%'>内容</th>";
-        echo "<th class='column-id' style='width: 50%'>时间</th>";
+        echo "<th class='column-id' style='width: 40%'>时间</th>";
         foreach (!empty($view_json[4][$view_json[3][$i]])?$view_json[4][$view_json[3][$i]]:[] as $k => $v) {
             echo "<tr>";
+            echo "<td>".$v['message_id']."</td>";
             echo "<td>".$v['message']."</td>";
             echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
             echo "</tr>";
@@ -269,7 +273,8 @@
         echo "<div id='myChart1_24_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
         echo "<h2>".$view_json[2][$j]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
-        echo "<th class='column-id' style='width: 50%'>内容</th>";
+        echo "<th class='column-id' style='width: 10%'>MSG_ID</th>";
+        echo "<th class='column-id' style='width: 40%'>内容</th>";
         echo "<th class='column-id' style='width: 10%'>时间</th>";
         echo "<th class='column-id' style='width: 10%'>方式";
         echo "<select name='type_sel' onchange='combtype(this)'>";
@@ -284,6 +289,7 @@
         echo "<th class='column-id' style='width: 10%'>Wechat</th>";
         foreach (!empty($view_json[9][$view_json[10][$j]])?$view_json[9][$view_json[10][$j]]:[] as $k => $v) {
             echo "<tr>";
+            echo "<td>".$v['message_id']."</td>";
             echo "<td>".$v['message']."</td>";
             echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
             echo "<td>";
@@ -342,10 +348,12 @@
         echo "<div id='myChart2_24_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
         echo "<h2>".$view_json[2][$j]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
-        echo "<th class='column-id' style='width: 50%'>内容</th>";
-        echo "<th class='column-id' style='width: 50%'>时间</th>";
+        echo "<th class='column-id' style='width: 10%'>MSG_ID</th>";
+        echo "<th class='column-id' style='width: 40%'>内容</th>";
+        echo "<th class='column-id' style='width: 10%'>时间</th>";
         foreach (!empty($view_json[9][$view_json[10][$j]])?$view_json[9][$view_json[10][$j]]:[] as $k => $v) {
             echo "<tr>";
+            echo "<td>".$v['message_id']."</td>";
             echo "<td>".$v['message']."</td>";
             echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
             echo "</tr>";
@@ -376,11 +384,13 @@ $(function () {
                 label: 'Mail',
                 data: [
                     <?php
+                    $x=count($view_json[3]);
                     foreach ($view_json[3] as $k => $v) {
                         if (!empty($view_json[5][$v]['mail_count'])) {
                              echo $view_json[5][$v]['mail_count'].",";
                         } else {
-                            echo 0;
+                            $c=0;
+                            echo $c.",";
                         }
                     }
                     ?>
@@ -409,7 +419,8 @@ $(function () {
                         if (!empty($view_json[5][$v]['phone_count'])) {
                              echo $view_json[5][$v]['phone_count'].",";
                         } else {
-                            echo 0;
+                            $c=0;
+                            echo $c.",";
                         }
                     }
                     ?>
