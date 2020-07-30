@@ -267,7 +267,7 @@
     $j=23;
     foreach ($view_json[10] as $k => $v) {
         echo "<div id='myChart1_24_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
-        echo "<h2>".$view_json[10][$j]."</h2>";
+        echo "<h2>".$view_json[2][$j]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' style='width: 50%'>内容</th>";
         echo "<th class='column-id' style='width: 10%'>时间</th>";
@@ -340,7 +340,7 @@
     $j=23;
     foreach ($view_json[10] as $k => $v) {
         echo "<div id='myChart2_24_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
-        echo "<h2>".$view_json[10][$j]."</h2>";
+        echo "<h2>".$view_json[2][$j]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' style='width: 50%'>内容</th>";
         echo "<th class='column-id' style='width: 50%'>时间</th>";

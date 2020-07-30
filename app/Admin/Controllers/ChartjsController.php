@@ -51,20 +51,20 @@ class ChartjsController extends Controller
             $weeks[]=date("Y-m-d",strtotime($day_str));
         }
         $hour=[];
+        $ymdhour=[];
         for ($x=0; $x<24; $x++) {
             $hour_str="-".$x." hour";
             $hour[]=date("H:00",strtotime($hour_str));
+            $ymdhour[]=date("Y-m-d H:00",strtotime($hour_str));
         }
-        $msg=[];
         $msg_arr=[];
-        $msg_arr_24=[];
-        // $msg_array_all=[];
         $msg_count=[];
-        $msg_count_24=[];
-        $message_id=0;
         $mail_all_count=0;
         $phone_all_count=0;
         $wechat_all_count=0;
+
+        $msg_arr_24=[];
+        $msg_count_24=[];
         $mail_all_count_24=0;
         $phone_all_count_24=0;
         $wechat_all_count_24=0;
@@ -78,6 +78,7 @@ class ChartjsController extends Controller
         $sql = $sql." mv.actiontime > '".$showtime."' ";
         $sql = $sql." and mv.user_id ='".$user['username']."' ";
         $message_all = DB::select($sql);
+        $msg_all_count = count($message_all);
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -87,7 +88,6 @@ class ChartjsController extends Controller
         $sql = $sql." mv.actiontime > '".$showtime24."' ";
         $sql = $sql." and mv.user_id ='".$user['username']."' ";
         $message_all_24 = DB::select($sql);
-        $msg_all_count = count($message_all);
         $msg_all_count_24 = count($message_all_24);
         for ($x=0; $x<$msg_all_count; $x++) {
             $date = new DateTime($message_all[$x]->actiontime);
@@ -200,8 +200,6 @@ class ChartjsController extends Controller
             $m['msg_action']=$msg_action;
             $msg_arr_24[$ymdh][]=$m;
         }
-        // $actoninfo_json = json_decode($actoninfo,TRUE);
-        // $actoninfo24_json = json_decode($actoninfo24,TRUE);
         $msg_all_counts=[];
         $msg_all_counts['msg_all_count']=$msg_all_count;
         $msg_all_counts['mail_all_count']=$mail_all_count;
@@ -213,20 +211,18 @@ class ChartjsController extends Controller
         $msg_all_counts_24['phone_all_count_24']=$phone_all_count_24;
         $msg_all_counts_24['wechat_all_count_24']=$wechat_all_count_24;
         $view_json=[];
-        // $view_json[]=$actoninfo_json;           // index=0
-        $view_json[]=[];           // index=0
+        $view_json[]=[];                        // index=0
         $view_json[]=$fluentd_sel;              // index=1
-        // $view_json[]=$actoninfo24_json;         // index=2
-        $view_json[]=[];         // index=2
+        $view_json[]=$ymdhour;                  // index=2
         $view_json[]=$weeks;                    // index=3 一周内日期List
         $view_json[]=$msg_arr;                  // index=4
         $view_json[]=$msg_count;                // index=5
         $view_json[]=$msg_all_counts;           // index=6 一周内msg_counts
-        $view_json[]=0;                             // index=7 24小时内msg_counts
-        $view_json[]=$msg_all_counts_24;           // index=8 一周内msg_counts
+        $view_json[]=0;                         // index=7 24小时内msg_counts
+        $view_json[]=$msg_all_counts_24;        // index=8 一周内msg_counts
         $view_json[]=$msg_arr_24;               // index=9
         $view_json[]=$hour;                     // index=10
-        $view_json[]=$msg_count_24;                     // index=11
+        $view_json[]=$msg_count_24;             // index=11
         // var_dump($view_json[6]['msg_all_count']);
         // var_dump($view_json[8]['msg_all_count_24']);
         // var_dump($view_json[0]);
@@ -240,8 +236,6 @@ class ChartjsController extends Controller
         // var_dump($view_json[8]);
         // var_dump($view_json[9]);
         // var_dump($view_json[10]);
-        $cnt = 0;
-        // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         return $content
             ->header('Chartjs')
             ->body(new Box('', view('admin.chartjs', compact('view_json'))));
@@ -265,39 +259,30 @@ class ChartjsController extends Controller
         }
         $fluentd_sel = $s;
         $showtime=date("Y-m-d",strtotime("-6 day"));
-        $actoninfo = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
-            ->join('message','action_info.message_id','=','message.id')
-            ->join('fluentd',function ($join) {
-                $join->on('message.sysid', '=', 'fluentd.sysid')
-                    ->on('message.svrid', '=', 'fluentd.svrid')
-                    ->on('message.subsysid', '=', 'fluentd.subsysid')
-                    ->on('message.cmpid', '=', 'fluentd.cmpid');
-                })
-            ->join('user_fluentd',function ($join) {
-                $join->on('fluentd.keyid', '=', 'user_fluentd.fluentd_keyid');
-                })
-            ->leftjoin('phone_info','action_info.phone_id','=','phone_info.call_id')
-            ->leftjoin('mail_info','action_info.mail_id','=','mail_info.id')
-            ->leftjoin('wechat_info','action_info.wechat_id','=','wechat_info.id')
-            ->where('user_fluentd.user_id', $user['username'])
-            ->where('fluentd.keyid', $fluentd_id)
-            ->where('action_info.actiontime','>=', $showtime)
-            ->get()
-            ->groupBy('actiontype'); // 按actiontype分组
+        $showtime24=date("Y-m-d H:i",strtotime("-1 day"));
         $weeks=[];
         for ($x=6; $x>=0; $x--) {
             $day_str="-".$x." day";
             $weeks[]=date("Y-m-d",strtotime($day_str));
         }
-
-        $msg=[];
+        $hour=[];
+        $ymdhour=[];
+        for ($x=0; $x<24; $x++) {
+            $hour_str="-".$x." hour";
+            $hour[]=date("H:00",strtotime($hour_str));
+            $ymdhour[]=date("Y-m-d H:00",strtotime($hour_str));
+        }
         $msg_arr=[];
-        // $msg_array_all=[];
         $msg_count=[];
-        $message_id=0;
         $mail_all_count=0;
         $phone_all_count=0;
         $wechat_all_count=0;
+
+        $msg_arr_24=[];
+        $msg_count_24=[];
+        $mail_all_count_24=0;
+        $phone_all_count_24=0;
+        $wechat_all_count_24=0;
 
         $sql="select * from fluentd "." where fluentd.keyid = ".$fluentd_id;
         $sel_fluentd = DB::select($sql);
@@ -319,10 +304,20 @@ class ChartjsController extends Controller
         $sql = $sql." m.id ";
         $message_all = DB::select($sql);
         $msg_all_count = count($message_all);
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." message_view mv ";
+        $sql = $sql." where ";
+        $sql = $sql." mv.actiontime > '".$showtime24."' ";
+        $sql = $sql." and mv.user_id ='".$user['username']."' ";
+        $message_all_24 = DB::select($sql);
+        $msg_all_count_24 = count($message_all_24);
         for ($x=0; $x<$msg_all_count; $x++) {
             $date = new DateTime($message_all[$x]->actiontime);
             $ymd = $date->format('Y-m-d');
-            $sql = selectActioninfo_sql($message_all[$x]->id);
+            $sql = $this->selectActioninfo_sql($message_all[$x]->id);
             $msg = DB::select($sql);
             // var_dump($msg[0]);
             $m=[];
@@ -341,7 +336,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count[$ymd]['mail_count']=1;
                     }
-
+                    $mail_all_count++;
                 }
                 if ($msg[$y]->ai_actiontype=="PHONE") {
                     $phone_type="PHONE";
@@ -350,6 +345,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count[$ymd]['phone_count']=1;
                     }
+                    $phone_all_count++;
                 }
                 if ($msg[$y]->ai_actiontype=="WECHAT") {
                     $wechat_type="WECHAT";
@@ -358,6 +354,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count[$ymd]['wechat_count']=1;
                     }
+                    $wechat_all_count++;
                 }
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
@@ -375,28 +372,90 @@ class ChartjsController extends Controller
             $m['msg_action']=$msg_action;
             $msg_arr[$ymd][]=$m;
         }
-        $actoninfo_json = json_decode($actoninfo,TRUE);
-
+        for ($x=0; $x<$msg_all_count_24; $x++) {
+            $date = new DateTime($message_all_24[$x]->actiontime);
+            $ymdh = $date->format("H:00");
+            $sql = $this->selectActioninfo_sql($message_all_24[$x]->id);
+            $msg = DB::select($sql);
+            $m=[];
+            $msg_action=[];
+            $mail_type="";
+            $wechat_type="";
+            $phone_type="";
+            // $mail_count=0;
+            // $phone_count=0;
+            // $wechat_count=0;
+            for ($y=0; $y<count($msg); $y++) {
+                if ($msg[$y]->ai_actiontype=="MAIL") {
+                    $mail_type="MAIL";
+                    if (!empty($msg_count_24[$ymdh]['mail_count'])) {
+                        $msg_count_24[$ymdh]['mail_count']++;
+                    } else {
+                        $msg_count_24[$ymdh]['mail_count']=1;
+                    }
+                    $mail_all_count_24++;
+                }
+                if ($msg[$y]->ai_actiontype=="PHONE") {
+                    $phone_type="PHONE";
+                    if (!empty($msg_count[$ymdh]['phone_count'])) {
+                        $msg_count_24[$ymdh]['phone_count']++;
+                    } else {
+                        $msg_count_24[$ymdh]['phone_count']=1;
+                    }
+                    $phone_all_count_24++;
+                }
+                if ($msg[$y]->ai_actiontype=="WECHAT") {
+                    $wechat_type="WECHAT";
+                    if (!empty($msg_count_24[$ymdh]['wechat_count'])) {
+                        $msg_count_24[$ymdh]['wechat_count']++;
+                    } else {
+                        $msg_count_24[$ymdh]['wechat_count']=1;
+                    }
+                    $wechat_all_count_24++;
+                }
+                $t=[];
+                $t['phone_number']=$msg[$y]->pi_phone_number;
+                $t['phone_dtmf']=$msg[$y]->pi_dtmf;
+                $t['mail_to']=$msg[$y]->mi_mail_to;
+                $t['wechat_to']=$msg[$y]->wi_wechat_to;
+                $msg_action[]=$t;
+            }
+            $m['message_id']=$message_all_24[$x]->id;
+            $m['message']=$message_all_24[$x]->message;
+            $m['actiontime']=$message_all_24[$x]->actiontime;
+            $m['mail_type']=$mail_type;
+            $m['phone_type']=$phone_type;
+            $m['wechat_type']=$wechat_type;
+            $m['msg_action']=$msg_action;
+            $msg_arr_24[$ymdh][]=$m;
+        }
         $msg_all_counts=[];
         $msg_all_counts['msg_all_count']=$msg_all_count;
         $msg_all_counts['mail_all_count']=$mail_all_count;
         $msg_all_counts['phone_all_count']=$phone_all_count;
         $msg_all_counts['wechat_all_count']=$wechat_all_count;
+        $msg_all_counts_24=[];
+        $msg_all_counts_24['msg_all_count_24']=$msg_all_count_24;
+        $msg_all_counts_24['mail_all_count_24']=$mail_all_count_24;
+        $msg_all_counts_24['phone_all_count_24']=$phone_all_count_24;
+        $msg_all_counts_24['wechat_all_count_24']=$wechat_all_count_24;
         $view_json=[];
-        $view_json[]=$actoninfo_json;         // index=0
-        $view_json[]=$fluentd_sel;            // index=1
-        $view_json[]=[];        // index=2
-        $view_json[]=$weeks;                  // index=3 一周内日期List
-        $view_json[]=$msg_arr;                // index=4
-        $view_json[]=$msg_count;              // index=5
-        $view_json[]=$msg_all_counts;         // index=6 一周内msg_counts
-        $view_json[]=$fluentd_id;             // index=7 fluentd下拉框默认选择
+        $view_json[]=[];                        // index=0
+        $view_json[]=$fluentd_sel;              // index=1
+        $view_json[]=$ymdhour;                  // index=2
+        $view_json[]=$weeks;                    // index=3 一周内日期List
+        $view_json[]=$msg_arr;                  // index=4
+        $view_json[]=$msg_count;                // index=5
+        $view_json[]=$msg_all_counts;           // index=6 一周内msg_counts
+        $view_json[]=$fluentd_id;               // index=7 24小时内msg_counts
+        $view_json[]=$msg_all_counts_24;        // index=8 一周内msg_counts
+        $view_json[]=$msg_arr_24;               // index=9
+        $view_json[]=$hour;                     // index=10
+        $view_json[]=$msg_count_24;             // index=11
         // var_dump($view_json[1]);
         // var_dump($view_json[4]);
         // var_dump($view_json[5]);
         // var_dump($view_json[7]);
-        $cnt = 0;
-        // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         $content = new Content();
         return $content
             ->header('Chartjs')
