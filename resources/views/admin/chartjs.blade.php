@@ -360,101 +360,103 @@
 </div>
 <script>
 $(function () {
+
     var ctx = document.getElementById("myChart1").getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ["{{$view_json[3][0]}}", "{{$view_json[3][1]}}", "{{$view_json[3][2]}}", "{{$view_json[3][3]}}", "{{$view_json[3][4]}}", "{{$view_json[3][5]}}","{{$view_json[3][6]}}"],
+            labels: [
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        echo "'".$v."',";
+                    }
+                    ?>
+                    ],
             datasets: [{
                 label: 'Mail',
                 data: [
-                    {{ !empty($view_json[5][$view_json[3][0]]['mail_count'])?$view_json[5][$view_json[3][0]]['mail_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][1]]['mail_count'])?$view_json[5][$view_json[3][1]]['mail_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][2]]['mail_count'])?$view_json[5][$view_json[3][2]]['mail_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][3]]['mail_count'])?$view_json[5][$view_json[3][3]]['mail_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][4]]['mail_count'])?$view_json[5][$view_json[3][4]]['mail_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][5]]['mail_count'])?$view_json[5][$view_json[3][5]]['mail_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][6]]['mail_count'])?$view_json[5][$view_json[3][6]]['mail_count']:0 }}
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        if (!empty($view_json[5][$v]['mail_count'])) {
+                             echo $view_json[5][$v]['mail_count'].",";
+                        } else {
+                            echo 0;
+                        }
+                    }
+                    ?>
                     ],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        echo "'rgba(255, 99, 132, 0.2)',";
+                    }
+                    ?>
                 ],
                 borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)'
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        echo "'rgba(255,99,132,1)',";
+                    }
+                    ?>
                 ],
                 borderWidth: 1
             },
             {
                 label: 'Phone',
                 data: [
-                    {{ !empty($view_json[5][$view_json[3][0]]['phone_count'])?$view_json[5][$view_json[3][0]]['phone_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][1]]['phone_count'])?$view_json[5][$view_json[3][1]]['phone_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][2]]['phone_count'])?$view_json[5][$view_json[3][2]]['phone_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][3]]['phone_count'])?$view_json[5][$view_json[3][3]]['phone_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][4]]['phone_count'])?$view_json[5][$view_json[3][4]]['phone_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][5]]['phone_count'])?$view_json[5][$view_json[3][5]]['phone_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][6]]['phone_count'])?$view_json[5][$view_json[3][6]]['phone_count']:0 }}
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        if (!empty($view_json[5][$v]['phone_count'])) {
+                             echo $view_json[5][$v]['phone_count'].",";
+                        } else {
+                            echo 0;
+                        }
+                    }
+                    ?>
                     ],
                 backgroundColor: [
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)'
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        echo "'rgba(54, 162, 235, 0.2)',";
+                    }
+                    ?>
                 ],
                 borderColor: [
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)'
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        echo "'rgba(54, 162, 235, 1)',";
+                    }
+                    ?>
                 ],
                 borderWidth: 1
             },
             {
                 label: 'Wechat',
                 data: [
-                    {{ !empty($view_json[5][$view_json[3][0]]['wechat_count'])?$view_json[5][$view_json[3][0]]['wechat_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][1]]['wechat_count'])?$view_json[5][$view_json[3][1]]['wechat_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][2]]['wechat_count'])?$view_json[5][$view_json[3][2]]['wechat_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][3]]['wechat_count'])?$view_json[5][$view_json[3][3]]['wechat_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][4]]['wechat_count'])?$view_json[5][$view_json[3][4]]['wechat_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][5]]['wechat_count'])?$view_json[5][$view_json[3][5]]['wechat_count']:0 }},
-                    {{ !empty($view_json[5][$view_json[3][6]]['wechat_count'])?$view_json[5][$view_json[3][6]]['wechat_count']:0 }}
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        if (!empty($view_json[5][$v]['wechat_count'])) {
+                             echo $view_json[5][$v]['wechat_count'].",";
+                        } else {
+                            $c=0;
+                            echo $c.",";
+                        }
+                    }
+                    ?>
                     ],
                 backgroundColor: [
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)'
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        echo "'rgba(255, 206, 86, 0.2)',";
+                    }
+                    ?>
                 ],
                 borderColor: [
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)'
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        echo "'rgba(255, 206, 86, 1)',";
+                    }
+                    ?>
                 ],
                 borderWidth: 1
             }]
@@ -469,8 +471,11 @@ $(function () {
             },
             events : ["mousemove", "mouseout", "click"],
             onClick : function (event, bars){
+
                 var activeElement = bars[0];   //当前被选中的元素
                 var product = activeElement._model.label;
+                // var datasetIndex = activeElement._datasetIndex;
+                // alert(product);
                 console.log(bars);
                 var count3 = {{ count($view_json[3]) }};
                 for (var x1=0;x1<count3;x1++)
@@ -482,6 +487,12 @@ $(function () {
                         document.getElementById("myChart1_"+(x1+1)).style.display= "none";
                     }
                 }
+                var count3_24 = {{ count($view_json[10]) }};
+                for (var x1=0;x1<count3_24;x1++)
+                {
+                    document.getElementById("myChart2_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("myChart1_24_"+(x1+1)).style.display= "none";
+                }
             }
         }
     });
@@ -492,35 +503,40 @@ $(function () {
     var myChart2 = new Chart(ctx2, {
         type: 'bar',
         data: {
-            labels: ["{{$view_json[3][0]}}", "{{$view_json[3][1]}}", "{{$view_json[3][2]}}", "{{$view_json[3][3]}}", "{{$view_json[3][4]}}", "{{$view_json[3][5]}}","{{$view_json[3][6]}}"],
+            labels: [
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        echo "'".$v."',";
+                    }
+                    ?>],
             datasets: [{
                 label: '一周内告警信息',
                 data: [
-                {{ count(!empty($view_json[4][$view_json[3][0]])?$view_json[4][$view_json[3][0]]:[]) }},
-                {{ count(!empty($view_json[4][$view_json[3][1]])?$view_json[4][$view_json[3][1]]:[]) }},
-                {{ count(!empty($view_json[4][$view_json[3][2]])?$view_json[4][$view_json[3][2]]:[]) }},
-                {{ count(!empty($view_json[4][$view_json[3][3]])?$view_json[4][$view_json[3][3]]:[]) }},
-                {{ count(!empty($view_json[4][$view_json[3][4]])?$view_json[4][$view_json[3][4]]:[]) }},
-                {{ count(!empty($view_json[4][$view_json[3][5]])?$view_json[4][$view_json[3][5]]:[]) }},
-                {{ count(!empty($view_json[4][$view_json[3][6]])?$view_json[4][$view_json[3][6]]:[]) }}
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        if (!empty($view_json[4][$v])) {
+                            echo count($view_json[4][$v]).",";
+                        } else {
+                            $c=0;
+                            echo $c.",";
+                        }
+
+                    }
+                    ?>
                 ],
                 backgroundColor: [
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)'
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        echo "'rgba(0, 0, 255, 0.2)',";
+                    }
+                    ?>
                 ],
                 borderColor: [
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)'
+                    <?php
+                    foreach ($view_json[3] as $k => $v) {
+                        echo "'rgba(54, 162, 235, 1)',";
+                    }
+                    ?>
                 ],
                 borderWidth: 1
             }]
@@ -550,6 +566,12 @@ $(function () {
                         document.getElementById("myChart2_"+(x1+1)).style.display= "none";
                     }
                 }
+                var count3_24 = {{ count($view_json[10]) }};
+                for (var x1=0;x1<count3_24;x1++)
+                {
+                    document.getElementById("myChart2_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("myChart1_24_"+(x1+1)).style.display= "none";
+                }
             }
         }
     });
@@ -559,250 +581,99 @@ $(function () {
     var myChart_24 = new Chart(ctx_24, {
         type: 'bar',
         data: {
-            labels: ["{{$view_json[10][23]}}", "{{$view_json[10][22]}}", "{{$view_json[10][21]}}", "{{$view_json[10][20]}}", "{{$view_json[10][19]}}", "{{$view_json[10][18]}}","{{$view_json[10][17]}}","{{$view_json[10][16]}}","{{$view_json[10][15]}}","{{$view_json[10][14]}}","{{$view_json[10][13]}}","{{$view_json[10][12]}}","{{$view_json[10][11]}}","{{$view_json[10][10]}}","{{$view_json[10][9]}}","{{$view_json[10][9]}}","{{$view_json[10][7]}}","{{$view_json[10][6]}}","{{$view_json[10][5]}}","{{$view_json[10][4]}}","{{$view_json[10][3]}}","{{$view_json[10][2]}}","{{$view_json[10][1]}}","{{$view_json[10][0]}}"],
+            labels: [
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        echo "'".$view_json[10][$x]."',";
+                    }
+                    ?>],
             datasets: [{
                 label: 'Mail',
                 data: [
-                    {{ !empty($view_json[11][$view_json[10][23]]['mail_count'])?$view_json[11][$view_json[10][23]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][22]]['mail_count'])?$view_json[11][$view_json[10][22]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][21]]['mail_count'])?$view_json[11][$view_json[10][21]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][20]]['mail_count'])?$view_json[11][$view_json[10][20]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][19]]['mail_count'])?$view_json[11][$view_json[10][19]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][18]]['mail_count'])?$view_json[11][$view_json[10][18]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][17]]['mail_count'])?$view_json[11][$view_json[10][17]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][16]]['mail_count'])?$view_json[11][$view_json[10][16]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][15]]['mail_count'])?$view_json[11][$view_json[10][15]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][14]]['mail_count'])?$view_json[11][$view_json[10][14]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][13]]['mail_count'])?$view_json[11][$view_json[10][13]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][12]]['mail_count'])?$view_json[11][$view_json[10][12]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][11]]['mail_count'])?$view_json[11][$view_json[10][11]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][10]]['mail_count'])?$view_json[11][$view_json[10][10]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][9]]['mail_count'])?$view_json[11][$view_json[10][9]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][8]]['mail_count'])?$view_json[11][$view_json[10][8]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][7]]['mail_count'])?$view_json[11][$view_json[10][7]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][6]]['mail_count'])?$view_json[11][$view_json[10][6]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][5]]['mail_count'])?$view_json[11][$view_json[10][5]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][4]]['mail_count'])?$view_json[11][$view_json[10][4]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][3]]['mail_count'])?$view_json[11][$view_json[10][3]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][2]]['mail_count'])?$view_json[11][$view_json[10][2]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][1]]['mail_count'])?$view_json[11][$view_json[10][1]]['mail_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][0]]['mail_count'])?$view_json[11][$view_json[10][0]]['mail_count']:0 }}
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        if (!empty($view_json[11][$view_json[10][$x]]['mail_count'])) {
+                            echo $view_json[11][$view_json[10][$x]]['mail_count'].",";
+                        }else{
+                            $c=0;
+                            echo $c.",";
+                        }
+                    }
+                    ?>
                     ],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 99, 132, 0.2)'
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        echo "'rgba(255, 99, 132, 0.2)',";
+                    }
+                    ?>
                 ],
                 borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255,99,132,1)'
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        echo "'rgba(255,99,132,1)',";
+                    }
+                    ?>
                 ],
                 borderWidth: 1
             },
             {
                 label: 'Phone',
                 data: [
-                    {{ !empty($view_json[11][$view_json[10][23]]['phone_count'])?$view_json[11][$view_json[10][23]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][22]]['phone_count'])?$view_json[11][$view_json[10][22]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][21]]['phone_count'])?$view_json[11][$view_json[10][21]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][20]]['phone_count'])?$view_json[11][$view_json[10][20]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][19]]['phone_count'])?$view_json[11][$view_json[10][19]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][18]]['phone_count'])?$view_json[11][$view_json[10][18]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][17]]['phone_count'])?$view_json[11][$view_json[10][17]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][16]]['phone_count'])?$view_json[11][$view_json[10][16]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][15]]['phone_count'])?$view_json[11][$view_json[10][15]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][14]]['phone_count'])?$view_json[11][$view_json[10][14]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][13]]['phone_count'])?$view_json[11][$view_json[10][13]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][12]]['phone_count'])?$view_json[11][$view_json[10][12]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][11]]['phone_count'])?$view_json[11][$view_json[10][11]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][10]]['phone_count'])?$view_json[11][$view_json[10][10]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][9]]['phone_count'])?$view_json[11][$view_json[10][9]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][8]]['phone_count'])?$view_json[11][$view_json[10][8]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][7]]['phone_count'])?$view_json[11][$view_json[10][7]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][6]]['phone_count'])?$view_json[11][$view_json[10][6]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][5]]['phone_count'])?$view_json[11][$view_json[10][5]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][4]]['phone_count'])?$view_json[11][$view_json[10][4]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][3]]['phone_count'])?$view_json[11][$view_json[10][3]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][2]]['phone_count'])?$view_json[11][$view_json[10][2]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][1]]['phone_count'])?$view_json[11][$view_json[10][1]]['phone_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][0]]['phone_count'])?$view_json[11][$view_json[10][0]]['phone_count']:0 }}
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        if (!empty($view_json[11][$view_json[10][$x]]['phone_count'])) {
+                            echo $view_json[11][$view_json[10][$x]]['phone_count'].",";
+                        }else{
+                            $c=0;
+                            echo $c.",";
+                        }
+                    }
+                    ?>
                     ],
                 backgroundColor: [
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)'
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        echo "'rgba(54, 162, 235, 0.2)',";
+                    }
+                    ?>
                 ],
                 borderColor: [
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)'
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        echo "'rgba(54, 162, 235, 1)',";
+                    }
+                    ?>
                 ],
                 borderWidth: 1
             },
             {
                 label: 'Wechat',
                 data: [
-                    {{ !empty($view_json[11][$view_json[10][23]]['wechat_count'])?$view_json[11][$view_json[10][23]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][22]]['wechat_count'])?$view_json[11][$view_json[10][22]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][21]]['wechat_count'])?$view_json[11][$view_json[10][21]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][20]]['wechat_count'])?$view_json[11][$view_json[10][20]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][19]]['wechat_count'])?$view_json[11][$view_json[10][19]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][18]]['wechat_count'])?$view_json[11][$view_json[10][18]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][17]]['wechat_count'])?$view_json[11][$view_json[10][17]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][16]]['wechat_count'])?$view_json[11][$view_json[10][16]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][15]]['wechat_count'])?$view_json[11][$view_json[10][15]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][14]]['wechat_count'])?$view_json[11][$view_json[10][14]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][13]]['wechat_count'])?$view_json[11][$view_json[10][13]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][12]]['wechat_count'])?$view_json[11][$view_json[10][12]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][11]]['wechat_count'])?$view_json[11][$view_json[10][11]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][10]]['wechat_count'])?$view_json[11][$view_json[10][10]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][9]]['wechat_count'])?$view_json[11][$view_json[10][9]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][8]]['wechat_count'])?$view_json[11][$view_json[10][8]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][7]]['wechat_count'])?$view_json[11][$view_json[10][7]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][6]]['wechat_count'])?$view_json[11][$view_json[10][6]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][5]]['wechat_count'])?$view_json[11][$view_json[10][5]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][4]]['wechat_count'])?$view_json[11][$view_json[10][4]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][3]]['wechat_count'])?$view_json[11][$view_json[10][3]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][2]]['wechat_count'])?$view_json[11][$view_json[10][2]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][1]]['wechat_count'])?$view_json[11][$view_json[10][1]]['wechat_count']:0 }},
-                    {{ !empty($view_json[11][$view_json[10][0]]['wechat_count'])?$view_json[11][$view_json[10][0]]['wechat_count']:0 }}
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        if (!empty($view_json[11][$view_json[10][$x]]['wechat_count'])) {
+                            echo $view_json[11][$view_json[10][$x]]['wechat_count'].",";
+                        }else{
+                            $c=0;
+                            echo $c.",";
+                        }
+                    }
+                    ?>
                     ],
                 backgroundColor: [
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(255, 206, 86, 0.2)'
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        echo "'rgba(255, 206, 86, 0.2)',";
+                    }
+                    ?>
                 ],
                 borderColor: [
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(255, 206, 86, 1)'
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        echo "'rgba(255, 206, 86, 1)',";
+                    }
+                    ?>
                 ],
                 borderWidth: 1
             }]
@@ -845,86 +716,39 @@ $(function () {
     var myChart2_24 = new Chart(ctx2_24, {
         type: 'bar',
         data: {
-            labels: ["{{$view_json[10][23]}}", "{{$view_json[10][22]}}","{{$view_json[10][21]}}","{{$view_json[10][20]}}","{{$view_json[10][19]}}","{{$view_json[10][18]}}","{{$view_json[10][17]}}","{{$view_json[10][16]}}","{{$view_json[10][15]}}","{{$view_json[10][14]}}","{{$view_json[10][13]}}","{{$view_json[10][12]}}","{{$view_json[10][11]}}","{{$view_json[10][10]}}","{{$view_json[10][9]}}","{{$view_json[10][8]}}","{{$view_json[10][7]}}","{{$view_json[10][6]}}","{{$view_json[10][5]}}","{{$view_json[10][4]}}","{{$view_json[10][3]}}","{{$view_json[10][2]}}","{{$view_json[10][1]}}","{{$view_json[10][0]}}"],
+            labels: [
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        echo "'".$view_json[10][$x]."',";
+                    }
+                    ?>],
             datasets: [{
                 label: '24小时内告警信息',
                 data: [
-                {{ count(!empty($view_json[9][$view_json[10][23]])?$view_json[9][$view_json[10][23]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][22]])?$view_json[9][$view_json[10][22]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][21]])?$view_json[9][$view_json[10][21]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][20]])?$view_json[9][$view_json[10][20]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][19]])?$view_json[9][$view_json[10][19]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][18]])?$view_json[9][$view_json[10][18]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][17]])?$view_json[9][$view_json[10][17]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][16]])?$view_json[9][$view_json[10][16]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][15]])?$view_json[9][$view_json[10][15]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][14]])?$view_json[9][$view_json[10][14]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][13]])?$view_json[9][$view_json[10][13]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][12]])?$view_json[9][$view_json[10][12]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][11]])?$view_json[9][$view_json[10][11]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][10]])?$view_json[9][$view_json[10][10]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][9]])?$view_json[9][$view_json[10][9]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][8]])?$view_json[9][$view_json[10][8]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][7]])?$view_json[9][$view_json[10][7]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][6]])?$view_json[9][$view_json[10][6]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][5]])?$view_json[9][$view_json[10][5]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][4]])?$view_json[9][$view_json[10][4]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][3]])?$view_json[9][$view_json[10][3]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][2]])?$view_json[9][$view_json[10][2]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][1]])?$view_json[9][$view_json[10][1]]:[]) }},
-                {{ count(!empty($view_json[9][$view_json[10][0]])?$view_json[9][$view_json[10][0]]:[]) }}
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        if (!empty($view_json[9][$view_json[10][$x]])) {
+                            echo count($view_json[9][$view_json[10][$x]]).",";
+                        }else{
+                            $c=0;
+                            echo $c.",";
+                        }
+                    }
+                    ?>
                 ],
                 backgroundColor: [
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)',
-                    'rgba(0, 0, 255, 0.2)'
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        echo "'rgba(0, 0, 255, 0.2)',";
+                    }
+                    ?>
                 ],
                 borderColor: [
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)'
+                    <?php
+                    for ($x=(count($view_json[10])-1); $x>=0; $x--) {
+                        echo "'rgba(54, 162, 235, 1)',";
+                    }
+                    ?>
                 ],
                 borderWidth: 1
             }]
@@ -963,14 +787,16 @@ $(function () {
         }
     });
 
+
+
+
+
 });
 
 function combaction(){
     //获取被选中的option标签
     var vs = document.getElementById("fluentd_id").value
 
-    // alert(vs);
-    // window.location.href = 'admin/chartjs/combaction?id=1';
     if (vs=="0"){
         location.href = '/index.php/admin/chartjs';
     } else {
@@ -1022,19 +848,22 @@ function combtype(obj){
         }
 
     }
-    // s.parent
-    // alert(vs);
-    // if (vs=="0"){
-    //     // location.href = '/index.php/admin/chartjs';
-    // } else {
-    //     // location.href = '/index.php/admin/chartjs/' + vs;
-    // }
 
 }
 function radochange(){
-    // var division = document.getElementsByName("division");
-    // var division1 = document.getElementById("division1").value
-    // var division2 = document.getElementById("division2").value
+
+    var count3 = {{ count($view_json[3]) }};
+    for (var x1=0;x1<count3;x1++)
+    {
+        document.getElementById("myChart1_"+(x1+1)).style.display= "none";
+        document.getElementById("myChart2_"+(x1+1)).style.display= "none";
+    }
+    var count3_24 = {{ count($view_json[10]) }};
+    for (var x1=0;x1<count3_24;x1++)
+    {
+        document.getElementById("myChart2_24_"+(x1+1)).style.display= "none";
+        document.getElementById("myChart1_24_"+(x1+1)).style.display= "none";
+    }
     var division = $("input[name='division']:checked").val();
     if (division=='1') {
         document.getElementById("myChart1").style.display= "";

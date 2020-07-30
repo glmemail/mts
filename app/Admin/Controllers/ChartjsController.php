@@ -45,43 +45,6 @@ class ChartjsController extends Controller
         $fluentd_sel = $s;
         $showtime=date("Y-m-d",strtotime("-6 day"));
         $showtime24=date("Y-m-d H:i",strtotime("-1 day"));
-        // $actoninfo = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
-        //     ->join('message','action_info.message_id','=','message.id')
-        //     ->join('fluentd',function ($join) {
-        //         $join->on('message.sysid', '=', 'fluentd.sysid')
-        //             ->on('message.svrid', '=', 'fluentd.svrid')
-        //             ->on('message.subsysid', '=', 'fluentd.subsysid')
-        //             ->on('message.cmpid', '=', 'fluentd.cmpid');
-        //         })
-        //     ->join('user_fluentd',function ($join) {
-        //         $join->on('fluentd.keyid', '=', 'user_fluentd.fluentd_keyid');
-        //         })
-        //     ->leftjoin('phone_info','action_info.phone_id','=','phone_info.call_id')
-        //     ->leftjoin('mail_info','action_info.mail_id','=','mail_info.id')
-        //     ->leftjoin('wechat_info','action_info.wechat_id','=','wechat_info.id')
-        //     ->where('user_fluentd.user_id', $user['username'])
-        //     ->where('action_info.actiontime','>=', $showtime)
-        //     ->get()
-        //     ->groupBy('actiontype'); // 按actiontype分组
-
-        // $actoninfo24 = Action_info::select(array('action_info.message_id', 'action_info.actiontype', 'action_info.actiontime', 'phone_info.phone_number', 'mail_info.mail_to', 'wechat_info.wechat_to', 'fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid'))
-        //     ->join('message','action_info.message_id','=','message.id')
-        //     ->join('fluentd',function ($join) {
-        //         $join->on('message.sysid', '=', 'fluentd.sysid')
-        //             ->on('message.svrid', '=', 'fluentd.svrid')
-        //             ->on('message.subsysid', '=', 'fluentd.subsysid')
-        //             ->on('message.cmpid', '=', 'fluentd.cmpid');
-        //         })
-        //     ->join('user_fluentd',function ($join) {
-        //         $join->on('fluentd.keyid', '=', 'user_fluentd.fluentd_keyid');
-        //         })
-        //     ->leftjoin('phone_info','action_info.phone_id','=','phone_info.call_id')
-        //     ->leftjoin('mail_info','action_info.mail_id','=','mail_info.id')
-        //     ->leftjoin('wechat_info','action_info.wechat_id','=','wechat_info.id')
-        //     ->where('user_fluentd.user_id', $user['username'])
-        //     ->where('action_info.actiontime','>=', $showtime24)
-        //     ->get()
-        //     ->groupBy('actiontype');
         $weeks=[];
         for ($x=6; $x>=0; $x--) {
             $day_str="-".$x." day";
@@ -136,9 +99,6 @@ class ChartjsController extends Controller
             $mail_type="";
             $wechat_type="";
             $phone_type="";
-            // $mail_count=0;
-            // $phone_count=0;
-            // $wechat_count=0;
             for ($y=0; $y<count($msg); $y++) {
                 if ($msg[$y]->ai_actiontype=="MAIL") {
                     $mail_type="MAIL";
@@ -267,10 +227,6 @@ class ChartjsController extends Controller
         $view_json[]=$msg_arr_24;               // index=9
         $view_json[]=$hour;                     // index=10
         $view_json[]=$msg_count_24;                     // index=11
-        // var_dump($view_json[6]);
-        // var_dump($view_json[8]);
-        // var_dump($view_json[9]);
-        // var_dump($view_json[10]);
         // var_dump($view_json[6]['msg_all_count']);
         // var_dump($view_json[8]['msg_all_count_24']);
         // var_dump($view_json[0]);
@@ -281,6 +237,9 @@ class ChartjsController extends Controller
         // var_dump($view_json[5]);
         // var_dump($view_json[6]);
         // var_dump($view_json[7]);
+        // var_dump($view_json[8]);
+        // var_dump($view_json[9]);
+        // var_dump($view_json[10]);
         $cnt = 0;
         // $action_count  = [count($actoninfo["WECHAT"]), count($actoninfo["MAIL"]), count($actoninfo["PHONE"]), 0, 0, 0];
         return $content
