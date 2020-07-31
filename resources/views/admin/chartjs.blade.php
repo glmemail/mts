@@ -177,8 +177,8 @@
         echo "<div id='myChart1_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
         echo "<h2>".$view_json[3][$i]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
-        echo "<th class='column-id' style='width: 10%'>MSG_ID</th>";
-        echo "<th class='column-id' style='width: 40%'>内容</th>";
+        echo "<th class='column-id' style='width: 5%'>Message id</th>";
+        echo "<th class='column-id' style='width: 45%'>内容</th>";
         echo "<th class='column-id' style='width: 10%'>时间</th>";
         echo "<th class='column-id' style='width: 10%'>方式";
         echo "<select name='type_sel' onchange='combtype(this)'>";
@@ -251,9 +251,9 @@
         echo "<div id='myChart2_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
         echo "<h2>".$view_json[3][$i]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
-        echo "<th class='column-id' style='width: 10%'>MSG_ID</th>";
+        echo "<th class='column-id' style='width: 5%'>Message id</th>";
         echo "<th class='column-id' style='width: 50%'>内容</th>";
-        echo "<th class='column-id' style='width: 40%'>时间</th>";
+        echo "<th class='column-id' style='width: 45%'>时间</th>";
         foreach (!empty($view_json[4][$view_json[3][$i]])?$view_json[4][$view_json[3][$i]]:[] as $k => $v) {
             echo "<tr>";
             echo "<td>".$v['message_id']."</td>";
@@ -273,8 +273,8 @@
         echo "<div id='myChart1_24_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
         echo "<h2>".$view_json[2][$j]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
-        echo "<th class='column-id' style='width: 10%'>MSG_ID</th>";
-        echo "<th class='column-id' style='width: 40%'>内容</th>";
+        echo "<th class='column-id' style='width: 5%'>Message id</th>";
+        echo "<th class='column-id' style='width: 45%'>内容</th>";
         echo "<th class='column-id' style='width: 10%'>时间</th>";
         echo "<th class='column-id' style='width: 10%'>方式";
         echo "<select name='type_sel' onchange='combtype(this)'>";
@@ -348,9 +348,9 @@
         echo "<div id='myChart2_24_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
         echo "<h2>".$view_json[2][$j]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
-        echo "<th class='column-id' style='width: 10%'>MSG_ID</th>";
-        echo "<th class='column-id' style='width: 40%'>内容</th>";
-        echo "<th class='column-id' style='width: 10%'>时间</th>";
+        echo "<th class='column-id' style='width: 5%'>Message id</th>";
+        echo "<th class='column-id' style='width: 50%'>内容</th>";
+        echo "<th class='column-id' style='width: 45%'>时间</th>";
         foreach (!empty($view_json[9][$view_json[10][$j]])?$view_json[9][$view_json[10][$j]]:[] as $k => $v) {
             echo "<tr>";
             echo "<td>".$v['message_id']."</td>";

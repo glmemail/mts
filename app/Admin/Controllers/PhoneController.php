@@ -156,7 +156,7 @@ class PhoneController extends AdminController
             $t = "<span>";
             $t = "".$t.$id."</span><br/><span>";
             for ($x=0; $x<count($r); $x++) {
-                $t = $t."<font color='blue' >->".$r[$x]->message_id."</font><br/>";
+                $t = $t."<font color='blue'>->".$r[$x]->message_id."</font><br/>";
             }
             $t = $t."</span>";
             return $t;
