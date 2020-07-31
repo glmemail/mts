@@ -163,23 +163,30 @@ class WechatController extends AdminController
         $grid->column('contact_name', __('Contact name'));
         $grid->column('actiontime', __('Actiontime'));
         $user = Auth::guard('admin')->user();
-        // $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
-        //     ->join('user_fluentd','fluentd.keyid','=','user_fluentd.fluentd_keyid')
-        //     ->where('user_fluentd.user_id', $user['username'])
-        //     ->get()
-        //     ->groupBy('keyid');
-        // $fluentd_json = json_decode($fluentd,true);
-        // foreach ($fluentd_json as $k => $v) {
-        //     $sysid = $v[0]['sysid'];
-        //     $grid->model()->Orwhere('sys_id', '=', $sysid);
-        // }
+        $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
+            ->join('user_fluentd','fluentd.keyid','=','user_fluentd.fluentd_keyid')
+            ->where('user_fluentd.user_id', $user['username'])
+            ->get()
+            ->groupBy('keyid');
+        $fluentd_json = json_decode($fluentd,true);
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
         $sql = $sql." from ";
         $sql = $sql." fluentd f ";
         $sql = $sql." where ";
-        $sql = $sql." f.keyid =".$id." ";
+        if ($id==0) {
+            $x = 0;
+            foreach ($fluentd_json as $k => $v) {
+                $x++;
+                $sql = $sql." f.keyid =".$v[0]['keyid'];
+                if ($x!=count($fluentd_json)) {
+                    $sql = $sql." or ";
+                }
+            }
+        } else {
+            $sql = $sql." f.keyid =".$id." ";
+        }
         $fluentdList = DB::select($sql);
         for ($x=0; $x<count($fluentdList); $x++) {
             $sysid=$fluentdList[$x]->sysid;
