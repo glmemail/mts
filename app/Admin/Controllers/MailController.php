@@ -84,6 +84,7 @@ class MailController extends AdminController
         $grid->model()->where('actiontime', '>=', $showtime);
         $grid->disableCreateButton();
         $grid->disableActions();
+        $grid->disableRowSelector();
         return $grid;
     }
 
@@ -183,6 +184,7 @@ class MailController extends AdminController
         $grid->model()->where('actiontime', '>=', $showtime);
         $grid->disableCreateButton();
         $grid->disableActions();
+        $grid->disableRowSelector();
         return $grid;
     }
 

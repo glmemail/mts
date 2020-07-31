@@ -99,6 +99,7 @@ class PhoneController extends AdminController
 
         $grid->disableCreateButton();
         $grid->disableActions();
+        $grid->disableRowSelector();
         return $grid;
     }
 
@@ -217,6 +218,7 @@ class PhoneController extends AdminController
         $grid->model()->where('actiontime', '>=', $showtime);
         $grid->disableCreateButton();
         $grid->disableActions();
+        $grid->disableRowSelector();
         return $grid;
     }
 

@@ -71,6 +71,7 @@ class MessageController extends AdminController
 
         $grid->disableCreateButton();
         $grid->disableActions();
+        $grid->disableRowSelector();
         return $grid;
     }
 
@@ -134,6 +135,7 @@ class MessageController extends AdminController
 
         $grid->disableCreateButton();
         $grid->disableActions();
+        $grid->disableRowSelector();
         return $grid;
     }
 

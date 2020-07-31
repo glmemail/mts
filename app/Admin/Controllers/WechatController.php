@@ -23,6 +23,9 @@ class WechatController extends AdminController
      */
     protected $title = 'App\Models\wechat_info';
 
+
+
+    protected $fluentd_keyid = -1;
     /**
      * Make a grid builder.
      *
@@ -66,10 +69,6 @@ class WechatController extends AdminController
         $grid->column('sub_sys_id', __('Sub sys id'));
         $grid->column('cmp_id', __('Cmp id'));
         $grid->column('wechat_to', __('Wechat to'));
-        // $grid->column('qy_id', __('Qy id'));
-        // $grid->column('qy_secret', __('Qy secret'));
-        // $grid->column('qy_agent_id', __('Qy agent id'));
-        // $grid->column('group_flg', __('Group flg'));
         $grid->column('contact_name', __('Contact name'));
         $grid->column('actiontime', __('Actiontime'));
         $user = Auth::guard('admin')->user();
@@ -87,6 +86,7 @@ class WechatController extends AdminController
         $grid->model()->where('actiontime', '>=', $showtime);
         $grid->disableCreateButton();
         $grid->disableActions();
+        $grid->disableRowSelector();
         return $grid;
     }
 
@@ -195,6 +195,7 @@ class WechatController extends AdminController
         }
         $grid->disableCreateButton();
         $grid->disableActions();
+        $grid->disableRowSelector();
         return $grid;
     }
 
