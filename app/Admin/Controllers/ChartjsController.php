@@ -237,7 +237,7 @@ class ChartjsController extends Controller
         // var_dump($view_json[9]);
         // var_dump($view_json[10]);
         return $content
-            ->header('Chartjs')
+            ->header('信息查询')
             ->body(new Box('', view('admin.chartjs', compact('view_json'))));
 
     }
