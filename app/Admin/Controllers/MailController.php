@@ -157,10 +157,6 @@ class MailController extends AdminController
             ->get()
             ->groupBy('keyid');
         $fluentd_json = json_decode($fluentd,true);
-        $s = [];
-        foreach ($fluentd_json as $k => $v) {
-            $s[$k] = $v[0]['sysid'] ." ". $v[0]['svrid'] ." ". $v[0]['subsysid'] ." ". $v[0]['cmpid'];
-        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -168,8 +164,13 @@ class MailController extends AdminController
         $sql = $sql." fluentd f ";
         $sql = $sql." where ";
         if ($id==0) {
+            $x = 0;
             foreach ($fluentd_json as $k => $v) {
-                $sql = $sql." f.keyid =".$v[0]['keyid']." ";
+                $x++;
+                $sql = $sql." f.keyid =".$v[0]['keyid'];
+                if ($x!=count($fluentd_json)) {
+                    $sql = $sql." or ";
+                }
             }
         } else {
             $sql = $sql." f.keyid =".$id." ";
