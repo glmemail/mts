@@ -304,16 +304,6 @@ class ChartjsController extends Controller
         $sql = $sql." m.id ";
         $message_all = DB::select($sql);
         $msg_all_count = count($message_all);
-        $sql = "";
-        $sql = $sql." select ";
-        $sql = $sql." * ";
-        $sql = $sql." from ";
-        $sql = $sql." message_view mv ";
-        $sql = $sql." where ";
-        $sql = $sql." mv.actiontime > '".$showtime24."' ";
-        $sql = $sql." and mv.user_id ='".$user['username']."' ";
-        $message_all_24 = DB::select($sql);
-        $msg_all_count_24 = count($message_all_24);
         for ($x=0; $x<$msg_all_count; $x++) {
             $date = new DateTime($message_all[$x]->actiontime);
             $ymd = $date->format('Y-m-d');
@@ -372,6 +362,23 @@ class ChartjsController extends Controller
             $m['msg_action']=$msg_action;
             $msg_arr[$ymd][]=$m;
         }
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." m.id,m.message,m.actiontime,m.sysid,m.svrid,m.subsysid,m.cmpid ";
+        $sql = $sql." from ";
+        $sql = $sql." message m ";
+        $sql = $sql." join action_info ai on ";
+        $sql = $sql." ai.message_id = m.id ";
+        $sql = $sql." where ";
+        $sql = $sql." m.actiontime > '".$showtime24."' ";
+        $sql = $sql." and m.sysid = '".$sel_fluentd[0]->sysid."' ";
+        $sql = $sql." and m.svrid = '".$sel_fluentd[0]->svrid."' ";
+        $sql = $sql." and m.subsysid = '".$sel_fluentd[0]->subsysid."' ";
+        $sql = $sql." and m.cmpid = '".$sel_fluentd[0]->cmpid."' ";
+        $sql = $sql." group by ";
+        $sql = $sql." m.id ";
+        $message_all_24 = DB::select($sql);
+        $msg_all_count_24 = count($message_all_24);
         for ($x=0; $x<$msg_all_count_24; $x++) {
             $date = new DateTime($message_all_24[$x]->actiontime);
             $ymdh = $date->format("H:00");
@@ -460,7 +467,7 @@ class ChartjsController extends Controller
         // var_dump($view_json[8]);
         $content = new Content();
         return $content
-            ->header('Chartjs')
+            ->header('信息查询')
             ->body(new Box('', view('admin.chartjs', compact('view_json'))));
 
     }
