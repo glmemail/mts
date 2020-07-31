@@ -124,7 +124,7 @@ class MailController extends AdminController
             $filter->like('mail_from', 'MAIL_FROM');
             $filter->like('actiontime', 'ActionTime');
         });
-        $grid->column('id', __('Mail id -> Message id'))->display(function($id) {
+        $grid->column('id', __('Mail id -> Message id'))->display(function($mail_id) {
 
             $sql = "";
             $sql = $sql." select ";
@@ -132,10 +132,10 @@ class MailController extends AdminController
             $sql = $sql." from ";
             $sql = $sql." action_info ai ";
             $sql = $sql." where ";
-            $sql = $sql." ai.mail_id = ".$id." ";
+            $sql = $sql." ai.mail_id = ".$mail_id." ";
             $r = DB::select($sql);
             $t = "<span>";
-            $t = "".$t.$id."</span><br/><span>";
+            $t = "".$t.$mail_id."</span><br/><span>";
             for ($x=0; $x<count($r); $x++) {
                 $t = $t."<font color='blue' >->".$r[$x]->message_id."</font><br/>";
             }
@@ -151,23 +151,29 @@ class MailController extends AdminController
         $grid->column('contact_name', __('Contact name'));
         $grid->column('actiontime', __('Actiontime'));
         $user = Auth::guard('admin')->user();
-        // $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
-        //     ->join('user_fluentd','fluentd.keyid','=','user_fluentd.fluentd_keyid')
-        //     ->where('user_fluentd.user_id', $user['username'])
-        //     ->get()
-        //     ->groupBy('keyid');
-        // foreach ($fluentd_json as $k => $v) {
-        //     $sysid = $v[0]['sysid'];
-        //     $grid->model()->Orwhere('sys_id', '=', $sysid);
-        // }
-        // $fluentd_json = json_decode($fluentd,true);
+        $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
+            ->join('user_fluentd','fluentd.keyid','=','user_fluentd.fluentd_keyid')
+            ->where('user_fluentd.user_id', $user['username'])
+            ->get()
+            ->groupBy('keyid');
+        $fluentd_json = json_decode($fluentd,true);
+        $s = [];
+        foreach ($fluentd_json as $k => $v) {
+            $s[$k] = $v[0]['sysid'] ." ". $v[0]['svrid'] ." ". $v[0]['subsysid'] ." ". $v[0]['cmpid'];
+        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
         $sql = $sql." from ";
         $sql = $sql." fluentd f ";
         $sql = $sql." where ";
-        $sql = $sql." f.keyid =".$id." ";
+        if ($id==0) {
+            foreach ($fluentd_json as $k => $v) {
+                $sql = $sql." f.keyid =".$v[0]['keyid']." ";
+            }
+        } else {
+            $sql = $sql." f.keyid =".$id." ";
+        }
         $fluentdList = DB::select($sql);
         for ($x=0; $x<count($fluentdList); $x++) {
             $sysid=$fluentdList[$x]->sysid;
