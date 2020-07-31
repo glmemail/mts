@@ -28,8 +28,7 @@ class MessageController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Message());
-        // 第一列显示id字段，并将这一列设置为可排序列
-        $grid->column('id', 'ID')->sortable();
+        $showtime=date("Y-m-d",strtotime("-6 day"));
         // 第二列显示title字段，由于title字段名和Grid对象的title方法冲突，所以用Grid的column()方法代替
         $grid->filter(function($filter){
 
@@ -46,19 +45,18 @@ class MessageController extends AdminController
             // ...
 
         });
+        // 第一列显示id字段，并将这一列设置为可排序列
+        $grid->column('id', 'ID')->sortable();
         // 显示JSON内嵌字段
         $grid->column('message', 'Message')->display(function ($message) {
-            // $msg =  json_decode ($this->message,true);
-            // $json = json_encode($msg,true);
             return $this->message;
-            // return "<span class='label label-warning'>{$action}</span>";
         })->width(900);
         $grid->column('sysid', 'SYS_ID');
         $grid->column('svrid', 'SVR_ID');
         $grid->column('subsysid', 'SUB_SYS_ID');
         $grid->column('cmpid', 'CMP_ID');
         $grid->column('actiontime', __('Actiontime'));
-
+        $grid->model()->where('actiontime', '>=', $showtime);
         $user = Auth::guard('admin')->user();
         $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
             ->join('user_fluentd','fluentd.keyid','=','user_fluentd.fluentd_keyid')
@@ -68,13 +66,11 @@ class MessageController extends AdminController
         $fluentd_json = json_decode($fluentd,true);
         foreach ($fluentd_json as $k => $v) {
             $sysid = $v[0]['sysid'];
-            $grid->model()->Orwhere('sysid', '=', $sysid);
+            $grid->model()->where('sysid', '=', $sysid);
         }
-        // $grid->model()->where('id', '=', 825543);
 
         $grid->disableCreateButton();
         $grid->disableActions();
-        // var_dump($grid);
         return $grid;
     }
 
@@ -86,13 +82,59 @@ class MessageController extends AdminController
      */
     protected function detail($id)
     {
-        $show = new Show(Message::findOrFail($id));
-        $show->field('id', __('Id'));
-        $show->field('message', __('Message'));
-        $show->field('actiontime', __('ActionTime'));
+        // $show = new Show(Message::findOrFail($id));
+        // $show->field('id', __('Id'));
+        // $show->field('message', __('Message'));
+        // $show->field('actiontime', __('ActionTime'));
 
 
-        return $show;
+        // return $show;
+
+        $grid = new Grid(new Message());
+        $showtime=date("Y-m-d",strtotime("-6 day"));
+        // 第二列显示title字段，由于title字段名和Grid对象的title方法冲突，所以用Grid的column()方法代替
+        $grid->filter(function($filter){
+
+            // 去掉默认的id过滤器
+            $filter->disableIdFilter();
+
+            // 在这里添加字段过滤器
+            $filter->like('message', 'message');
+            $filter->like('sysid', 'SYS_ID');
+            $filter->like('svrid', 'SVR_ID');
+            $filter->like('subsysid', 'SUB_SYS_ID');
+            $filter->like('cmpid', 'CMP_ID');
+            $filter->like('actiontime', 'ActionTime');
+            // ...
+
+        });
+        // 第一列显示id字段，并将这一列设置为可排序列
+        $grid->column('id', 'ID')->sortable();
+        // 显示JSON内嵌字段
+        $grid->column('message', 'Message')->display(function ($message) {
+            return $this->message;
+        })->width(900);
+        $grid->column('sysid', 'SYS_ID');
+        $grid->column('svrid', 'SVR_ID');
+        $grid->column('subsysid', 'SUB_SYS_ID');
+        $grid->column('cmpid', 'CMP_ID');
+        $grid->column('actiontime', __('Actiontime'));
+        $grid->model()->where('actiontime', '>=', $showtime);
+        $user = Auth::guard('admin')->user();
+        $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
+            ->join('user_fluentd','fluentd.keyid','=','user_fluentd.fluentd_keyid')
+            ->where('user_fluentd.user_id', $user['username'])
+            ->get()
+            ->groupBy('keyid');
+        $fluentd_json = json_decode($fluentd,true);
+        foreach ($fluentd_json as $k => $v) {
+            $sysid = $v[0]['sysid'];
+            $grid->model()->where('sysid', '=', $sysid);
+        }
+
+        $grid->disableCreateButton();
+        $grid->disableActions();
+        return $grid;
     }
 
     /**
