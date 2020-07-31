@@ -162,6 +162,7 @@ class WechatController extends AdminController
         // $grid->column('group_flg', __('Group flg'));
         $grid->column('contact_name', __('Contact name'));
         $grid->column('actiontime', __('Actiontime'));
+        $grid->model()->where('actiontime', '>=', $showtime);
         $user = Auth::guard('admin')->user();
         $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
             ->join('user_fluentd','fluentd.keyid','=','user_fluentd.fluentd_keyid')
@@ -190,9 +191,8 @@ class WechatController extends AdminController
         $fluentdList = DB::select($sql);
         for ($x=0; $x<count($fluentdList); $x++) {
             $sysid=$fluentdList[$x]->sysid;
-            $grid->model()->Orwhere('sys_id', '=', $sysid);
+            $grid->model()->where('sys_id', '=', $sysid);
         }
-        $grid->model()->where('actiontime', '>=', $showtime);
         $grid->disableCreateButton();
         $grid->disableActions();
         return $grid;

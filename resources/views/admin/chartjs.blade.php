@@ -178,9 +178,9 @@
         echo "<h2>".$view_json[3][$i]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' style='width: 5%'>Message id</th>";
-        echo "<th class='column-id' style='width: 45%'>内容</th>";
+        echo "<th class='column-id' style='width: 40%'>内容</th>";
         echo "<th class='column-id' style='width: 10%'>时间</th>";
-        echo "<th class='column-id' style='width: 10%'>方式";
+        echo "<th class='column-id' style='width: 15%'>方式";
         echo "<select name='type_sel' onchange='combtype(this)'>";
         echo "<option value='0'>全部</option>";
         echo "<option value='1'>mail</option>";
@@ -274,9 +274,9 @@
         echo "<h2>".$view_json[2][$j]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' style='width: 5%'>Message id</th>";
-        echo "<th class='column-id' style='width: 45%'>内容</th>";
+        echo "<th class='column-id' style='width: 40%'>内容</th>";
         echo "<th class='column-id' style='width: 10%'>时间</th>";
-        echo "<th class='column-id' style='width: 10%'>方式";
+        echo "<th class='column-id' style='width: 15%'>方式";
         echo "<select name='type_sel' onchange='combtype(this)'>";
         echo "<option value='0'>全部</option>";
         echo "<option value='1'>mail</option>";

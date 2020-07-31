@@ -178,7 +178,7 @@ class MailController extends AdminController
         $fluentdList = DB::select($sql);
         for ($x=0; $x<count($fluentdList); $x++) {
             $sysid=$fluentdList[$x]->sysid;
-            $grid->model()->Orwhere('sys_id', '=', $sysid);
+            $grid->model()->where('sys_id', '=', $sysid);
         }
         $grid->model()->where('actiontime', '>=', $showtime);
         $grid->disableCreateButton();
