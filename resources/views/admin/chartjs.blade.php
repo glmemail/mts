@@ -178,7 +178,7 @@
         echo "<h2>".$view_json[3][$i]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' style='width: 5%'>Message id</th>";
-        echo "<th class='column-id' style='width: 40%'>内容</th>";
+        echo "<th class='column-id' style='width: 30%'>内容</th>";
         echo "<th class='column-id' style='width: 10%'>时间</th>";
         echo "<th class='column-id' style='width: 15%'>方式";
         echo "<select name='type_sel' onchange='combtype(this)'>";
@@ -189,7 +189,7 @@
         echo "</select>";
         echo "</th>";
         echo "<th class='column-id' style='width: 10%'>Mail</th>";
-        echo "<th class='column-id' style='width: 10%'>Phone</th>";
+        echo "<th class='column-id' style='width: 20%'>Phone</th>";
         echo "<th class='column-id' style='width: 10%'>Wechat</th>";
         foreach (!empty($view_json[4][$view_json[3][$i]])?$view_json[4][$view_json[3][$i]]:[] as $k => $v) {
             echo "<tr>";
@@ -217,10 +217,13 @@
                 if (!empty($v['msg_action'][$x]['phone_number'])) {
                     echo "<font size='3'>".($x1+1)."</font>：".$v['msg_action'][$x]['phone_number'];
                     $phone_dtmf=!empty($v['msg_action'][$x]['phone_dtmf'])?$v['msg_action'][$x]['phone_dtmf']:"";
+                    $phone_status_code=!empty($v['msg_action'][$x]['phone_status_code'])?$v['msg_action'][$x]['phone_status_code']:"";
                     if ($phone_dtmf=="2") {
                     // echo !empty($v['msg_action'][$x]['phone_dtmf'])?"<font size='4'>▲</font>":"";
                         echo "<font size='2'> 当番处理</font>";
                     } else if ($phone_dtmf=="0") {
+                        echo "<font size='2'> 接通他人处理</font>";
+                    } else if ($phone_status_code=="200102") {
                         echo "<font size='2'> 接通未处理</font>";
                     } else {
                         echo "<font size='2'> 未接通</font>";
@@ -274,7 +277,7 @@
         echo "<h2>".$view_json[2][$j]."</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' style='width: 5%'>Message id</th>";
-        echo "<th class='column-id' style='width: 40%'>内容</th>";
+        echo "<th class='column-id' style='width: 30%'>内容</th>";
         echo "<th class='column-id' style='width: 10%'>时间</th>";
         echo "<th class='column-id' style='width: 15%'>方式";
         echo "<select name='type_sel' onchange='combtype(this)'>";
@@ -285,7 +288,7 @@
         echo "</select>";
         echo "</th>";
         echo "<th class='column-id' style='width: 10%'>Mail</th>";
-        echo "<th class='column-id' style='width: 10%'>Phone</th>";
+        echo "<th class='column-id' style='width: 20%'>Phone</th>";
         echo "<th class='column-id' style='width: 10%'>Wechat</th>";
         foreach (!empty($view_json[9][$view_json[10][$j]])?$view_json[9][$view_json[10][$j]]:[] as $k => $v) {
             echo "<tr>";
@@ -313,10 +316,13 @@
                 if (!empty($v['msg_action'][$x]['phone_number'])) {
                     echo "<font size='3'>".($x1+1)."</font>：".$v['msg_action'][$x]['phone_number'];
                     $phone_dtmf=!empty($v['msg_action'][$x]['phone_dtmf'])?$v['msg_action'][$x]['phone_dtmf']:"";
+                    $phone_status_code=!empty($v['msg_action'][$x]['phone_status_code'])?$v['msg_action'][$x]['phone_status_code']:"";
                     if ($phone_dtmf=="2") {
                     // echo !empty($v['msg_action'][$x]['phone_dtmf'])?"<font size='4'>▲</font>":"";
                         echo "<font size='2'> 当番处理</font>";
                     } else if ($phone_dtmf=="0") {
+                        echo "<font size='2'> 接通他人处理</font>";
+                    } else if ($phone_status_code=="200102") {
                         echo "<font size='2'> 接通未处理</font>";
                     } else {
                         echo "<font size='2'> 未接通</font>";

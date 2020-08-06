@@ -94,6 +94,7 @@ class ChartjsController extends Controller
             $ymd = $date->format('Y-m-d');
             $sql = $this->selectActioninfo_sql($message_all[$x]->id);
             $msg = DB::select($sql);
+            // var_dump($msg);
             $m=[];
             $msg_action=[];
             $mail_type="";
@@ -130,8 +131,10 @@ class ChartjsController extends Controller
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
                 $t['phone_dtmf']=$msg[$y]->pi_dtmf;
+                $t['phone_status_code']=$msg[$y]->pi_status_code;
                 $t['mail_to']=$msg[$y]->mi_mail_to;
                 $t['wechat_to']=$msg[$y]->wi_wechat_to;
+
                 $msg_action[]=$t;
             }
             $m['message_id']=$message_all[$x]->id;
@@ -187,6 +190,7 @@ class ChartjsController extends Controller
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
                 $t['phone_dtmf']=$msg[$y]->pi_dtmf;
+                $t['phone_status_code']=$msg[$y]->pi_status_code;
                 $t['mail_to']=$msg[$y]->mi_mail_to;
                 $t['wechat_to']=$msg[$y]->wi_wechat_to;
                 $msg_action[]=$t;
@@ -349,6 +353,7 @@ class ChartjsController extends Controller
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
                 $t['phone_dtmf']=$msg[$y]->pi_dtmf;
+                $t['phone_status_code']=$msg[$y]->pi_status_code;
                 $t['mail_to']=$msg[$y]->mi_mail_to;
                 $t['wechat_to']=$msg[$y]->wi_wechat_to;
                 $msg_action[]=$t;
@@ -423,6 +428,7 @@ class ChartjsController extends Controller
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
                 $t['phone_dtmf']=$msg[$y]->pi_dtmf;
+                $t['phone_status_code']=$msg[$y]->pi_status_code;
                 $t['mail_to']=$msg[$y]->mi_mail_to;
                 $t['wechat_to']=$msg[$y]->wi_wechat_to;
                 $msg_action[]=$t;
