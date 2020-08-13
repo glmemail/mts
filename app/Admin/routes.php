@@ -19,7 +19,6 @@ Route::group([
     $router->resource('phone', PhoneController::class);
     $router->get('/chartjs', 'ChartjsController@index')->name('admin.chartjs');
     $router->get('/chartjs/{fluentd_id}', 'ChartjsController@combaction')->name('admin.chartjsid');
-
     $router->resource('action', ActionController::class);
-
+    $router->resource('member', MemberController::class);
 });
