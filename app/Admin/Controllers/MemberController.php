@@ -145,7 +145,7 @@ class MemberController extends AdminController
         }
         $form->select('fluentd_key', __('Fluentd'))->options($s);
         $form->text('compid', __('Comp'));
-        $form->text('deptid', __('Dept'));
+        // $form->text('deptid', __('Dept'));
         $form->email('mail_addr', __('Email'));
         $form->mobile('phone_number', __('Phone'));
         $form->text('wechat_id', __('Wechat'));
