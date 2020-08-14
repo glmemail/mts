@@ -15,6 +15,6 @@ class Member extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'name', 'userid', 'fluentd_key', 'mail_addr', 'phone_number', 'wechat_id', 'gender', 'created_at', 'updated_at'
+        'id', 'name', 'tenantid', 'fluentd_key', 'mail_addr', 'phone_number', 'wechat_id', 'gender', 'created_at', 'updated_at'
     ];
 }
