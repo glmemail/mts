@@ -2,20 +2,12 @@
 
 namespace App\Models;
 
-// use App\Models\Message;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Action_info;
-use Encore\Admin\Facades\Admin;
 
-class Message extends Model
+class Message_list extends Model
 {
-    public function action_info()
-    {
-        return $this->hasMany(Action_info::class);
-    }
-
     // use Notifiable;
-    protected $table = 'message';
+    protected $table = 'message_list';
 
     public $timestamps = false;
     /**

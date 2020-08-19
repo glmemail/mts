@@ -13,6 +13,7 @@ Route::group([
     $router->get('/', 'HomeController@index')->name('admin.home');
     $router->resource('users', UserController::class);
     $router->resource('message', MessageController::class);
+    $router->resource('message_list', MessagelistController::class);
     $router->resource('mail', MailController::class);
     $router->get('/mailList/{fluentd_id}', 'MailController@mailList')->name('admin.mailList');
     $router->resource('wechat', WechatController::class);

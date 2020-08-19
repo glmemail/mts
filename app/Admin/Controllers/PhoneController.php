@@ -144,7 +144,8 @@ class PhoneController extends AdminController
             $filter->like('phone_number', 'PHONE_NUMBER');
             $filter->like('actiontime', 'ActionTime');
         });
-        $grid->column('call_id', __('Call id -> Message id'))->display(function($id) {
+
+        $grid->column('call_id', __('Call id'))->display(function($id) {
 
             $sql = "";
             $sql = $sql." select ";
@@ -155,9 +156,27 @@ class PhoneController extends AdminController
             $sql = $sql." ai.phone_id = '".$id."' ";
             $r = DB::select($sql);
             $t = "<span>";
-            $t = "".$t.$id."</span><br/><span>";
+            $t = "".$t.$id."</span>";
+            // for ($x=0; $x<count($r); $x++) {
+            //     $t = $t."<font color='blue'>->".$r[$x]->message_id."</font><br/>";
+            // }
+            $t = $t."</span>";
+            return $t;
+        });
+        $grid->column('message_id', __('Message id'))->display(function($id) {
+
+            $sql = "";
+            $sql = $sql." select ";
+            $sql = $sql." * ";
+            $sql = $sql." from ";
+            $sql = $sql." action_info ai ";
+            $sql = $sql." where ";
+            $sql = $sql." ai.phone_id = '".$this->call_id."' ";
+            $r = DB::select($sql);
+            $t = "<span>";
+            // $t = "".$t.$id."</span><br/><span>";
             for ($x=0; $x<count($r); $x++) {
-                $t = $t."<font color='blue'>->".$r[$x]->message_id."</font><br/>";
+                $t = $t.$r[$x]->message_id."<br/>";
             }
             $t = $t."</span>";
             return $t;
@@ -166,11 +185,7 @@ class PhoneController extends AdminController
         $grid->column('svr_id', __('Svr id'));
         $grid->column('sub_sys_id', __('Sub sys id'));
         $grid->column('cmp_id', __('Cmp id'));
-        // $grid->column('rule_cond', __('Rule cond'));
         $grid->column('phone_number', __('Phone number'));
-        // $grid->column('requestid', __('Requestid'));
-        // $grid->column('code', __('Code'));
-        // $grid->column('message', __('Message'));
         $grid->column('actiontime', __('Actiontime'));
         $grid->column('dtmf', __('处理'))->display(function ($dtmf) {
             if($dtmf==2) {
@@ -179,11 +194,7 @@ class PhoneController extends AdminController
                 return "未接通";
 
             }
-            // return "<span class='label label-warning'>{$action}</span>";
         });
-        // $grid->column('duration', __('Duration'));
-        // $grid->column('status_code', __('Status code'));
-
 
         $user = Auth::guard('admin')->user();
         $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
@@ -215,6 +226,8 @@ class PhoneController extends AdminController
             $sysid=$fluentdList[$x]->sysid;
             $grid->model()->where('sys_id', '=', $sysid);
         }
+        // var_dump($showtime);
+        // $showtime="2020-08-12 00:00:00"
         $grid->model()->where('actiontime', '>=', $showtime);
         $grid->disableCreateButton();
         $grid->disableActions();

@@ -63,7 +63,7 @@
         <div class="icon">
             <i class="fa fa-comment"></i>
         </div>
-        <a href="/index.php/admin/message/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
+        <a href="/index.php/admin/message_list/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -121,7 +121,7 @@
         <div class="icon">
             <i class="fa fa-comment"></i>
         </div>
-        <a href="/index.php/admin/message" class="small-box-footer">
+        <a href="/index.php/admin/message_list" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>

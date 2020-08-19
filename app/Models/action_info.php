@@ -8,7 +8,7 @@ use App\Models\Message;
 class Action_info extends Model
 {
 
-    public function post()
+    public function message()
     {
         return $this->belongsTo(Message::class, 'id', 'message_id');
     }

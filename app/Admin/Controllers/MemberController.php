@@ -9,6 +9,8 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Support\Facades\Auth;
+use Encore\Admin\Widgets\Box;
+use Encore\Admin\Layout\Content;
 use DB;
 
 class MemberController extends AdminController
@@ -30,8 +32,22 @@ class MemberController extends AdminController
         $grid = new Grid(new Member());
         $grid->column('id', "ID");
         $grid->column('name', __('Name'));
-        $grid->column('compid', __('Comp'));
-        $grid->column('deptid', __('Dept'));
+        $grid->column('compid', __('Comp'))->display(function ($compid) {
+
+            $sql = "";
+            $sql = $sql." select ";
+            $sql = $sql." * ";
+            $sql = $sql." from ";
+            $sql = $sql." comp ";
+            $sql = $sql." where ";
+            $sql = $sql." cmpid ='".$compid."' ";
+            $comp_info = DB::select($sql);
+            if (count($comp_info) > 0) {
+                return $comp_info[0]->cmpname;
+            }
+            return "";
+        });
+        // $grid->column('deptid', __('Dept'));
         // $grid->column('tenantid', __('Tenant'));
         $grid->column('tenantid', __('Tenant'))->display(function ($tenantid) {
 
@@ -72,6 +88,43 @@ class MemberController extends AdminController
         // $grid->disableCreateButton();
         // $grid->disableActions();
         $grid->disableRowSelector();
+        $grid->header(function ($query) {
+            $weeks=[];
+            for ($x=6; $x>=0; $x--) {
+                $day_str="-".$x." day";
+                $weeks[]=date("Y-m-d",strtotime($day_str));
+            }
+            $msg_count=[];
+            $msg_count['2020-08-13']['wechat_count']=5;
+            $msg_count['2020-08-13']['mail_count']=4;
+            $msg_count['2020-08-13']['phone_count']=1;
+            $msg_count['2020-08-14']['wechat_count']=10;
+            $msg_count['2020-08-14']['mail_count']=8;
+            $msg_count['2020-08-14']['phone_count']=4;
+            $msg_count['2020-08-15']['wechat_count']=16;
+            $msg_count['2020-08-15']['mail_count']=20;
+            $msg_count['2020-08-15']['phone_count']=4;
+            $msg_count['2020-08-17']['wechat_count']=7;
+            $msg_count['2020-08-17']['mail_count']=35;
+            $msg_count['2020-08-17']['phone_count']=28;
+            $view_json=[];
+            $view_json[]=[];                        // index=0
+            $view_json[]=[];              // index=1
+            $view_json[]=[];                  // index=2
+            $view_json[]=$weeks;                    // index=3 一周内日期List
+            $view_json[]=[];                  // index=4
+            $view_json[]=$msg_count;                // index=5
+            // var_dump($view_json[3]);
+            // var_dump($view_json[5]);
+
+            $doughnut = view('admin.gender', compact('view_json'));
+
+            return new Box('chartjs', $doughnut);
+            // $content = new Content();
+            // return $content
+            // ->header('信息查询')
+            // ->body(new Box('', view('admin.gender', compact('view_json'))));
+        });
         return $grid;
     }
 
@@ -100,19 +153,6 @@ class MemberController extends AdminController
         $form = new Form(new Member());
         $user = Auth::guard('admin')->user();
         $form->text('name', __('Name'));
-        // $form->text('userid')->value(function ($userid) {
-        //     $sql = "";
-        //     $sql = $sql." select ";
-        //     $sql = $sql." * ";
-        //     $sql = $sql." from ";
-        //     $sql = $sql." user ";
-        //     $sql = $sql." where ";
-        //     $sql = $sql." userid ='".$user['username']."' ";
-        //     // var_dump($sql);
-        //     $user_info = DB::select($sql);
-        //     var_dump($user_info);
-        //     return $user['username'];
-        // });
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." t.name, ";
@@ -133,6 +173,7 @@ class MemberController extends AdminController
             // $s[$k] = 'aaa';
         }
         $form->select('tenantid', __('Tenant'))->options($s);
+        // Fluentd
         $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
             ->join('user_fluentd','fluentd.keyid','=','user_fluentd.fluentd_keyid')
             ->where('user_fluentd.user_id', $user['username'])
@@ -144,7 +185,18 @@ class MemberController extends AdminController
             $s[$k] = $v[0]['sysid'] ." ". $v[0]['svrid'] ." ". $v[0]['subsysid'] ." ". $v[0]['cmpid'];
         }
         $form->select('fluentd_key', __('Fluentd'))->options($s);
-        $form->text('compid', __('Comp'));
+
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." public.comp ";
+        $comp_info = DB::select($sql);
+        $s = [];
+        foreach ($comp_info as $k => $v) {
+            $s[$v->cmpid] = $v->cmpname;
+        }
+        $form->select('compid', __('Comp'))->options($s);
         // $form->text('deptid', __('Dept'));
         $form->email('mail_addr', __('Email'));
         $form->mobile('phone_number', __('Phone'));
@@ -156,7 +208,47 @@ class MemberController extends AdminController
         // $form->email('email', __('Email'));
 
         $form->isCreating();
+
         // $form->isUpdating();
+        $form->header(function ($query) {
+            // var_dump($query);
+            $weeks=[];
+            for ($x=6; $x>=0; $x--) {
+                $day_str="-".$x." day";
+                $weeks[]=date("Y-m-d",strtotime($day_str));
+            }
+            $msg_count=[];
+            $msg_count['2020-08-13']['wechat_count']=5;
+            $msg_count['2020-08-13']['mail_count']=4;
+            $msg_count['2020-08-13']['phone_count']=1;
+            $msg_count['2020-08-14']['wechat_count']=10;
+            $msg_count['2020-08-14']['mail_count']=8;
+            $msg_count['2020-08-14']['phone_count']=4;
+            $msg_count['2020-08-15']['wechat_count']=16;
+            $msg_count['2020-08-15']['mail_count']=20;
+            $msg_count['2020-08-15']['phone_count']=4;
+            $msg_count['2020-08-17']['wechat_count']=7;
+            $msg_count['2020-08-17']['mail_count']=35;
+            $msg_count['2020-08-17']['phone_count']=28;
+            $view_json=[];
+            $view_json[]=[];                        // index=0
+            $view_json[]=[];              // index=1
+            $view_json[]=[];                  // index=2
+            $view_json[]=$weeks;                    // index=3 一周内日期List
+            $view_json[]=[];                  // index=4
+            $view_json[]=$msg_count;                // index=5
+            // var_dump($view_json[3]);
+            // var_dump($view_json[5]);
+
+            $doughnut = view('admin.gender', compact('view_json'));
+
+            return new Box('chartjs', $doughnut);
+            // return "<div style='padding: 10px;'>总收入 ： 12123131313123</div>";
+            // $content = new Content();
+            // return $content
+            // ->header('信息查询')
+            // ->body(new Box('', view('admin.gender', compact('view_json'))));
+        });
         return $form;
     }
 }
