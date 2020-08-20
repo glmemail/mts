@@ -26,6 +26,7 @@
 
 </style>
 <div>
+    <lable>Fluentd : </lable>
     <select id="fluentd_id" onchange="combaction()">
         <option value="0" >请选择</option>
         <?php
@@ -63,7 +64,7 @@
         <div class="icon">
             <i class="fa fa-comment"></i>
         </div>
-        <a href="/index.php/admin/message_list/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
+        <a onclick="return fluentd_check();" href="/index.php/admin/message_list/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -76,7 +77,7 @@
         <div class="icon">
             <i class="fa fa-envelope"></i>
         </div>
-        <a href="/index.php/admin/mail/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
+        <a onclick="return fluentd_check();" href="/index.php/admin/mail/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -90,7 +91,7 @@
         <div class="icon">
             <i class="fa fa-phone"></i>
         </div>
-        <a href="/index.php/admin/phone/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
+        <a onclick="return fluentd_check();" href="/index.php/admin/phone/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -103,7 +104,7 @@
         <div class="icon">
             <i class="fa fa-weixin"></i>
         </div>
-        <a href="/index.php/admin/wechat/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
+        <a onclick="return fluentd_check();" href="/index.php/admin/wechat/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -121,7 +122,7 @@
         <div class="icon">
             <i class="fa fa-comment"></i>
         </div>
-        <a href="/index.php/admin/message_list" class="small-box-footer">
+        <a onclick="return fluentd_check();" href="/index.php/admin/message_list" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -134,7 +135,7 @@
         <div class="icon">
             <i class="fa fa-envelope"></i>
         </div>
-        <a href="/index.php/admin/mail/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
+        <a onclick="return fluentd_check();" href="/index.php/admin/mail/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -148,7 +149,7 @@
         <div class="icon">
             <i class="fa fa-phone"></i>
         </div>
-        <a href="/index.php/admin/phone/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
+        <a onclick="return fluentd_check();" href="/index.php/admin/phone/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -162,7 +163,7 @@
         <div class="icon">
             <i class="fa fa-weixin"></i>
         </div>
-        <a href="/index.php/admin/wechat/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
+        <a onclick="return fluentd_check();" href="/index.php/admin/wechat/{{ !empty($view_json[7])?$view_json[7]:0 }}" class="small-box-footer">
             更多&nbsp;
             <i class="fa fa-arrow-circle-right"></i>
         </a>
@@ -812,7 +813,7 @@ $(function () {
 
 function combaction(){
     //获取被选中的option标签
-    var vs = document.getElementById("fluentd_id").value
+    var vs = document.getElementById("fluentd_id").value;
 
     if (vs=="0"){
         location.href = '/index.php/admin/chartjs';
@@ -898,5 +899,18 @@ function radochange(){
         document.getElementById("myChart2_24").style.display= "";
         document.getElementById("msg_24").style.display= "";
     }
+}
+
+function fluentd_check(){
+    //获取被选中的option标签
+    // var vs = document.getElementById("fluentd_id").value;
+
+    if ($("#fluentd_id").val()=="0"){
+        alert("请选择Fluentd");
+        return false;
+    } else {
+        return true;
+    }
+
 }
 </script>
