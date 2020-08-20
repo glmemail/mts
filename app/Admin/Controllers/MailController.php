@@ -44,7 +44,8 @@ class MailController extends AdminController
             $filter->like('mail_from', 'MAIL_FROM');
             $filter->like('actiontime', 'ActionTime');
         });
-        $grid->column('id', __('Mail id -> Message id'))->display(function($id) {
+        $grid->column('id', __('Mail id'));
+        $grid->column('message_id', __('Message id'))->display(function($id) {
 
             $sql = "";
             $sql = $sql." select ";
@@ -52,12 +53,12 @@ class MailController extends AdminController
             $sql = $sql." from ";
             $sql = $sql." action_info ai ";
             $sql = $sql." where ";
-            $sql = $sql." ai.mail_id = ".$id." ";
+            $sql = $sql." ai.mail_id = ".$this->id." ";
             $r = DB::select($sql);
             $t = "<span>";
-            $t = "".$t.$id."</span><br/><span>";
+            // $t = "".$t.$id."</span><br/><span>";
             for ($x=0; $x<count($r); $x++) {
-                $t = $t."<font color='blue' >->".$r[$x]->message_id."</font><br/>";
+                $t = $t.$r[$x]->message_id."<br/>";
             }
             $t = $t."</span>";
             return $t;
@@ -125,7 +126,8 @@ class MailController extends AdminController
             $filter->like('mail_from', 'MAIL_FROM');
             $filter->like('actiontime', 'ActionTime');
         });
-        $grid->column('id', __('Mail id -> Message id'))->display(function($mail_id) {
+        $grid->column('id', __('Mail id'));
+        $grid->column('message_id', __('Message id'))->display(function($id) {
 
             $sql = "";
             $sql = $sql." select ";
@@ -133,12 +135,13 @@ class MailController extends AdminController
             $sql = $sql." from ";
             $sql = $sql." action_info ai ";
             $sql = $sql." where ";
-            $sql = $sql." ai.mail_id = ".$mail_id." ";
+            $sql = $sql." ai.mail_id = ".$this->id." ";
+            $sql = $sql." ORDER BY message_id ";
             $r = DB::select($sql);
             $t = "<span>";
-            $t = "".$t.$mail_id."</span><br/><span>";
+            // $t = "".$t.$id."</span><br/><span>";
             for ($x=0; $x<count($r); $x++) {
-                $t = $t."<font color='blue' >->".$r[$x]->message_id."</font><br/>";
+                $t = $t.$r[$x]->message_id."<br/>";
             }
             $t = $t."</span>";
             return $t;

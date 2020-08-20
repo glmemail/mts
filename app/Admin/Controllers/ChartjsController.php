@@ -39,8 +39,32 @@ class ChartjsController extends Controller
         // $svrid = "";
         $fluentd_json = json_decode($fluentd,true);
         $s = [];
+        $sysid="";
+        $svrid="";
+        $subsysid="";
+        $cmpid="";
         foreach ($fluentd_json as $k => $v) {
             $s[$k] = $v[0]['sysid'] ." ". $v[0]['svrid'] ." ". $v[0]['subsysid'] ." ". $v[0]['cmpid'];
+            if ($sysid=="") {
+                $sysid="'".$v[0]['sysid']."'";
+            } else {
+                $sysid=$sysid.","."'".$v[0]['sysid']."'";
+            }
+            if ($svrid=="") {
+                $svrid="'".$v[0]['svrid']."'";
+            } else {
+                $svrid=$svrid.","."'".$v[0]['svrid']."'";
+            }
+            if ($subsysid=="") {
+                $subsysid="'".$v[0]['subsysid']."'";
+            } else {
+                $subsysid=$subsysid.","."'".$v[0]['subsysid']."'";
+            }
+            if ($cmpid=="") {
+                $cmpid="'".$v[0]['cmpid']."'";
+            } else {
+                $cmpid=$cmpid.","."'".$v[0]['cmpid']."'";
+            }
         }
         $fluentd_sel = $s;
         $showtime=date("Y-m-d",strtotime("-6 day"));
@@ -89,6 +113,89 @@ class ChartjsController extends Controller
         $sql = $sql." and mv.user_id ='".$user['username']."' ";
         $message_all_24 = DB::select($sql);
         $msg_all_count_24 = count($message_all_24);
+
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." mail_info mi ";
+        $sql = $sql." where ";
+        $sql = $sql." mi.actiontime > '".$showtime."' ";
+        $sql = $sql." and mi.sys_id in ( ".$sysid." )";
+        $sql = $sql." and mi.svr_id in ( ".$svrid." )";
+        $sql = $sql." and mi.sub_sys_id in ( ".$subsysid." )";
+        $sql = $sql." and mi.cmp_id in ( ".$cmpid." )";
+        $mail_all = DB::select($sql);
+        $mail_all_count = count($mail_all);
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." mail_info mi ";
+        $sql = $sql." where ";
+        $sql = $sql." mi.actiontime > '".$showtime24."' ";
+        $sql = $sql." and mi.sys_id in ( ".$sysid." )";
+        $sql = $sql." and mi.svr_id in ( ".$svrid." )";
+        $sql = $sql." and mi.sub_sys_id in ( ".$subsysid." )";
+        $sql = $sql." and mi.cmp_id in ( ".$cmpid." )";
+        $mail_all_24 = DB::select($sql);
+        $mail_all_count_24 = count($mail_all_24);
+
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." phone_info pi ";
+        $sql = $sql." where ";
+        $sql = $sql." pi.actiontime > '".$showtime."' ";
+        $sql = $sql." and pi.sys_id in ( ".$sysid." )";
+        $sql = $sql." and pi.svr_id in ( ".$svrid." )";
+        $sql = $sql." and pi.sub_sys_id in ( ".$subsysid." )";
+        $sql = $sql." and pi.cmp_id in ( ".$cmpid." )";
+        $phone_all = DB::select($sql);
+        $phone_all_count = count($phone_all);
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." phone_info pi ";
+        $sql = $sql." where ";
+        $sql = $sql." pi.actiontime > '".$showtime24."' ";
+        $sql = $sql." and pi.sys_id in ( ".$sysid." )";
+        $sql = $sql." and pi.svr_id in ( ".$svrid." )";
+        $sql = $sql." and pi.sub_sys_id in ( ".$subsysid." )";
+        $sql = $sql." and pi.cmp_id in ( ".$cmpid." )";
+        $phone_all_24 = DB::select($sql);
+        $phone_all_count_24 = count($phone_all_24);
+
+
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." wechat_info wi ";
+        $sql = $sql." where ";
+        $sql = $sql." wi.actiontime > '".$showtime."' ";
+        $sql = $sql." and wi.sys_id in ( ".$sysid." )";
+        $sql = $sql." and wi.svr_id in ( ".$svrid." )";
+        $sql = $sql." and wi.sub_sys_id in ( ".$subsysid." )";
+        $sql = $sql." and wi.cmp_id in ( ".$cmpid." )";
+        $wechat_all = DB::select($sql);
+        $wechat_all_count = count($wechat_all);
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." wechat_info wi ";
+        $sql = $sql." where ";
+        $sql = $sql." wi.actiontime > '".$showtime24."' ";
+        $sql = $sql." and wi.sys_id in ( ".$sysid." )";
+        $sql = $sql." and wi.svr_id in ( ".$svrid." )";
+        $sql = $sql." and wi.sub_sys_id in ( ".$subsysid." )";
+        $sql = $sql." and wi.cmp_id in ( ".$cmpid." )";
+        $wechat_all_24 = DB::select($sql);
+        $wechat_all_count_24 = count($wechat_all_24);
+
         for ($x=0; $x<$msg_all_count; $x++) {
             $date = new DateTime($message_all[$x]->actiontime);
             $ymd = $date->format('Y-m-d');
@@ -108,7 +215,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count[$ymd]['mail_count']=1;
                     }
-                    $mail_all_count++;
+                    // $mail_all_count++;
                 }
                 if ($msg[$y]->ai_actiontype=="PHONE") {
                     $phone_type="PHONE";
@@ -117,7 +224,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count[$ymd]['phone_count']=1;
                     }
-                    $phone_all_count++;
+                    // $phone_all_count++;
                 }
                 if ($msg[$y]->ai_actiontype=="WECHAT") {
                     $wechat_type="WECHAT";
@@ -126,7 +233,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count[$ymd]['wechat_count']=1;
                     }
-                    $wechat_all_count++;
+                    // $wechat_all_count++;
                 }
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
@@ -167,7 +274,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count_24[$ymdh]['mail_count']=1;
                     }
-                    $mail_all_count_24++;
+                    // $mail_all_count_24++;
                 }
                 if ($msg[$y]->ai_actiontype=="PHONE") {
                     $phone_type="PHONE";
@@ -176,7 +283,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count_24[$ymdh]['phone_count']=1;
                     }
-                    $phone_all_count_24++;
+                    // $phone_all_count_24++;
                 }
                 if ($msg[$y]->ai_actiontype=="WECHAT") {
                     $wechat_type="WECHAT";
@@ -185,7 +292,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count_24[$ymdh]['wechat_count']=1;
                     }
-                    $wechat_all_count_24++;
+                    // $wechat_all_count_24++;
                 }
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
@@ -308,6 +415,91 @@ class ChartjsController extends Controller
         $sql = $sql." m.id ";
         $message_all = DB::select($sql);
         $msg_all_count = count($message_all);
+
+
+
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." mail_info mi ";
+        $sql = $sql." where ";
+        $sql = $sql." mi.actiontime > '".$showtime."' ";
+        $sql = $sql." and mi.sys_id in ( '".$sel_fluentd[0]->sysid."' )";
+        $sql = $sql." and mi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
+        $sql = $sql." and mi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
+        $sql = $sql." and mi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $mail_all = DB::select($sql);
+        $mail_all_count = count($mail_all);
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." mail_info mi ";
+        $sql = $sql." where ";
+        $sql = $sql." mi.actiontime > '".$showtime24."' ";
+        $sql = $sql." and mi.sys_id in ( '".$sel_fluentd[0]->sysid."' )";
+        $sql = $sql." and mi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
+        $sql = $sql." and mi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
+        $sql = $sql." and mi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $mail_all_24 = DB::select($sql);
+        $mail_all_count_24 = count($mail_all_24);
+
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." phone_info pi ";
+        $sql = $sql." where ";
+        $sql = $sql." pi.actiontime > '".$showtime."' ";
+        $sql = $sql." and pi.sys_id in ( '".$sel_fluentd[0]->sysid."' )";
+        $sql = $sql." and pi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
+        $sql = $sql." and pi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
+        $sql = $sql." and pi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $phone_all = DB::select($sql);
+        $phone_all_count = count($phone_all);
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." phone_info pi ";
+        $sql = $sql." where ";
+        $sql = $sql." pi.actiontime > '".$showtime24."' ";
+        $sql = $sql." and pi.sys_id in ( '".$sel_fluentd[0]->sysid."' )";
+        $sql = $sql." and pi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
+        $sql = $sql." and pi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
+        $sql = $sql." and pi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $phone_all_24 = DB::select($sql);
+        $phone_all_count_24 = count($phone_all_24);
+
+
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." wechat_info wi ";
+        $sql = $sql." where ";
+        $sql = $sql." wi.actiontime > '".$showtime."' ";
+        $sql = $sql." and wi.sys_id in ( '".$sel_fluentd[0]->sysid."' )";
+        $sql = $sql." and wi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
+        $sql = $sql." and wi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
+        $sql = $sql." and wi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $wechat_all = DB::select($sql);
+        $wechat_all_count = count($wechat_all);
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." wechat_info wi ";
+        $sql = $sql." where ";
+        $sql = $sql." wi.actiontime > '".$showtime24."' ";
+        $sql = $sql." and wi.sys_id in ( '".$sel_fluentd[0]->sysid."' )";
+        $sql = $sql." and wi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
+        $sql = $sql." and wi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
+        $sql = $sql." and wi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $wechat_all_24 = DB::select($sql);
+        $wechat_all_count_24 = count($wechat_all_24);
+
         for ($x=0; $x<$msg_all_count; $x++) {
             $date = new DateTime($message_all[$x]->actiontime);
             $ymd = $date->format('Y-m-d');
@@ -330,7 +522,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count[$ymd]['mail_count']=1;
                     }
-                    $mail_all_count++;
+                    // $mail_all_count++;
                 }
                 if ($msg[$y]->ai_actiontype=="PHONE") {
                     $phone_type="PHONE";
@@ -339,7 +531,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count[$ymd]['phone_count']=1;
                     }
-                    $phone_all_count++;
+                    // $phone_all_count++;
                 }
                 if ($msg[$y]->ai_actiontype=="WECHAT") {
                     $wechat_type="WECHAT";
@@ -348,7 +540,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count[$ymd]['wechat_count']=1;
                     }
-                    $wechat_all_count++;
+                    // $wechat_all_count++;
                 }
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
@@ -405,7 +597,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count_24[$ymdh]['mail_count']=1;
                     }
-                    $mail_all_count_24++;
+                    // $mail_all_count_24++;
                 }
                 if ($msg[$y]->ai_actiontype=="PHONE") {
                     $phone_type="PHONE";
@@ -414,7 +606,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count_24[$ymdh]['phone_count']=1;
                     }
-                    $phone_all_count_24++;
+                    // $phone_all_count_24++;
                 }
                 if ($msg[$y]->ai_actiontype=="WECHAT") {
                     $wechat_type="WECHAT";
@@ -423,7 +615,7 @@ class ChartjsController extends Controller
                     } else {
                         $msg_count_24[$ymdh]['wechat_count']=1;
                     }
-                    $wechat_all_count_24++;
+                    // $wechat_all_count_24++;
                 }
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;

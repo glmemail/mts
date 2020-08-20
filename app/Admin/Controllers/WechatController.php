@@ -133,7 +133,8 @@ class WechatController extends AdminController
         });
         // $grid->column('id', __('Id'));
         // $grid->column('id', __('Id'));
-        $grid->column('id', __('Wechat id -> Message id'))->display(function($id) {
+        $grid->column('id', __('Wechat id'));
+        $grid->column('message_id', __('Message id'))->display(function($id) {
 
             $sql = "";
             $sql = $sql." select ";
@@ -141,12 +142,13 @@ class WechatController extends AdminController
             $sql = $sql." from ";
             $sql = $sql." action_info ai ";
             $sql = $sql." where ";
-            $sql = $sql." ai.wechat_id = ".$id." ";
+            $sql = $sql." ai.wechat_id = ".$this->id." ";
+            $sql = $sql." ORDER BY message_id ";
             $r = DB::select($sql);
             $t = "<span>";
-            $t = "".$t.$id."</span><br/><span>";
+            // $t = "".$t.$id."</span><br/><span>";
             for ($x=0; $x<count($r); $x++) {
-                $t = $t."<font color='blue' >->".$r[$x]->message_id."</font><br/>";
+                $t = $t.$r[$x]->message_id."<br/>";
             }
             $t = $t."</span>";
             return $t;

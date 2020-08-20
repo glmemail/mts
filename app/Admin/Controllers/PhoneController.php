@@ -145,24 +145,7 @@ class PhoneController extends AdminController
             $filter->like('actiontime', 'ActionTime');
         });
 
-        $grid->column('call_id', __('Call id'))->display(function($id) {
-
-            $sql = "";
-            $sql = $sql." select ";
-            $sql = $sql." * ";
-            $sql = $sql." from ";
-            $sql = $sql." action_info ai ";
-            $sql = $sql." where ";
-            $sql = $sql." ai.phone_id = '".$id."' ";
-            $r = DB::select($sql);
-            $t = "<span>";
-            $t = "".$t.$id."</span>";
-            // for ($x=0; $x<count($r); $x++) {
-            //     $t = $t."<font color='blue'>->".$r[$x]->message_id."</font><br/>";
-            // }
-            $t = $t."</span>";
-            return $t;
-        });
+        $grid->column('call_id', __('Call id'));
         $grid->column('message_id', __('Message id'))->display(function($id) {
 
             $sql = "";
@@ -172,6 +155,7 @@ class PhoneController extends AdminController
             $sql = $sql." action_info ai ";
             $sql = $sql." where ";
             $sql = $sql." ai.phone_id = '".$this->call_id."' ";
+            $sql = $sql." ORDER BY message_id ";
             $r = DB::select($sql);
             $t = "<span>";
             // $t = "".$t.$id."</span><br/><span>";
