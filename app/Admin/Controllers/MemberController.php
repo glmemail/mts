@@ -128,6 +128,15 @@ class MemberController extends AdminController
         return $grid;
     }
 
+    public function show($id, Content $content)
+    {
+        $member = Member::find($id);
+
+        return $content->title('详情')
+            ->description('简介')
+            ->view('admin.member.show', $member->toArray());
+    }
+
     /**
      * Make a show builder.
      *
