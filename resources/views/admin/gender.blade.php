@@ -1,10 +1,10 @@
 <div class="col-md-4">
     <canvas id="myChart1" style="width: 322px; display: block; height: 160px;" width="322" height="160"></canvas>
-    <input type="button" name="chartjs" value="chartjs" onclick="chartjsclick()">
+<!--     <input type="button" name="chartjs" value="chartjs" onclick="chartjsclick()"> -->
 </div>
 <script>
-    chartjsclick();
-    function chartjsclick() {
+    // function chartjsclick() {
+$(function () {
         // alert("aaaaa");
         var ctx = document.getElementById("myChart1").getContext('2d');
         var myChart = new Chart(ctx, {
@@ -116,18 +116,9 @@
                         beginAtZero:true
                     }
                 }]
-            },
-            events : ["mousemove", "mouseout", "click"],
-            onClick : function (event, bars){
-
-                var activeElement = bars[0];   //当前被选中的元素
-                var product = activeElement._model.label;
-                // var datasetIndex = activeElement._datasetIndex;
-                // alert(product);
-                console.log(bars);
             }
         }
     });
 
-}
+});
 </script>

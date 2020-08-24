@@ -1,6 +1,6 @@
 <div class="box box-solid">
     <div class="box-header with-border">
-        <i class="fa fa-text-width"></i>
+        <!-- <i class="fa fa-text-width"></i> -->
         <h3 class="box-title">用户详情</h3>
     </div>
     <div class="box-body">

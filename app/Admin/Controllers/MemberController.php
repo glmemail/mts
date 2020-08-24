@@ -131,10 +131,42 @@ class MemberController extends AdminController
     public function show($id, Content $content)
     {
         $member = Member::find($id);
+        $weeks=[];
+        for ($x=6; $x>=0; $x--) {
+            $day_str="-".$x." day";
+            $weeks[]=date("Y-m-d",strtotime($day_str));
+        }
+        $msg_count=[];
+        $msg_count['2020-08-20']['wechat_count']=5;
+        $msg_count['2020-08-20']['mail_count']=4;
+        $msg_count['2020-08-20']['phone_count']=1;
+        $msg_count['2020-08-21']['wechat_count']=10;
+        $msg_count['2020-08-21']['mail_count']=8;
+        $msg_count['2020-08-21']['phone_count']=4;
+        $msg_count['2020-08-22']['wechat_count']=16;
+        $msg_count['2020-08-22']['mail_count']=20;
+        $msg_count['2020-08-22']['phone_count']=4;
+        $msg_count['2020-08-24']['wechat_count']=7;
+        $msg_count['2020-08-24']['mail_count']=35;
+        $msg_count['2020-08-24']['phone_count']=28;
+        $view_json=[];
+        $view_json[]=[];                        // index=0
+        $view_json[]=[];              // index=1
+        $view_json[]=[];                  // index=2
+        $view_json[]=$weeks;                    // index=3 一周内日期List
+        $view_json[]=[];                  // index=4
+        $view_json[]=$msg_count;                // index=5
+        // var_dump($member->toArray());
+        // return $content->title('详情')
+        //     ->description('简介')
+        //     ->view('admin.member.show', $member->toArray(), compact('view_json'));
+        return $content
+            ->header('详情')
+            ->body(new Box('', view('admin.gender', $member->toArray(), compact('view_json'))));
+            // ->view('admin.member.show', $member->toArray());
 
-        return $content->title('详情')
-            ->description('简介')
-            ->view('admin.member.show', $member->toArray());
+
+
     }
 
     /**
