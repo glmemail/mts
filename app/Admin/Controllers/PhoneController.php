@@ -213,6 +213,7 @@ class PhoneController extends AdminController
         // var_dump($showtime);
         // $showtime="2020-08-12 00:00:00"
         $grid->model()->where('actiontime', '>=', $showtime);
+        $grid->model()->orderBy('actiontime', 'desc');
         $grid->disableCreateButton();
         $grid->disableActions();
         $grid->disableRowSelector();
