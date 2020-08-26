@@ -444,8 +444,7 @@
                 echo "<td>".$view_json[17][$x]->svr_id."</td>";
                 echo "<td>".$view_json[17][$x]->sub_sys_id."</td>";
                 echo "<td>".$view_json[17][$x]->cmp_id."</td>";
-                echo "<td>".$view_json[17][$x]->mail_to."</td>";
-                echo "<td>".$view_json[17][$x]->mail_from."</td>";
+                echo "<td>".$view_json[17][$x]->wechat_to."</td>";
                 echo "<td>".$view_json[17][$x]->contact_name."</td>";
                 echo "<td>".$view_json[17][$x]->actiontime."</td>";
                 echo "</tr>";

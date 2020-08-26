@@ -679,6 +679,7 @@ class ChartjsController extends Controller
         // var_dump($view_json[10]);
         // var_dump($view_json[14]);
         // var_dump($view_json[16]);
+        // var_dump($view_json[17]);
         $content = new Content();
         return $content
             ->header('信息查询')
