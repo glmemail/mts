@@ -153,7 +153,6 @@ class ChartjsController extends Controller
         $sql = $sql." and pi.sub_sys_id in ( ".$subsysid." )";
         $sql = $sql." and pi.cmp_id in ( ".$cmpid." )";
         $phone_all = DB::select($sql);
-        var_dump($phone_all);
         $phone_all_count = count($phone_all);
         $sql = "";
         $sql = $sql." select ";
@@ -335,6 +334,13 @@ class ChartjsController extends Controller
         $view_json[]=$msg_arr_24;               // index=9
         $view_json[]=$hour;                     // index=10
         $view_json[]=$msg_count_24;             // index=11
+
+        $view_json[]=$mail_all;                 // index=12
+        $view_json[]=$mail_all_24;              // index=13
+        $view_json[]=$phone_all;                // index=14
+        $view_json[]=$phone_all_24;             // index=15
+        $view_json[]=$wechat_all;               // index=16
+        $view_json[]=$wechat_all_24;            // index=17
         // var_dump($view_json[6]['msg_all_count']);
         // var_dump($view_json[8]['msg_all_count_24']);
         // var_dump($view_json[0]);
