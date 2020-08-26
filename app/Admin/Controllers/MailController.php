@@ -66,7 +66,7 @@ class MailController extends AdminController
         $grid->column('sys_id', __('Sys id'));
         $grid->column('svr_id', __('Svr id'));
         $grid->column('sub_sys_id', __('Sub sys id'));
-        $grid->column('cmp_id', __('Cmp id1'));
+        $grid->column('cmp_id', __('Cmp id'));
         $grid->column('mail_to', __('Mail to'));
         $grid->column('mail_from', __('Mail from'));
         $grid->column('contact_name', __('Contact name'));
@@ -83,6 +83,7 @@ class MailController extends AdminController
             $grid->model()->Orwhere('sys_id', '=', $sysid);
         }
         $grid->model()->where('actiontime', '>=', $showtime);
+        $grid->model()->orderBy('actiontime', 'desc');
         $grid->disableCreateButton();
         $grid->disableActions();
         $grid->disableRowSelector();
@@ -149,7 +150,7 @@ class MailController extends AdminController
         $grid->column('sys_id', __('Sys id'));
         $grid->column('svr_id', __('Svr id'));
         $grid->column('sub_sys_id', __('Sub sys id'));
-        $grid->column('cmp_id', __('Cmp id1'));
+        $grid->column('cmp_id', __('Cmp id'));
         $grid->column('mail_to', __('Mail to'));
         $grid->column('mail_from', __('Mail from'));
         $grid->column('contact_name', __('Contact name'));
@@ -185,6 +186,7 @@ class MailController extends AdminController
             $grid->model()->where('sys_id', '=', $sysid);
         }
         $grid->model()->where('actiontime', '>=', $showtime);
+        $grid->model()->orderBy('actiontime', 'desc');
         $grid->disableCreateButton();
         $grid->disableActions();
         $grid->disableRowSelector();

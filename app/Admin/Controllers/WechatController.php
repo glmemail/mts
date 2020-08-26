@@ -84,6 +84,7 @@ class WechatController extends AdminController
         }
         $showtime=date("Y-m-d",strtotime("-6 day"));
         $grid->model()->where('actiontime', '>=', $showtime);
+        $grid->model()->orderBy('actiontime', 'desc');
         $grid->disableCreateButton();
         $grid->disableActions();
         $grid->disableRowSelector();
@@ -195,6 +196,7 @@ class WechatController extends AdminController
             $sysid=$fluentdList[$x]->sysid;
             $grid->model()->where('sys_id', '=', $sysid);
         }
+        $grid->model()->orderBy('actiontime', 'desc');
         $grid->disableCreateButton();
         $grid->disableActions();
         $grid->disableRowSelector();

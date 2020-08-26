@@ -153,6 +153,7 @@ class ChartjsController extends Controller
         $sql = $sql." and pi.sub_sys_id in ( ".$subsysid." )";
         $sql = $sql." and pi.cmp_id in ( ".$cmpid." )";
         $phone_all = DB::select($sql);
+        var_dump($phone_all);
         $phone_all_count = count($phone_all);
         $sql = "";
         $sql = $sql." select ";
@@ -376,6 +377,7 @@ class ChartjsController extends Controller
             $day_str="-".$x." day";
             $weeks[]=date("Y-m-d",strtotime($day_str));
         }
+
         $hour=[];
         $ymdhour=[];
         for ($x=0; $x<24; $x++) {
@@ -416,8 +418,6 @@ class ChartjsController extends Controller
         $message_all = DB::select($sql);
         $msg_all_count = count($message_all);
 
-
-
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -429,6 +429,7 @@ class ChartjsController extends Controller
         $sql = $sql." and mi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
         $sql = $sql." and mi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
         $sql = $sql." and mi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $sql = $sql." order by actiontime desc";
         $mail_all = DB::select($sql);
         $mail_all_count = count($mail_all);
         $sql = "";
@@ -442,6 +443,7 @@ class ChartjsController extends Controller
         $sql = $sql." and mi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
         $sql = $sql." and mi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
         $sql = $sql." and mi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $sql = $sql." order by actiontime desc";
         $mail_all_24 = DB::select($sql);
         $mail_all_count_24 = count($mail_all_24);
 
@@ -456,6 +458,7 @@ class ChartjsController extends Controller
         $sql = $sql." and pi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
         $sql = $sql." and pi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
         $sql = $sql." and pi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $sql = $sql." order by actiontime desc";
         $phone_all = DB::select($sql);
         $phone_all_count = count($phone_all);
         $sql = "";
@@ -469,9 +472,9 @@ class ChartjsController extends Controller
         $sql = $sql." and pi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
         $sql = $sql." and pi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
         $sql = $sql." and pi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $sql = $sql." order by actiontime desc";
         $phone_all_24 = DB::select($sql);
         $phone_all_count_24 = count($phone_all_24);
-
 
         $sql = "";
         $sql = $sql." select ";
@@ -484,6 +487,7 @@ class ChartjsController extends Controller
         $sql = $sql." and wi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
         $sql = $sql." and wi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
         $sql = $sql." and wi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $sql = $sql." order by actiontime desc";
         $wechat_all = DB::select($sql);
         $wechat_all_count = count($wechat_all);
         $sql = "";
@@ -497,6 +501,7 @@ class ChartjsController extends Controller
         $sql = $sql." and wi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
         $sql = $sql." and wi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
         $sql = $sql." and wi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $sql = $sql." order by actiontime desc";
         $wechat_all_24 = DB::select($sql);
         $wechat_all_count_24 = count($wechat_all_24);
 
@@ -657,6 +662,14 @@ class ChartjsController extends Controller
         $view_json[]=$msg_arr_24;               // index=9
         $view_json[]=$hour;                     // index=10
         $view_json[]=$msg_count_24;             // index=11
+
+        $view_json[]=$mail_all;                 // index=12
+        $view_json[]=$mail_all_24;              // index=13
+        $view_json[]=$phone_all;                // index=14
+        $view_json[]=$phone_all_24;             // index=15
+        $view_json[]=$wechat_all;               // index=16
+        $view_json[]=$wechat_all_24;            // index=17
+        // var_dump($view_json[2]);
         // var_dump($view_json[3]);
         // var_dump($view_json[4]);
         // var_dump($view_json[5]);
@@ -664,6 +677,8 @@ class ChartjsController extends Controller
         // var_dump($view_json[7]);
         // var_dump($view_json[8]);
         // var_dump($view_json[10]);
+        // var_dump($view_json[14]);
+        // var_dump($view_json[16]);
         $content = new Content();
         return $content
             ->header('信息查询')
