@@ -241,7 +241,14 @@ class ChartjsController extends Controller
                 $msg_count_24[$h00]['wechat_count']=1;
             }
         }
-
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." action_info ai ";
+        $sql = $sql." where ";
+        $sql = $sql." ai.actiontime > '".$showtime."' ";
+        $actioninfo = DB::select($sql);
         for ($x=0; $x<$msg_all_count; $x++) {
             $date = new DateTime($message_all[$x]->actiontime);
             $ymd = $date->format('Y-m-d');
@@ -563,6 +570,8 @@ class ChartjsController extends Controller
                 $msg_count_24[$h00]['wechat_count']=1;
             }
         }
+
+
         for ($x=0; $x<$msg_all_count; $x++) {
             $date = new DateTime($message_all[$x]->actiontime);
             $ymd = $date->format('Y-m-d');
@@ -680,7 +689,6 @@ class ChartjsController extends Controller
         $view_json[]=$msg_arr_24;               // index=9
         $view_json[]=$hour;                     // index=10
         $view_json[]=$msg_count_24;             // index=11
-
         $view_json[]=$mail_all;                 // index=12
         $view_json[]=$mail_all_24;              // index=13
         $view_json[]=$phone_all;                // index=14
