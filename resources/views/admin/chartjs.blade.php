@@ -923,8 +923,8 @@ $(function () {
         }
     });
 
-    var ctx2_24 = document.getElementById("messageChart_24").getContext('2d');
-    var messageChart_24 = new Chart(ctx2_24, {
+    var messagectx_24 = document.getElementById("messageChart_24").getContext('2d');
+    var messageChart_24 = new Chart(messagectx_24, {
         type: 'bar',
         data: {
             labels: [

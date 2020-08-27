@@ -127,6 +127,14 @@ class ChartjsController extends Controller
         $sql = $sql." and mi.cmp_id in ( ".$cmpid." )";
         $mail_all = DB::select($sql);
         $mail_all_count = count($mail_all);
+        for ($x=0; $x<$mail_all_count; $x++) {
+            $ymd=date("Y-m-d",strtotime($mail_all[$x]->actiontime));
+            if (!empty($msg_count[$ymd]['mail_count'])) {
+                $msg_count[$ymd]['mail_count']++;
+            } else {
+                $msg_count[$ymd]['mail_count']=1;
+            }
+        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -140,7 +148,14 @@ class ChartjsController extends Controller
         $sql = $sql." and mi.cmp_id in ( ".$cmpid." )";
         $mail_all_24 = DB::select($sql);
         $mail_all_count_24 = count($mail_all_24);
-
+        for ($x=0; $x<$mail_all_count_24; $x++) {
+            $h00=date("H:00",strtotime($mail_all_24[$x]->actiontime));
+            if (!empty($msg_count_24[$h00]['mail_count'])) {
+                $msg_count_24[$h00]['mail_count']++;
+            } else {
+                $msg_count_24[$h00]['mail_count']=1;
+            }
+        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -154,6 +169,14 @@ class ChartjsController extends Controller
         $sql = $sql." and pi.cmp_id in ( ".$cmpid." )";
         $phone_all = DB::select($sql);
         $phone_all_count = count($phone_all);
+        for ($x=0; $x<$phone_all_count; $x++) {
+            $ymd=date("Y-m-d",strtotime($phone_all[$x]->actiontime));
+            if (!empty($msg_count[$ymd]['phone_count'])) {
+                $msg_count[$ymd]['phone_count']++;
+            } else {
+                $msg_count[$ymd]['phone_count']=1;
+            }
+        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -167,7 +190,14 @@ class ChartjsController extends Controller
         $sql = $sql." and pi.cmp_id in ( ".$cmpid." )";
         $phone_all_24 = DB::select($sql);
         $phone_all_count_24 = count($phone_all_24);
-
+        for ($x=0; $x<$phone_all_count_24; $x++) {
+            $h00=date("H:00",strtotime($phone_all_24[$x]->actiontime));
+            if (!empty($msg_count_24[$h00]['phone_count'])) {
+                $msg_count_24[$h00]['phone_count']++;
+            } else {
+                $msg_count_24[$h00]['phone_count']=1;
+            }
+        }
 
         $sql = "";
         $sql = $sql." select ";
@@ -182,6 +212,14 @@ class ChartjsController extends Controller
         $sql = $sql." and wi.cmp_id in ( ".$cmpid." )";
         $wechat_all = DB::select($sql);
         $wechat_all_count = count($wechat_all);
+        for ($x=0; $x<$wechat_all_count; $x++) {
+            $ymd=date("Y-m-d",strtotime($wechat_all[$x]->actiontime));
+            if (!empty($msg_count[$ymd]['wechat_count'])) {
+                $msg_count[$ymd]['wechat_count']++;
+            } else {
+                $msg_count[$ymd]['wechat_count']=1;
+            }
+        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -195,6 +233,14 @@ class ChartjsController extends Controller
         $sql = $sql." and wi.cmp_id in ( ".$cmpid." )";
         $wechat_all_24 = DB::select($sql);
         $wechat_all_count_24 = count($wechat_all_24);
+        for ($x=0; $x<$wechat_all_count_24; $x++) {
+            $h00=date("H:00",strtotime($wechat_all_24[$x]->actiontime));
+            if (!empty($msg_count_24[$h00]['wechat_count'])) {
+                $msg_count_24[$h00]['wechat_count']++;
+            } else {
+                $msg_count_24[$h00]['wechat_count']=1;
+            }
+        }
 
         for ($x=0; $x<$msg_all_count; $x++) {
             $date = new DateTime($message_all[$x]->actiontime);
@@ -210,30 +256,12 @@ class ChartjsController extends Controller
             for ($y=0; $y<count($msg); $y++) {
                 if ($msg[$y]->ai_actiontype=="MAIL") {
                     $mail_type="MAIL";
-                    if (!empty($msg_count[$ymd]['mail_count'])) {
-                        $msg_count[$ymd]['mail_count']++;
-                    } else {
-                        $msg_count[$ymd]['mail_count']=1;
-                    }
-                    // $mail_all_count++;
                 }
                 if ($msg[$y]->ai_actiontype=="PHONE") {
                     $phone_type="PHONE";
-                    if (!empty($msg_count[$ymd]['phone_count'])) {
-                        $msg_count[$ymd]['phone_count']++;
-                    } else {
-                        $msg_count[$ymd]['phone_count']=1;
-                    }
-                    // $phone_all_count++;
                 }
                 if ($msg[$y]->ai_actiontype=="WECHAT") {
                     $wechat_type="WECHAT";
-                    if (!empty($msg_count[$ymd]['wechat_count'])) {
-                        $msg_count[$ymd]['wechat_count']++;
-                    } else {
-                        $msg_count[$ymd]['wechat_count']=1;
-                    }
-                    // $wechat_all_count++;
                 }
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
@@ -263,36 +291,15 @@ class ChartjsController extends Controller
             $mail_type="";
             $wechat_type="";
             $phone_type="";
-            // $mail_count=0;
-            // $phone_count=0;
-            // $wechat_count=0;
             for ($y=0; $y<count($msg); $y++) {
                 if ($msg[$y]->ai_actiontype=="MAIL") {
                     $mail_type="MAIL";
-                    if (!empty($msg_count_24[$ymdh]['mail_count'])) {
-                        $msg_count_24[$ymdh]['mail_count']++;
-                    } else {
-                        $msg_count_24[$ymdh]['mail_count']=1;
-                    }
-                    // $mail_all_count_24++;
                 }
                 if ($msg[$y]->ai_actiontype=="PHONE") {
                     $phone_type="PHONE";
-                    if (!empty($msg_count[$ymdh]['phone_count'])) {
-                        $msg_count_24[$ymdh]['phone_count']++;
-                    } else {
-                        $msg_count_24[$ymdh]['phone_count']=1;
-                    }
-                    // $phone_all_count_24++;
                 }
                 if ($msg[$y]->ai_actiontype=="WECHAT") {
                     $wechat_type="WECHAT";
-                    if (!empty($msg_count_24[$ymdh]['wechat_count'])) {
-                        $msg_count_24[$ymdh]['wechat_count']++;
-                    } else {
-                        $msg_count_24[$ymdh]['wechat_count']=1;
-                    }
-                    // $wechat_all_count_24++;
                 }
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
@@ -438,7 +445,14 @@ class ChartjsController extends Controller
         $sql = $sql." order by actiontime desc";
         $mail_all = DB::select($sql);
         $mail_all_count = count($mail_all);
-
+        for ($x=0; $x<$mail_all_count; $x++) {
+            $ymd=date("Y-m-d",strtotime($mail_all[$x]->actiontime));
+            if (!empty($msg_count[$ymd]['mail_count'])) {
+                $msg_count[$ymd]['mail_count']++;
+            } else {
+                $msg_count[$ymd]['mail_count']=1;
+            }
+        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -453,7 +467,13 @@ class ChartjsController extends Controller
         $sql = $sql." order by actiontime desc";
         $mail_all_24 = DB::select($sql);
         $mail_all_count_24 = count($mail_all_24);
-        for ($x=0; $x<$msg_all_count; $x++) {
+        for ($x=0; $x<$mail_all_count_24; $x++) {
+            $h00=date("H:00",strtotime($mail_all_24[$x]->actiontime));
+            if (!empty($msg_count_24[$h00]['mail_count'])) {
+                $msg_count_24[$h00]['mail_count']++;
+            } else {
+                $msg_count_24[$h00]['mail_count']=1;
+            }
         }
         $sql = "";
         $sql = $sql." select ";
@@ -469,6 +489,14 @@ class ChartjsController extends Controller
         $sql = $sql." order by actiontime desc";
         $phone_all = DB::select($sql);
         $phone_all_count = count($phone_all);
+        for ($x=0; $x<$phone_all_count; $x++) {
+            $ymd=date("Y-m-d",strtotime($phone_all[$x]->actiontime));
+            if (!empty($msg_count[$ymd]['phone_count'])) {
+                $msg_count[$ymd]['phone_count']++;
+            } else {
+                $msg_count[$ymd]['phone_count']=1;
+            }
+        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -483,7 +511,14 @@ class ChartjsController extends Controller
         $sql = $sql." order by actiontime desc";
         $phone_all_24 = DB::select($sql);
         $phone_all_count_24 = count($phone_all_24);
-
+        for ($x=0; $x<$phone_all_count_24; $x++) {
+            $h00=date("H:00",strtotime($phone_all_24[$x]->actiontime));
+            if (!empty($msg_count_24[$h00]['phone_count'])) {
+                $msg_count_24[$h00]['phone_count']++;
+            } else {
+                $msg_count_24[$h00]['phone_count']=1;
+            }
+        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -498,6 +533,14 @@ class ChartjsController extends Controller
         $sql = $sql." order by actiontime desc";
         $wechat_all = DB::select($sql);
         $wechat_all_count = count($wechat_all);
+        for ($x=0; $x<$wechat_all_count; $x++) {
+            $ymd=date("Y-m-d",strtotime($wechat_all[$x]->actiontime));
+            if (!empty($msg_count[$ymd]['wechat_count'])) {
+                $msg_count[$ymd]['wechat_count']++;
+            } else {
+                $msg_count[$ymd]['wechat_count']=1;
+            }
+        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -512,13 +555,19 @@ class ChartjsController extends Controller
         $sql = $sql." order by actiontime desc";
         $wechat_all_24 = DB::select($sql);
         $wechat_all_count_24 = count($wechat_all_24);
-
+        for ($x=0; $x<$wechat_all_count_24; $x++) {
+            $h00=date("H:00",strtotime($wechat_all_24[$x]->actiontime));
+            if (!empty($msg_count_24[$h00]['wechat_count'])) {
+                $msg_count_24[$h00]['wechat_count']++;
+            } else {
+                $msg_count_24[$h00]['wechat_count']=1;
+            }
+        }
         for ($x=0; $x<$msg_all_count; $x++) {
             $date = new DateTime($message_all[$x]->actiontime);
             $ymd = $date->format('Y-m-d');
             $sql = $this->selectActioninfo_sql($message_all[$x]->id);
             $msg = DB::select($sql);
-            // var_dump($msg[0]);
             $m=[];
             $msg_action=[];
             $mail_type="";
@@ -530,30 +579,12 @@ class ChartjsController extends Controller
             for ($y=0; $y<count($msg); $y++) {
                 if ($msg[$y]->ai_actiontype=="MAIL") {
                     $mail_type="MAIL";
-                    if (!empty($msg_count[$ymd]['mail_count'])) {
-                        $msg_count[$ymd]['mail_count']++;
-                    } else {
-                        $msg_count[$ymd]['mail_count']=1;
-                    }
-                    // $mail_all_count++;
                 }
                 if ($msg[$y]->ai_actiontype=="PHONE") {
                     $phone_type="PHONE";
-                    if (!empty($msg_count[$ymd]['phone_count'])) {
-                        $msg_count[$ymd]['phone_count']++;
-                    } else {
-                        $msg_count[$ymd]['phone_count']=1;
-                    }
-                    // $phone_all_count++;
                 }
                 if ($msg[$y]->ai_actiontype=="WECHAT") {
                     $wechat_type="WECHAT";
-                    if (!empty($msg_count[$ymd]['wechat_count'])) {
-                        $msg_count[$ymd]['wechat_count']++;
-                    } else {
-                        $msg_count[$ymd]['wechat_count']=1;
-                    }
-                    // $wechat_all_count++;
                 }
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
@@ -599,36 +630,15 @@ class ChartjsController extends Controller
             $mail_type="";
             $wechat_type="";
             $phone_type="";
-            // $mail_count=0;
-            // $phone_count=0;
-            // $wechat_count=0;
             for ($y=0; $y<count($msg); $y++) {
                 if ($msg[$y]->ai_actiontype=="MAIL") {
                     $mail_type="MAIL";
-                    if (!empty($msg_count_24[$ymdh]['mail_count'])) {
-                        $msg_count_24[$ymdh]['mail_count']++;
-                    } else {
-                        $msg_count_24[$ymdh]['mail_count']=1;
-                    }
-                    // $mail_all_count_24++;
                 }
                 if ($msg[$y]->ai_actiontype=="PHONE") {
                     $phone_type="PHONE";
-                    if (!empty($msg_count[$ymdh]['phone_count'])) {
-                        $msg_count_24[$ymdh]['phone_count']++;
-                    } else {
-                        $msg_count_24[$ymdh]['phone_count']=1;
-                    }
-                    // $phone_all_count_24++;
                 }
                 if ($msg[$y]->ai_actiontype=="WECHAT") {
                     $wechat_type="WECHAT";
-                    if (!empty($msg_count_24[$ymdh]['wechat_count'])) {
-                        $msg_count_24[$ymdh]['wechat_count']++;
-                    } else {
-                        $msg_count_24[$ymdh]['wechat_count']=1;
-                    }
-                    // $wechat_all_count_24++;
                 }
                 $t=[];
                 $t['phone_number']=$msg[$y]->pi_phone_number;
