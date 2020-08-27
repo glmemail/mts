@@ -205,7 +205,8 @@
     $i=0;
     foreach ($view_json[3] as $k => $v) {
         echo "<div id='messageChart_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
-        echo "<h2>".$view_json[3][$i]."</h2>";
+        echo "<h2>Message</h2>";
+        echo "<h4>".$view_json[3][$i]."</h4>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' style='width: 5%'>Message id</th>";
         echo "<th class='column-id' style='width: 30%'>内容</th>";
@@ -281,19 +282,73 @@
     $j=23;
     foreach ($view_json[10] as $k => $v) {
         echo "<div id='messageChart_24_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
-        echo "<h2>".$view_json[2][$j]."</h2>";
+        echo "<h2>Message</h2>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' style='width: 5%'>Message id</th>";
-        echo "<th class='column-id' style='width: 50%'>内容</th>";
-        echo "<th class='column-id' style='width: 45%'>时间</th>";
+        echo "<th class='column-id' style='width: 30%'>内容</th>";
+        echo "<th class='column-id' style='width: 10%'>时间</th>";
+        echo "<th class='column-id' style='width: 15%'>方式";
+        echo "<select name='type_sel' onchange='combtype(this)'>";
+        echo "<option value='0'>全部</option>";
+        echo "<option value='1'>mail</option>";
+        echo "<option value='2'>phone</option>";
+        echo "<option value='3'>wechat</option>";
+        echo "</select>";
+        echo "</th>";
+        echo "<th class='column-id' style='width: 10%'>Mail</th>";
+        echo "<th class='column-id' style='width: 20%'>Phone</th>";
+        echo "<th class='column-id' style='width: 10%'>Wechat</th>";
         foreach (!empty($view_json[9][$view_json[10][$j]])?$view_json[9][$view_json[10][$j]]:[] as $k => $v) {
             echo "<tr>";
             echo "<td>".$v['message_id']."</td>";
             echo "<td>".$v['message']."</td>";
             echo "<td>".date('yy-m-d H:i:s',strtotime($v['actiontime']))."</td>";
+            echo "<td>";
+            echo !empty($v['phone_type'])?"Phone<font size='5'>■</font><br/>":"Phone<font size='5'>□</font><br/>";
+            echo !empty($v['phone_type'])?"<input name='phone' type='hidden' value='1'>":"<input name='phone' type='hidden' value='0'>";
+            echo !empty($v['mail_type'])?"Mail<font size='5'>■</font><br/>":"Mail<font size='5'>□</font><br/>";
+            echo !empty($v['mail_type'])?"<input name='mail' type='hidden' value='1'>":"<input name='mail' type='hidden' value='0'>";
+            echo !empty($v['wechat_type'])?"Wechat<font size='5'>■</font><br/>":"Wechat<font size='5'>□</font><br/>";
+            echo !empty($v['wechat_type'])?"<input name='wechat' type='hidden' value='1'>":"<input name='wechat' type='hidden' value='0'>";
+            echo "</td>";
+            echo "<td>";
+            for ($x=0; $x<count($v['msg_action']); $x++) {
+                if (!empty($v['msg_action'][$x]['mail_to'])) {
+                    echo $v['msg_action'][$x]['mail_to']."<br/>";
+                }
+            }
+            echo "</td>";
+            echo "<td>";
+            $x1=0;
+            for ($x=0; $x<count($v['msg_action']); $x++) {
+                if (!empty($v['msg_action'][$x]['phone_number'])) {
+                    echo "<font size='3'>".($x1+1)."</font>：".$v['msg_action'][$x]['phone_number'];
+                    $phone_dtmf=!empty($v['msg_action'][$x]['phone_dtmf'])?$v['msg_action'][$x]['phone_dtmf']:"";
+                    $phone_status_code=!empty($v['msg_action'][$x]['phone_status_code'])?$v['msg_action'][$x]['phone_status_code']:"";
+                    if ($phone_dtmf=="2") {
+                    // echo !empty($v['msg_action'][$x]['phone_dtmf'])?"<font size='4'>▲</font>":"";
+                        echo "<font size='2'> 当番处理</font>";
+                    } else if ($phone_dtmf=="0") {
+                        echo "<font size='2'> 接通他人处理</font>";
+                    } else if ($phone_status_code=="200102") {
+                        echo "<font size='2'> 接通未处理</font>";
+                    } else {
+                        echo "<font size='2'> 未接通</font>";
+                    }
+                    echo "<br/>";
+                    $x1++;
+                }
+            }
+            echo "</td>";
+            echo "<td>";
+            for ($x=0; $x<count($v['msg_action']); $x++) {
+                if (!empty($v['msg_action'][$x]['wechat_to'])) {
+                    echo $v['msg_action'][$x]['wechat_to']."<br/>";
+                }
+            }
+            echo "<td>";
             echo "</tr>";
         }
-
         echo "</table>";
         echo "</div>";
         $i++;
@@ -304,7 +359,8 @@
     $i=0;
     foreach ($view_json[3] as $k => $v) {
         echo "<div id='mailChart_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
-        echo "<h2>".$view_json[3][$i]."</h2>";
+        echo "<h2>Mail</h2>";
+        echo "<h4>".$view_json[3][$i]."</h4>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' >Mail id</th>";
         echo "<th class='column-id' >Sys id</th>";
@@ -340,7 +396,8 @@
     $j=23;
     foreach ($view_json[10] as $k => $v) {
         echo "<div id='mailChart_24_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
-        echo "<h2>".$view_json[2][$j]."</h2>";
+        echo "<h2>Mail</h2>";
+        echo "<h4>".$view_json[2][$j]."</h4 >";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' >Mail id</th>";
         echo "<th class='column-id' >Sys id</th>";
@@ -376,7 +433,8 @@
     $i=0;
     foreach ($view_json[3] as $k => $v) {
         echo "<div id='phoneChart_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
-        echo "<h2>".$view_json[3][$i]."</h2>";
+        echo "<h2>Phone</h2>";
+        echo "<h4>".$view_json[3][$i]."</h4>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' >Call id</th>";
         echo "<th class='column-id' >Sys id</th>";
@@ -397,7 +455,17 @@
                 echo "<td>".$view_json[14][$x]->cmp_id."</td>";
                 echo "<td>".$view_json[14][$x]->phone_number."</td>";
                 echo "<td>".$view_json[14][$x]->actiontime."</td>";
-                echo "<td>".$view_json[14][$x]->status_code."</td>";
+                echo "<td>";
+                if ($view_json[14][$x]->dtmf=="2") {
+                    echo "<font size='2'> 当番处理</font>";
+                } elseif($view_json[14][$x]->dtmf=="0") {
+                    echo "<font size='2'> 接通他人处理</font>";
+                } elseif($view_json[14][$x]->status_code=="200102") {
+                    echo "<font size='2'> 接通未处理</font>";
+                } else {
+                    echo "<font size='2'> 未接通</font>";
+                }
+                echo "</td>";
                 echo "</tr>";
             }
         }
@@ -410,7 +478,8 @@
     $j=23;
     foreach ($view_json[10] as $k => $v) {
         echo "<div id='phoneChart_24_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
-        echo "<h2>".$view_json[2][$j]."</h2>";
+        echo "<h2>Phone</h2>";
+        echo "<h4>".$view_json[2][$j]."</h4>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' >Call id</th>";
         echo "<th class='column-id' >Sys id</th>";
@@ -422,7 +491,7 @@
         echo "<th class='column-id' >处理</th>";
         for ($x=0; $x<count($view_json[15]); $x++) {
             $actiontime =date("Y-m-d H:00",strtotime($view_json[15][$x]->actiontime));
-            if ($actiontime==$view_json[2][$i]) {
+            if ($actiontime==$view_json[2][$j]) {
                 echo "<tr>";
                 echo "<td>".$view_json[15][$x]->call_id."</td>";
                 echo "<td>".$view_json[15][$x]->sys_id."</td>";
@@ -431,7 +500,17 @@
                 echo "<td>".$view_json[15][$x]->cmp_id."</td>";
                 echo "<td>".$view_json[15][$x]->phone_number."</td>";
                 echo "<td>".$view_json[15][$x]->actiontime."</td>";
-                echo "<td>".$view_json[15][$x]->status_code."</td>";
+                echo "<td>";
+                if ($view_json[14][$x]->dtmf=="2") {
+                    echo "<font size='2'> 当番处理</font>";
+                } elseif($view_json[14][$x]->dtmf=="0") {
+                    echo "<font size='2'> 接通他人处理</font>";
+                } elseif($view_json[14][$x]->status_code=="200102") {
+                    echo "<font size='2'> 接通未处理</font>";
+                } else {
+                    echo "<font size='2'> 未接通</font>";
+                }
+                echo "</td>";
                 echo "</tr>";
             }
         }
@@ -444,7 +523,8 @@
     $i=0;
     foreach ($view_json[3] as $k => $v) {
         echo "<div id='wechatChart_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
-        echo "<h2>".$view_json[3][$i]."</h2>";
+        echo "<h2>Wechat</h2>";
+        echo "<h4>".$view_json[3][$i]."</h4>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' >Wechat id</th>";
         echo "<th class='column-id' >Sys id</th>";
@@ -478,7 +558,8 @@
     $j=23;
     foreach ($view_json[10] as $k => $v) {
         echo "<div id='wechatChart_24_".($i+1)."' class='box-body table-responsive no-padding' style='display: none'>";
-        echo "<h2>".$view_json[2][$j]."</h2>";
+        echo "<h2>Wechat</h2>";
+        echo "<h4>".$view_json[2][$j]."</h4>";
         echo "<table class='table table-hover grid-table' style='border-collapse: collapse;'>";
         echo "<th class='column-id' >Wechat id</th>";
         echo "<th class='column-id' >Sys id</th>";
@@ -491,7 +572,7 @@
         echo "<th class='column-id' >时间</th>";
         for ($x=0; $x<count($view_json[17]); $x++) {
             $actiontime =date("Y-m-d H:00",strtotime($view_json[17][$x]->actiontime));
-            if ($actiontime==$view_json[2][$i]) {
+            if ($actiontime==$view_json[2][$j]) {
                 echo "<tr>";
                 echo "<td>".$view_json[17][$x]->id."</td>";
                 echo "<td>".$view_json[17][$x]->sys_id."</td>";
@@ -575,6 +656,8 @@ $(function () {
                 for (var x1=0;x1<count3;x1++)
                 {
                     document.getElementById("mailChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_"+(x1+1)).style.display= "none";
                     if (activeElement._index==x1) {
                         document.getElementById("messageChart_"+(x1+1)).style.display= "block";
                     } else {
@@ -586,6 +669,8 @@ $(function () {
                 {
                     document.getElementById("messageChart_24_"+(x1+1)).style.display= "none";
                     document.getElementById("mailChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_24_"+(x1+1)).style.display= "none";
                 }
             }
         }
@@ -654,6 +739,8 @@ $(function () {
                 for (var x1=0;x1<count3;x1++)
                 {
                     document.getElementById("messageChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_"+(x1+1)).style.display= "none";
                     if (activeElement._index==x1) {
                         document.getElementById("mailChart_"+(x1+1)).style.display= "block";
                     } else {
@@ -665,6 +752,8 @@ $(function () {
                 {
                     document.getElementById("messageChart_24_"+(x1+1)).style.display= "none";
                     document.getElementById("mailChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_24_"+(x1+1)).style.display= "none";
                 }
             }
         }
@@ -732,6 +821,8 @@ $(function () {
                 for (var x1=0;x1<count3;x1++)
                 {
                     document.getElementById("messageChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("mailChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_"+(x1+1)).style.display= "none";
                     if (activeElement._index==x1) {
                         document.getElementById("phoneChart_"+(x1+1)).style.display= "block";
                     } else {
@@ -743,6 +834,8 @@ $(function () {
                 {
                     document.getElementById("messageChart_24_"+(x1+1)).style.display= "none";
                     document.getElementById("mailChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_24_"+(x1+1)).style.display= "none";
                 }
             }
         }
@@ -810,6 +903,8 @@ $(function () {
                 for (var x1=0;x1<count3;x1++)
                 {
                     document.getElementById("messageChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("mailChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_"+(x1+1)).style.display= "none";
                     if (activeElement._index==x1) {
                         document.getElementById("wechatChart_"+(x1+1)).style.display= "block";
                     } else {
@@ -821,6 +916,8 @@ $(function () {
                 {
                     document.getElementById("messageChart_24_"+(x1+1)).style.display= "none";
                     document.getElementById("mailChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_24_"+(x1+1)).style.display= "none";
                 }
             }
         }
@@ -884,13 +981,17 @@ $(function () {
                 var count3 = {{ count($view_json[3]) }};
                 for (var x1=0;x1<count3;x1++)
                 {
-                    document.getElementById("mailChart_"+(x1+1)).style.display= "none";
                     document.getElementById("messageChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("mailChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_"+(x1+1)).style.display= "none";
                 }
                 var count3_24 = {{ count($view_json[10]) }};
                 for (var x1=0;x1<count3_24;x1++)
                 {
                     document.getElementById("mailChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_24_"+(x1+1)).style.display= "none";
                     if (activeElement._index==x1) {
                         document.getElementById("messageChart_24_"+(x1+1)).style.display= "block";
                     } else {
@@ -960,13 +1061,17 @@ $(function () {
                 var count3 = {{ count($view_json[3]) }};
                 for (var x1=0;x1<count3;x1++)
                 {
-                    document.getElementById("mailChart_"+(x1+1)).style.display= "none";
                     document.getElementById("messageChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("mailChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_"+(x1+1)).style.display= "none";
                 }
                 var count3_24 = {{ count($view_json[10]) }};
                 for (var x1=0;x1<count3_24;x1++)
                 {
                     document.getElementById("messageChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_24_"+(x1+1)).style.display= "none";
                     if (activeElement._index==x1) {
                         document.getElementById("mailChart_24_"+(x1+1)).style.display= "block";
                     } else {
@@ -1036,17 +1141,21 @@ $(function () {
                 var count3 = {{ count($view_json[3]) }};
                 for (var x1=0;x1<count3;x1++)
                 {
-                    document.getElementById("mailChart_"+(x1+1)).style.display= "none";
                     document.getElementById("messageChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("mailChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_"+(x1+1)).style.display= "none";
                 }
                 var count3_24 = {{ count($view_json[10]) }};
                 for (var x1=0;x1<count3_24;x1++)
                 {
                     document.getElementById("messageChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("mailChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_24_"+(x1+1)).style.display= "none";
                     if (activeElement._index==x1) {
-                        document.getElementById("mailChart_24_"+(x1+1)).style.display= "block";
+                        document.getElementById("phoneChart_24_"+(x1+1)).style.display= "block";
                     } else {
-                        document.getElementById("mailChart_24_"+(x1+1)).style.display= "none";
+                        document.getElementById("phoneChart_24_"+(x1+1)).style.display= "none";
                     }
                 }
             }
@@ -1111,17 +1220,21 @@ $(function () {
                 var count3 = {{ count($view_json[3]) }};
                 for (var x1=0;x1<count3;x1++)
                 {
-                    document.getElementById("mailChart_"+(x1+1)).style.display= "none";
                     document.getElementById("messageChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("mailChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_"+(x1+1)).style.display= "none";
+                    document.getElementById("wechatChart_"+(x1+1)).style.display= "none";
                 }
                 var count3_24 = {{ count($view_json[10]) }};
                 for (var x1=0;x1<count3_24;x1++)
                 {
                     document.getElementById("messageChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("mailChart_24_"+(x1+1)).style.display= "none";
+                    document.getElementById("phoneChart_24_"+(x1+1)).style.display= "none";
                     if (activeElement._index==x1) {
-                        document.getElementById("mailChart_24_"+(x1+1)).style.display= "block";
+                        document.getElementById("wechatChart_24_"+(x1+1)).style.display= "block";
                     } else {
-                        document.getElementById("mailChart_24_"+(x1+1)).style.display= "none";
+                        document.getElementById("wechatChart_24_"+(x1+1)).style.display= "none";
                     }
                 }
             }
@@ -1212,24 +1325,12 @@ function radochange(){
 
     var division = $("input[name='division']:checked").val();
     if (division=='1') {
-        // document.getElementById("mailChart").style.display= "";
-        // document.getElementById("messageChart").style.display= "";
-        // document.getElementById("msg").style.display= "";
-        // document.getElementById("mailChart_24").style.display= "none";
-        // document.getElementById("messageChart_24").style.display= "none";
-        // document.getElementById("msg_24").style.display= "none";
         document.getElementById("msg_top").style.display= "";
         document.getElementById("msg_down").style.display= "";
         document.getElementById("msg_top_24").style.display= "none";
         document.getElementById("msg_down_24").style.display= "none";
     }
     if (division=='0') {
-        // document.getElementById("mailChart").style.display= "none";
-        // document.getElementById("messageChart").style.display= "none";
-        // document.getElementById("msg").style.display= "none";
-        // document.getElementById("mailChart_24").style.display= "";
-        // document.getElementById("messageChart_24").style.display= "";
-        // document.getElementById("msg_24").style.display= "";
         document.getElementById("msg_top").style.display= "none";
         document.getElementById("msg_down").style.display= "none";
         document.getElementById("msg_top_24").style.display= "";

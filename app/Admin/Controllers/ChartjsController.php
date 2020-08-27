@@ -682,8 +682,10 @@ class ChartjsController extends Controller
         // var_dump($view_json[6]);
         // var_dump($view_json[7]);
         // var_dump($view_json[8]);
-        // var_dump($view_json[10]);
+        var_dump($view_json[10]);
+        var_dump($view_json[11]);
         // var_dump($view_json[14]);
+        // var_dump($view_json[15]);
         // var_dump($view_json[16]);
         // var_dump($view_json[17]);
         $content = new Content();
