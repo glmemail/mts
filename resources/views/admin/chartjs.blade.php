@@ -53,7 +53,7 @@
     </div>
     <div class="col-md-4">
         <div class="row">
-        <div class="col-md-6" ><div class="small-box bg-aqua" style="padding-top:30%;padding-bottom:30%;">
+        <div class="col-md-6" ><div class="small-box bg-purple" style="padding-top:30%;padding-bottom:30%;">
             <div class="inner" id="message">
                 <h3>{{$view_json[6]['msg_all_count']}}</h3>
                 <p>Message</p>
@@ -66,7 +66,7 @@
                 <i class="fa fa-arrow-circle-right"></i>
             </a>
         </div></div>
-        <div class="col-md-6" ><div class="small-box bg-green" style="padding-top:30%;padding-bottom:30%;">
+        <div class="col-md-6" ><div class="small-box bg-maroon" style="padding-top:30%;padding-bottom:30%;">
             <div class="inner">
                 <h3>{{ $view_json[6]['mail_all_count'] }}</h3>
                 <p>Mail</p>
@@ -91,7 +91,7 @@
     </div>
     <div class="col-md-4">
         <div class="row">
-        <div class="col-md-6"><div class="small-box bg-aqua" style="padding-top:30%;padding-bottom:30%;">
+        <div class="col-md-6"><div class="small-box bg-purple" style="padding-top:30%;padding-bottom:30%;">
             <div class="inner">
                 <h3>{{$view_json[8]['msg_all_count_24']}}</h3>
                 <p>Message</p>
@@ -104,7 +104,7 @@
                 <i class="fa fa-arrow-circle-right"></i>
             </a>
         </div></div>
-        <div class="col-md-6"><div class="small-box bg-green" style="padding-top:30%;padding-bottom:30%;">
+        <div class="col-md-6"><div class="small-box bg-maroon" style="padding-top:30%;padding-bottom:30%;">
             <div class="inner">
                 <h3>{{$view_json[8]['mail_all_count_24']}}</h3>
                 <p>Mail</p>
@@ -129,7 +129,7 @@
     </div>
     <div class="col-md-4">
         <div class="row">
-        <div class="col-md-6"><div class="small-box bg-green" style="padding-top:30%;padding-bottom:30%;">
+        <div class="col-md-6"><div class="small-box bg-teal" style="padding-top:30%;padding-bottom:30%;">
             <div class="inner">
                 <h3>{{$view_json[6]['phone_all_count']}}</h3>
 
@@ -143,7 +143,7 @@
                 <i class="fa fa-arrow-circle-right"></i>
             </a>
         </div></div>
-        <div class="col-md-6"><div class="small-box bg-green" style="padding-top:30%;padding-bottom:30%;">
+        <div class="col-md-6"><div class="small-box bg-yellow" style="padding-top:30%;padding-bottom:30%;">
             <div class="inner">
                 <h3>{{$view_json[6]['wechat_all_count']}}</h3>
                 <p>Wechat</p>
@@ -168,7 +168,7 @@
     </div>
     <div class="col-md-4" >
         <div class="row">
-        <div class="col-md-6"><div class="small-box bg-green" style="padding-top:30%;padding-bottom:30%;">
+        <div class="col-md-6"><div class="small-box bg-teal" style="padding-top:30%;padding-bottom:30%;">
             <div class="inner">
                 <h3>{{$view_json[8]['phone_all_count_24']}}</h3>
 
@@ -182,7 +182,7 @@
                 <i class="fa fa-arrow-circle-right"></i>
             </a>
         </div></div>
-        <div class="col-md-6"><div class="small-box bg-green" style="padding-top:30%;padding-bottom:30%;">
+        <div class="col-md-6"><div class="small-box bg-yellow" style="padding-top:30%;padding-bottom:30%;">
             <div class="inner">
                 <h3>{{$view_json[8]['wechat_all_count_24']}}</h3>
 
