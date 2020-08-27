@@ -566,8 +566,7 @@
         echo "<th class='column-id' >Svr id</th>";
         echo "<th class='column-id' >Sub sys id</th>";
         echo "<th class='column-id' >Cmp id</th>";
-        echo "<th class='column-id' >Mail to</th>";
-        echo "<th class='column-id' >Mail from</th>";
+        echo "<th class='column-id' >Wechat to</th>";
         echo "<th class='column-id' >Contact name</th>";
         echo "<th class='column-id' >时间</th>";
         for ($x=0; $x<count($view_json[17]); $x++) {
