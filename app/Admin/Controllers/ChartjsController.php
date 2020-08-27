@@ -438,6 +438,7 @@ class ChartjsController extends Controller
         $sql = $sql." order by actiontime desc";
         $mail_all = DB::select($sql);
         $mail_all_count = count($mail_all);
+
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -452,7 +453,8 @@ class ChartjsController extends Controller
         $sql = $sql." order by actiontime desc";
         $mail_all_24 = DB::select($sql);
         $mail_all_count_24 = count($mail_all_24);
-
+        for ($x=0; $x<$msg_all_count; $x++) {
+        }
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -682,8 +684,9 @@ class ChartjsController extends Controller
         // var_dump($view_json[6]);
         // var_dump($view_json[7]);
         // var_dump($view_json[8]);
-        var_dump($view_json[10]);
-        var_dump($view_json[11]);
+        // var_dump($view_json[9]);
+        // var_dump($view_json[10]);
+        // var_dump($view_json[11]);
         // var_dump($view_json[14]);
         // var_dump($view_json[15]);
         // var_dump($view_json[16]);
