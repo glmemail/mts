@@ -88,54 +88,87 @@ class MemberController extends AdminController
         // $grid->disableCreateButton();
         // $grid->disableActions();
         $grid->disableRowSelector();
-        $grid->header(function ($query) {
-            $weeks=[];
-            for ($x=6; $x>=0; $x--) {
-                $day_str="-".$x." day";
-                $weeks[]=date("Y-m-d",strtotime($day_str));
-            }
-            $msg_count=[];
-            $msg_count['2020-08-13']['wechat_count']=5;
-            $msg_count['2020-08-13']['mail_count']=4;
-            $msg_count['2020-08-13']['phone_count']=1;
-            $msg_count['2020-08-14']['wechat_count']=10;
-            $msg_count['2020-08-14']['mail_count']=8;
-            $msg_count['2020-08-14']['phone_count']=4;
-            $msg_count['2020-08-15']['wechat_count']=16;
-            $msg_count['2020-08-15']['mail_count']=20;
-            $msg_count['2020-08-15']['phone_count']=4;
-            $msg_count['2020-08-17']['wechat_count']=7;
-            $msg_count['2020-08-17']['mail_count']=35;
-            $msg_count['2020-08-17']['phone_count']=28;
-            $view_json=[];
-            $view_json[]=[];                        // index=0
-            $view_json[]=[];              // index=1
-            $view_json[]=[];                  // index=2
-            $view_json[]=$weeks;                    // index=3 一周内日期List
-            $view_json[]=[];                  // index=4
-            $view_json[]=$msg_count;                // index=5
-            // var_dump($view_json[3]);
-            // var_dump($view_json[5]);
+        // $grid->header(function ($query) {
+        //     $weeks=[];
+        //     for ($x=6; $x>=0; $x--) {
+        //         $day_str="-".$x." day";
+        //         $weeks[]=date("Y-m-d",strtotime($day_str));
+        //     }
 
-            $doughnut = view('admin.gender', compact('view_json'));
 
-            return new Box('chartjs', $doughnut);
-            // $content = new Content();
-            // return $content
-            // ->header('信息查询')
-            // ->body(new Box('', view('admin.gender', compact('view_json'))));
-        });
+        //     $msg_count=[];
+        //     $msg_count['2020-08-13']['wechat_count']=5;
+        //     $msg_count['2020-08-13']['mail_count']=4;
+        //     $msg_count['2020-08-13']['phone_count']=1;
+        //     $msg_count['2020-08-14']['wechat_count']=10;
+        //     $msg_count['2020-08-14']['mail_count']=8;
+        //     $msg_count['2020-08-14']['phone_count']=4;
+        //     $msg_count['2020-08-15']['wechat_count']=16;
+        //     $msg_count['2020-08-15']['mail_count']=20;
+        //     $msg_count['2020-08-15']['phone_count']=4;
+        //     $msg_count['2020-08-17']['wechat_count']=7;
+        //     $msg_count['2020-08-17']['mail_count']=35;
+        //     $msg_count['2020-08-17']['phone_count']=28;
+        //     $view_json=[];
+        //     $view_json[]=[];                        // index=0
+        //     $view_json[]=[];              // index=1
+        //     $view_json[]=[];                  // index=2
+        //     $view_json[]=$weeks;                    // index=3 一周内日期List
+        //     $view_json[]=[];                  // index=4
+        //     $view_json[]=$msg_count;                // index=5
+        //     // var_dump($view_json[3]);
+        //     // var_dump($view_json[5]);
+
+        //     $doughnut = view('admin.gender', compact('view_json'));
+
+        //     return new Box('chartjs', $doughnut);
+        //     // $content = new Content();
+        //     // return $content
+        //     // ->header('信息查询')
+        //     // ->body(new Box('', view('admin.gender', compact('view_json'))));
+        // });
         return $grid;
     }
 
     public function show($id, Content $content)
     {
         $member = Member::find($id);
+        $member_json = json_decode($member,true);
+        var_dump($member_json);
         $weeks=[];
         for ($x=6; $x>=0; $x--) {
             $day_str="-".$x." day";
             $weeks[]=date("Y-m-d",strtotime($day_str));
         }
+        $name=$member_json['name'];
+        $tenantid=$member_json['tenantid'];
+        $fluentd_key=$member_json['fluentd_key'];
+        $mail_addr=$member_json['mail_addr'];
+        $phone_number=$member_json['phone_number'];
+        $wechat_id=$member_json['wechat_id'];
+        $compid=$member_json['compid'];
+        $deptid=$member_json['deptid'];
+        $created_at=$member_json['created_at'];
+        $updated_at=$member_json['updated_at'];
+
+
+
+
+        // $sql = "";
+        // $sql = $sql." select ";
+        // $sql = $sql." * ";
+        // $sql = $sql." from ";
+        // $sql = $sql." mail_info mi ";
+        // $sql = $sql." where ";
+        // $sql = $sql." mi.actiontime > '".$showtime."' ";
+        // $sql = $sql." and mi.sys_id in ( '".$sel_fluentd[0]->sysid."' )";
+        // $sql = $sql." and mi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
+        // $sql = $sql." and mi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
+        // $sql = $sql." and mi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        // $sql = $sql." order by actiontime desc";
+        // $mail_all = DB::select($sql);
+
+
         $msg_count=[];
         $msg_count['2020-08-20']['wechat_count']=5;
         $msg_count['2020-08-20']['mail_count']=4;
@@ -248,48 +281,52 @@ class MemberController extends AdminController
         // $form->email('email', __('Email'));
         // $form->email('email', __('Email'));
 
-        $form->isCreating();
 
         // $form->isUpdating();
-        $form->header(function ($query) {
-            // var_dump($query);
-            $weeks=[];
-            for ($x=6; $x>=0; $x--) {
-                $day_str="-".$x." day";
-                $weeks[]=date("Y-m-d",strtotime($day_str));
-            }
-            $msg_count=[];
-            $msg_count['2020-08-13']['wechat_count']=5;
-            $msg_count['2020-08-13']['mail_count']=4;
-            $msg_count['2020-08-13']['phone_count']=1;
-            $msg_count['2020-08-14']['wechat_count']=10;
-            $msg_count['2020-08-14']['mail_count']=8;
-            $msg_count['2020-08-14']['phone_count']=4;
-            $msg_count['2020-08-15']['wechat_count']=16;
-            $msg_count['2020-08-15']['mail_count']=20;
-            $msg_count['2020-08-15']['phone_count']=4;
-            $msg_count['2020-08-17']['wechat_count']=7;
-            $msg_count['2020-08-17']['mail_count']=35;
-            $msg_count['2020-08-17']['phone_count']=28;
-            $view_json=[];
-            $view_json[]=[];                        // index=0
-            $view_json[]=[];              // index=1
-            $view_json[]=[];                  // index=2
-            $view_json[]=$weeks;                    // index=3 一周内日期List
-            $view_json[]=[];                  // index=4
-            $view_json[]=$msg_count;                // index=5
-            // var_dump($view_json[3]);
-            // var_dump($view_json[5]);
+        // $form->header(function ($query) {
+        //     // var_dump($query);
+        //     $weeks=[];
+        //     for ($x=6; $x>=0; $x--) {
+        //         $day_str="-".$x." day";
+        //         $weeks[]=date("Y-m-d",strtotime($day_str));
+        //     }
+        //     $msg_count=[];
+        //     $msg_count['2020-08-13']['wechat_count']=5;
+        //     $msg_count['2020-08-13']['mail_count']=4;
+        //     $msg_count['2020-08-13']['phone_count']=1;
+        //     $msg_count['2020-08-14']['wechat_count']=10;
+        //     $msg_count['2020-08-14']['mail_count']=8;
+        //     $msg_count['2020-08-14']['phone_count']=4;
+        //     $msg_count['2020-08-15']['wechat_count']=16;
+        //     $msg_count['2020-08-15']['mail_count']=20;
+        //     $msg_count['2020-08-15']['phone_count']=4;
+        //     $msg_count['2020-08-17']['wechat_count']=7;
+        //     $msg_count['2020-08-17']['mail_count']=35;
+        //     $msg_count['2020-08-17']['phone_count']=28;
+        //     $view_json=[];
+        //     $view_json[]=[];                        // index=0
+        //     $view_json[]=[];              // index=1
+        //     $view_json[]=[];                  // index=2
+        //     $view_json[]=$weeks;                    // index=3 一周内日期List
+        //     $view_json[]=[];                  // index=4
+        //     $view_json[]=$msg_count;                // index=5
+        //     // var_dump($view_json[3]);
+        //     // var_dump($view_json[5]);
 
-            $doughnut = view('admin.gender', compact('view_json'));
+        //     $doughnut = view('admin.gender', compact('view_json'));
 
-            return new Box('chartjs', $doughnut);
-            // return "<div style='padding: 10px;'>总收入 ： 12123131313123</div>";
-            // $content = new Content();
-            // return $content
-            // ->header('信息查询')
-            // ->body(new Box('', view('admin.gender', compact('view_json'))));
-        });
+        //     return new Box('chartjs', $doughnut);
+        //     // return "<div style='padding: 10px;'>总收入 ： 12123131313123</div>";
+        //     // $content = new Content();
+        //     // return $content
+        //     // ->header('信息查询')
+        //     // ->body(new Box('', view('admin.gender', compact('view_json'))));
+        // });
+        // 两个时间显示
+        $form->display('created_at', '创建时间');
+        $form->display('updated_at', '修改时间');
+
+        // $form->isCreating();
         return $form;
     }
 }

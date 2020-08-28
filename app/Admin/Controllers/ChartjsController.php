@@ -419,7 +419,6 @@ class ChartjsController extends Controller
 
         $sql="select * from fluentd "." where fluentd.keyid = ".$fluentd_id;
         $sel_fluentd = DB::select($sql);
-        // var_dump($sel_fluentd[0]->sysid);
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." m.id,m.message,m.actiontime,m.sysid,m.svrid,m.subsysid,m.cmpid ";

@@ -8,7 +8,7 @@ class Member extends Model
 {
     protected $table = 'member';
 
-    public $timestamps = false;
+    // public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
