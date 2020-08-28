@@ -323,8 +323,8 @@ class MemberController extends AdminController
         //     // ->body(new Box('', view('admin.gender', compact('view_json'))));
         // });
         // 两个时间显示
-        $form->display('created_at', '创建时间');
-        $form->display('updated_at', '修改时间');
+        $form->display('created_at', __('创建时间'));
+        $form->display('updated_at', __('修改时间'));
 
         // $form->isCreating();
         return $form;
