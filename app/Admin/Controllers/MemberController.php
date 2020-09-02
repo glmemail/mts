@@ -150,23 +150,22 @@ class MemberController extends AdminController
         $deptid=$member_json['deptid'];
         $created_at=$member_json['created_at'];
         $updated_at=$member_json['updated_at'];
+        $showtime=date("Y-m-d",strtotime("-6 day"));
 
 
 
-
-        // $sql = "";
-        // $sql = $sql." select ";
-        // $sql = $sql." * ";
-        // $sql = $sql." from ";
-        // $sql = $sql." mail_info mi ";
-        // $sql = $sql." where ";
-        // $sql = $sql." mi.actiontime > '".$showtime."' ";
-        // $sql = $sql." and mi.sys_id in ( '".$sel_fluentd[0]->sysid."' )";
-        // $sql = $sql." and mi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
-        // $sql = $sql." and mi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
-        // $sql = $sql." and mi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
-        // $sql = $sql." order by actiontime desc";
-        // $mail_all = DB::select($sql);
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." * ";
+        $sql = $sql." from ";
+        $sql = $sql." fluentd ";
+        $sql = $sql." where ";
+        $sql = $sql." and mi.sys_id in ( '".$sel_fluentd[0]->sysid."' )";
+        $sql = $sql." and mi.svr_id in ( '".$sel_fluentd[0]->svrid."' )";
+        $sql = $sql." and mi.sub_sys_id in ( '".$sel_fluentd[0]->subsysid."' )";
+        $sql = $sql." and mi.cmp_id in ( '".$sel_fluentd[0]->cmpid."' )";
+        $sql = $sql." order by actiontime desc";
+        $mail_all = DB::select($sql);
 
 
         $msg_count=[];

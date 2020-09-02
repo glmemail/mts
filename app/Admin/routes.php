@@ -10,7 +10,8 @@ Route::group([
     'middleware'    => config('admin.route.middleware'),
 ], function (Router $router) {
 
-    $router->get('/', 'HomeController@index')->name('admin.home');
+    // $router->get('/', 'HomeController@index')->name('admin.home');
+    $router->get('/', 'ChartjsController@index')->name('admin.chartjs');
     $router->resource('users', UserController::class);
     $router->resource('message', MessageController::class);
     $router->resource('message_list', MessagelistController::class);
