@@ -142,7 +142,7 @@ class MailController extends AdminController
             $t = "<span>";
             // $t = "".$t.$id."</span><br/><span>";
             if (count($r)<1) {
-                "Message ID not obtained!"
+                $t = $t."Message ID not obtained!"
             } else {
                 for ($x=0; $x<count($r); $x++) {
                     $t = $t.$r[$x]->message_id."<br/>";
