@@ -96,6 +96,7 @@ class PhoneController extends AdminController
         // $grid->column('duration', __('Duration'));
         // $grid->column('status_code', __('Status code'));
         $grid->model()->where('actiontime', '>=', $showtime);
+        $grid->model()->orderBy('actiontime', 'desc');
 
         $grid->disableCreateButton();
         $grid->disableActions();

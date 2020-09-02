@@ -57,7 +57,6 @@ class MessageController extends AdminController
         $grid->column('subsysid', 'SUB_SYS_ID');
         $grid->column('cmpid', 'CMP_ID');
         $grid->column('actiontime', __('Actiontime'));
-        $grid->model()->where('actiontime', '>=', $showtime);
         $user = Auth::guard('admin')->user();
         $fluentd = Fluentd::select(array('fluentd.keyid','fluentd.keyname','fluentd.sysid', 'fluentd.svrid', 'fluentd.subsysid', 'fluentd.cmpid','user_fluentd.user_id'))
             ->join('user_fluentd','fluentd.keyid','=','user_fluentd.fluentd_keyid')
@@ -69,6 +68,9 @@ class MessageController extends AdminController
             $sysid = $v[0]['sysid'];
             $grid->model()->where('sysid', '=', $sysid);
         }
+
+        $grid->model()->where('actiontime', '>=', $showtime);
+        $grid->model()->orderBy('actiontime', 'desc');
 
         $grid->disableCreateButton();
         $grid->disableActions();
@@ -152,6 +154,7 @@ class MessageController extends AdminController
             $grid->model()->where('sysid', '=', $sysid);
         }
         $grid->model()->where('actiontime', '>=', $showtime);
+        $grid->model()->orderBy('actiontime', 'desc');
         // $grid->model()->where('action_info', '!=', "''");
         $grid->disableCreateButton();
         $grid->disableActions();

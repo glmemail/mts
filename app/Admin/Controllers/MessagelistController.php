@@ -88,6 +88,7 @@ class MessagelistController extends AdminController
         //     $grid->model()->where('sysid', '=', $sysid);
         // }
         $grid->model()->where('actiontime', '>=', $showtime);
+        $grid->model()->orderBy('actiontime', 'desc');
         // $grid->model()->where('action_info', '!=', "''");
         $grid->disableCreateButton();
         $grid->disableActions();
@@ -173,6 +174,7 @@ class MessagelistController extends AdminController
             $grid->model()->where('sysid', '=', $sysid);
         }
         $grid->model()->where('actiontime', '>=', $showtime);
+        $grid->model()->orderBy('actiontime', 'desc');
         // $grid->model()->where('action_info', '!=', "''");
         $grid->disableCreateButton();
         $grid->disableActions();
