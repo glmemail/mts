@@ -141,8 +141,12 @@ class MailController extends AdminController
             $r = DB::select($sql);
             $t = "<span>";
             // $t = "".$t.$id."</span><br/><span>";
-            for ($x=0; $x<count($r); $x++) {
-                $t = $t.$r[$x]->message_id."<br/>";
+            if (count($r)<1) {
+                "Message ID not obtained!"
+            } else {
+                for ($x=0; $x<count($r); $x++) {
+                    $t = $t.$r[$x]->message_id."<br/>";
+                }
             }
             $t = $t."</span>";
             return $t;
