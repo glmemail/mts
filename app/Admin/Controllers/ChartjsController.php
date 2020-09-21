@@ -101,6 +101,7 @@ class ChartjsController extends Controller
         $sql = $sql." where ";
         $sql = $sql." mv.actiontime > '".$showtime."' ";
         $sql = $sql." and mv.user_id ='".$user['username']."' ";
+        $sql = $sql." order by actiontime desc ";
         $message_all = DB::select($sql);
         $msg_all_count = count($message_all);
         $sql = "";
@@ -111,6 +112,7 @@ class ChartjsController extends Controller
         $sql = $sql." where ";
         $sql = $sql." mv.actiontime > '".$showtime24."' ";
         $sql = $sql." and mv.user_id ='".$user['username']."' ";
+        $sql = $sql." order by actiontime desc ";
         $message_all_24 = DB::select($sql);
         $msg_all_count_24 = count($message_all_24);
 
@@ -125,6 +127,7 @@ class ChartjsController extends Controller
         $sql = $sql." and mi.svr_id in ( ".$svrid." )";
         $sql = $sql." and mi.sub_sys_id in ( ".$subsysid." )";
         $sql = $sql." and mi.cmp_id in ( ".$cmpid." )";
+        $sql = $sql." order by actiontime desc ";
         $mail_all = DB::select($sql);
         $mail_all_count = count($mail_all);
         for ($x=0; $x<$mail_all_count; $x++) {
@@ -146,6 +149,7 @@ class ChartjsController extends Controller
         $sql = $sql." and mi.svr_id in ( ".$svrid." )";
         $sql = $sql." and mi.sub_sys_id in ( ".$subsysid." )";
         $sql = $sql." and mi.cmp_id in ( ".$cmpid." )";
+        $sql = $sql." order by actiontime desc ";
         $mail_all_24 = DB::select($sql);
         $mail_all_count_24 = count($mail_all_24);
         for ($x=0; $x<$mail_all_count_24; $x++) {
@@ -167,6 +171,7 @@ class ChartjsController extends Controller
         $sql = $sql." and pi.svr_id in ( ".$svrid." )";
         $sql = $sql." and pi.sub_sys_id in ( ".$subsysid." )";
         $sql = $sql." and pi.cmp_id in ( ".$cmpid." )";
+        $sql = $sql." order by actiontime desc ";
         $phone_all = DB::select($sql);
         $phone_all_count = count($phone_all);
         for ($x=0; $x<$phone_all_count; $x++) {
@@ -188,6 +193,7 @@ class ChartjsController extends Controller
         $sql = $sql." and pi.svr_id in ( ".$svrid." )";
         $sql = $sql." and pi.sub_sys_id in ( ".$subsysid." )";
         $sql = $sql." and pi.cmp_id in ( ".$cmpid." )";
+        $sql = $sql." order by actiontime desc ";
         $phone_all_24 = DB::select($sql);
         $phone_all_count_24 = count($phone_all_24);
         for ($x=0; $x<$phone_all_count_24; $x++) {
@@ -210,6 +216,7 @@ class ChartjsController extends Controller
         $sql = $sql." and wi.svr_id in ( ".$svrid." )";
         $sql = $sql." and wi.sub_sys_id in ( ".$subsysid." )";
         $sql = $sql." and wi.cmp_id in ( ".$cmpid." )";
+        $sql = $sql." order by actiontime desc ";
         $wechat_all = DB::select($sql);
         $wechat_all_count = count($wechat_all);
         for ($x=0; $x<$wechat_all_count; $x++) {
@@ -231,6 +238,7 @@ class ChartjsController extends Controller
         $sql = $sql." and wi.svr_id in ( ".$svrid." )";
         $sql = $sql." and wi.sub_sys_id in ( ".$subsysid." )";
         $sql = $sql." and wi.cmp_id in ( ".$cmpid." )";
+        $sql = $sql." order by actiontime desc ";
         $wechat_all_24 = DB::select($sql);
         $wechat_all_count_24 = count($wechat_all_24);
         for ($x=0; $x<$wechat_all_count_24; $x++) {
@@ -248,6 +256,7 @@ class ChartjsController extends Controller
         $sql = $sql." action_info ai ";
         $sql = $sql." where ";
         $sql = $sql." ai.actiontime > '".$showtime."' ";
+        $sql = $sql." order by actiontime desc ";
         $actioninfo = DB::select($sql);
         for ($x=0; $x<$msg_all_count; $x++) {
             $date = new DateTime($message_all[$x]->actiontime);
@@ -368,6 +377,7 @@ class ChartjsController extends Controller
         // var_dump($view_json[8]);
         // var_dump($view_json[9]);
         // var_dump($view_json[10]);
+        // var_dump($view_json[12]);
         return $content
             ->header('信息查询')
             ->body(new Box('', view('admin.chartjs', compact('view_json'))));
