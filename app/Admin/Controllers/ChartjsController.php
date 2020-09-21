@@ -444,6 +444,7 @@ class ChartjsController extends Controller
         $sql = $sql." and m.cmpid = '".$sel_fluentd[0]->cmpid."' ";
         $sql = $sql." group by ";
         $sql = $sql." m.id ";
+        $sql = $sql." order by actiontime desc";
         $message_all = DB::select($sql);
         $msg_all_count = count($message_all);
 
