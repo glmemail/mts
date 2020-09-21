@@ -448,6 +448,102 @@ class ChartjsController extends Controller
         $message_all = DB::select($sql);
         $msg_all_count = count($message_all);
 
+        for ($x=0; $x<$msg_all_count; $x++) {
+            $date = new DateTime($message_all[$x]->actiontime);
+            $ymd = $date->format('Y-m-d');
+            $sql = $this->selectActioninfo_sql($message_all[$x]->id);
+            $msg = DB::select($sql);
+            $m=[];
+            $msg_action=[];
+            $mail_type="";
+            $wechat_type="";
+            $phone_type="";
+            $mail_count=0;
+            $phone_count=0;
+            $wechat_count=0;
+            for ($y=0; $y<count($msg); $y++) {
+                if ($msg[$y]->ai_actiontype=="MAIL") {
+                    $mail_type="MAIL";
+                }
+                if ($msg[$y]->ai_actiontype=="PHONE") {
+                    $phone_type="PHONE";
+                }
+                if ($msg[$y]->ai_actiontype=="WECHAT") {
+                    $wechat_type="WECHAT";
+                }
+                $t=[];
+                $t['phone_number']=$msg[$y]->pi_phone_number;
+                $t['phone_dtmf']=$msg[$y]->pi_dtmf;
+                $t['phone_status_code']=$msg[$y]->pi_status_code;
+                $t['mail_to']=$msg[$y]->mi_mail_to;
+                $t['wechat_to']=$msg[$y]->wi_wechat_to;
+                $msg_action[]=$t;
+            }
+            $m['message_id']=$message_all[$x]->id;
+            $m['message']=$message_all[$x]->message;
+            $m['actiontime']=$message_all[$x]->actiontime;
+            $m['mail_type']=$mail_type;
+            $m['phone_type']=$phone_type;
+            $m['wechat_type']=$wechat_type;
+            $m['msg_action']=$msg_action;
+            $msg_arr[$ymd][]=$m;
+        }
+        $sql = "";
+        $sql = $sql." select ";
+        $sql = $sql." m.id,m.message,m.actiontime,m.sysid,m.svrid,m.subsysid,m.cmpid ";
+        $sql = $sql." from ";
+        $sql = $sql." message m ";
+        $sql = $sql." join action_info ai on ";
+        $sql = $sql." ai.message_id = m.id ";
+        $sql = $sql." where ";
+        $sql = $sql." m.actiontime > '".$showtime24."' ";
+        $sql = $sql." and m.sysid = '".$sel_fluentd[0]->sysid."' ";
+        $sql = $sql." and m.svrid = '".$sel_fluentd[0]->svrid."' ";
+        $sql = $sql." and m.subsysid = '".$sel_fluentd[0]->subsysid."' ";
+        $sql = $sql." and m.cmpid = '".$sel_fluentd[0]->cmpid."' ";
+        $sql = $sql." group by ";
+        $sql = $sql." m.id ";
+        $sql = $sql." order by actiontime desc";
+        $message_all_24 = DB::select($sql);
+        $msg_all_count_24 = count($message_all_24);
+        for ($x=0; $x<$msg_all_count_24; $x++) {
+            $date = new DateTime($message_all_24[$x]->actiontime);
+            $ymdh = $date->format("H:00");
+            $sql = $this->selectActioninfo_sql($message_all_24[$x]->id);
+            $msg = DB::select($sql);
+            $m=[];
+            $msg_action=[];
+            $mail_type="";
+            $wechat_type="";
+            $phone_type="";
+            for ($y=0; $y<count($msg); $y++) {
+                if ($msg[$y]->ai_actiontype=="MAIL") {
+                    $mail_type="MAIL";
+                }
+                if ($msg[$y]->ai_actiontype=="PHONE") {
+                    $phone_type="PHONE";
+                }
+                if ($msg[$y]->ai_actiontype=="WECHAT") {
+                    $wechat_type="WECHAT";
+                }
+                $t=[];
+                $t['phone_number']=$msg[$y]->pi_phone_number;
+                $t['phone_dtmf']=$msg[$y]->pi_dtmf;
+                $t['phone_status_code']=$msg[$y]->pi_status_code;
+                $t['mail_to']=$msg[$y]->mi_mail_to;
+                $t['wechat_to']=$msg[$y]->wi_wechat_to;
+                $msg_action[]=$t;
+            }
+            $m['message_id']=$message_all_24[$x]->id;
+            $m['message']=$message_all_24[$x]->message;
+            $m['actiontime']=$message_all_24[$x]->actiontime;
+            $m['mail_type']=$mail_type;
+            $m['phone_type']=$phone_type;
+            $m['wechat_type']=$wechat_type;
+            $m['msg_action']=$msg_action;
+            $msg_arr_24[$ymdh][]=$m;
+        }
+
         $sql = "";
         $sql = $sql." select ";
         $sql = $sql." * ";
@@ -582,100 +678,6 @@ class ChartjsController extends Controller
         }
 
 
-        for ($x=0; $x<$msg_all_count; $x++) {
-            $date = new DateTime($message_all[$x]->actiontime);
-            $ymd = $date->format('Y-m-d');
-            $sql = $this->selectActioninfo_sql($message_all[$x]->id);
-            $msg = DB::select($sql);
-            $m=[];
-            $msg_action=[];
-            $mail_type="";
-            $wechat_type="";
-            $phone_type="";
-            $mail_count=0;
-            $phone_count=0;
-            $wechat_count=0;
-            for ($y=0; $y<count($msg); $y++) {
-                if ($msg[$y]->ai_actiontype=="MAIL") {
-                    $mail_type="MAIL";
-                }
-                if ($msg[$y]->ai_actiontype=="PHONE") {
-                    $phone_type="PHONE";
-                }
-                if ($msg[$y]->ai_actiontype=="WECHAT") {
-                    $wechat_type="WECHAT";
-                }
-                $t=[];
-                $t['phone_number']=$msg[$y]->pi_phone_number;
-                $t['phone_dtmf']=$msg[$y]->pi_dtmf;
-                $t['phone_status_code']=$msg[$y]->pi_status_code;
-                $t['mail_to']=$msg[$y]->mi_mail_to;
-                $t['wechat_to']=$msg[$y]->wi_wechat_to;
-                $msg_action[]=$t;
-            }
-            $m['message_id']=$message_all[$x]->id;
-            $m['message']=$message_all[$x]->message;
-            $m['actiontime']=$message_all[$x]->actiontime;
-            $m['mail_type']=$mail_type;
-            $m['phone_type']=$phone_type;
-            $m['wechat_type']=$wechat_type;
-            $m['msg_action']=$msg_action;
-            $msg_arr[$ymd][]=$m;
-        }
-        $sql = "";
-        $sql = $sql." select ";
-        $sql = $sql." m.id,m.message,m.actiontime,m.sysid,m.svrid,m.subsysid,m.cmpid ";
-        $sql = $sql." from ";
-        $sql = $sql." message m ";
-        $sql = $sql." join action_info ai on ";
-        $sql = $sql." ai.message_id = m.id ";
-        $sql = $sql." where ";
-        $sql = $sql." m.actiontime > '".$showtime24."' ";
-        $sql = $sql." and m.sysid = '".$sel_fluentd[0]->sysid."' ";
-        $sql = $sql." and m.svrid = '".$sel_fluentd[0]->svrid."' ";
-        $sql = $sql." and m.subsysid = '".$sel_fluentd[0]->subsysid."' ";
-        $sql = $sql." and m.cmpid = '".$sel_fluentd[0]->cmpid."' ";
-        $sql = $sql." group by ";
-        $sql = $sql." m.id ";
-        $message_all_24 = DB::select($sql);
-        $msg_all_count_24 = count($message_all_24);
-        for ($x=0; $x<$msg_all_count_24; $x++) {
-            $date = new DateTime($message_all_24[$x]->actiontime);
-            $ymdh = $date->format("H:00");
-            $sql = $this->selectActioninfo_sql($message_all_24[$x]->id);
-            $msg = DB::select($sql);
-            $m=[];
-            $msg_action=[];
-            $mail_type="";
-            $wechat_type="";
-            $phone_type="";
-            for ($y=0; $y<count($msg); $y++) {
-                if ($msg[$y]->ai_actiontype=="MAIL") {
-                    $mail_type="MAIL";
-                }
-                if ($msg[$y]->ai_actiontype=="PHONE") {
-                    $phone_type="PHONE";
-                }
-                if ($msg[$y]->ai_actiontype=="WECHAT") {
-                    $wechat_type="WECHAT";
-                }
-                $t=[];
-                $t['phone_number']=$msg[$y]->pi_phone_number;
-                $t['phone_dtmf']=$msg[$y]->pi_dtmf;
-                $t['phone_status_code']=$msg[$y]->pi_status_code;
-                $t['mail_to']=$msg[$y]->mi_mail_to;
-                $t['wechat_to']=$msg[$y]->wi_wechat_to;
-                $msg_action[]=$t;
-            }
-            $m['message_id']=$message_all_24[$x]->id;
-            $m['message']=$message_all_24[$x]->message;
-            $m['actiontime']=$message_all_24[$x]->actiontime;
-            $m['mail_type']=$mail_type;
-            $m['phone_type']=$phone_type;
-            $m['wechat_type']=$wechat_type;
-            $m['msg_action']=$msg_action;
-            $msg_arr_24[$ymdh][]=$m;
-        }
         $msg_all_counts=[];
         $msg_all_counts['msg_all_count']=$msg_all_count;
         $msg_all_counts['mail_all_count']=$mail_all_count;
